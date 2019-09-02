@@ -171,7 +171,7 @@
     <script th:inline="javascript">
         var editFlag = [[${@permission.hasPermi('system:management:edit')}]];
         var removeFlag = [[${@permission.hasPermi('system:management:remove')}]];
-        var prefix = ctx + "system/management";
+        var prefix = ctx + "property/management";
 
         $(function() {
             var options = {
