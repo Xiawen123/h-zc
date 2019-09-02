@@ -31,7 +31,7 @@ public class ZxAssetManagementController extends BaseController
     @Autowired
     private IZxAssetManagementService zxAssetManagementService;
 
-    @RequiresPermissions("system:management:view")
+    @RequiresPermissions("property:management:view")
     @GetMapping()
     public String management()
     {
@@ -41,7 +41,7 @@ public class ZxAssetManagementController extends BaseController
     /**
      * 查询资产信息列表
      */
-    @RequiresPermissions("system:management:list")
+    @RequiresPermissions("property:management:list")
     @PostMapping("/list")
     @ResponseBody
     public TableDataInfo list(ZxAssetManagement zxAssetManagement)
@@ -54,7 +54,7 @@ public class ZxAssetManagementController extends BaseController
     /**
      * 导出资产信息列表
      */
-    @RequiresPermissions("system:management:export")
+    @RequiresPermissions("property:management:export")
     @PostMapping("/export")
     @ResponseBody
     public AjaxResult export(ZxAssetManagement zxAssetManagement)
@@ -76,7 +76,7 @@ public class ZxAssetManagementController extends BaseController
     /**
      * 新增保存资产信息
      */
-    @RequiresPermissions("system:management:add")
+    @RequiresPermissions("property:management:add")
     @Log(title = "资产信息", businessType = BusinessType.INSERT)
     @PostMapping("/add")
     @ResponseBody
@@ -99,7 +99,7 @@ public class ZxAssetManagementController extends BaseController
     /**
      * 修改保存资产信息
      */
-    @RequiresPermissions("system:management:edit")
+    @RequiresPermissions("property:management:edit")
     @Log(title = "资产信息", businessType = BusinessType.UPDATE)
     @PostMapping("/edit")
     @ResponseBody
@@ -111,7 +111,7 @@ public class ZxAssetManagementController extends BaseController
     /**
      * 删除资产信息
      */
-    @RequiresPermissions("system:management:remove")
+    @RequiresPermissions("property:management:remove")
     @Log(title = "资产信息", businessType = BusinessType.DELETE)
     @PostMapping( "/remove")
     @ResponseBody
