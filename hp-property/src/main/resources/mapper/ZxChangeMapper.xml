@@ -2,7 +2,7 @@
 <!DOCTYPE mapper
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.hp.system.mapper.ZxChangeMapper">
+<mapper namespace="com.hp.property.mapper.ZxChangeMapper">
     
     <resultMap type="ZxChange" id="ZxChangeResult">
         <result property="id"    column="id"    />

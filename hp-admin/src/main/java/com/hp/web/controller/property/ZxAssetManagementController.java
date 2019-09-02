@@ -1,25 +1,20 @@
 package com.hp.web.controller.property;
 
-import java.util.List;
-
+import com.hp.common.annotation.Log;
+import com.hp.common.core.controller.BaseController;
+import com.hp.common.core.domain.AjaxResult;
+import com.hp.common.core.page.TableDataInfo;
+import com.hp.common.enums.BusinessType;
+import com.hp.common.utils.poi.ExcelUtil;
 import com.hp.property.domain.ZxAssetManagement;
 import com.hp.property.service.IZxAssetManagementService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-import com.hp.common.annotation.Log;
-import com.hp.common.enums.BusinessType;
+import org.springframework.web.bind.annotation.*;
 
-import com.hp.common.core.controller.BaseController;
-import com.hp.common.core.domain.AjaxResult;
-import com.hp.common.utils.poi.ExcelUtil;
-import com.hp.common.core.page.TableDataInfo;
+import java.util.List;
 
 /**
  * 资产信息Controller
@@ -28,10 +23,10 @@ import com.hp.common.core.page.TableDataInfo;
  * @date 2019-09-02
  */
 @Controller
-@RequestMapping("/system/management")
+@RequestMapping("/property/management")
 public class ZxAssetManagementController extends BaseController
 {
-    private String prefix = "system/management";
+    private String prefix = "property/management";
 
     @Autowired
     private IZxAssetManagementService zxAssetManagementService;
