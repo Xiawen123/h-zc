@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hp.system.mapper.ZxChangeMapper">
+    
+    <resultMap type="ZxChange" id="ZxChangeResult">
+        <result property="id"    column="id"    />
+        <result property="assetsId"    column="assets_id"    />
+        <result property="changeType"    column="change_type"    />
+        <result property="submittedDepartment"    column="submitted_department"    />
+        <result property="submitOne"    column="submit_one"    />
+        <result property="useDepartment"    column="use_department"    />
+        <result property="users"    column="users"    />
+        <result property="extend1"    column="extend1"    />
+        <result property="extend2"    column="extend2"    />
+        <result property="extend3"    column="extend3"    />
+        <result property="extend4"    column="extend4"    />
+        <result property="extend5"    column="extend5"    />
+    </resultMap>
+
+    <sql id="selectZxChangeVo">
+        select id, assets_id, change_type, submitted_department, submit_one, use_department, users, extend1, extend2, extend3, extend4, extend5 from zx_change
+    </sql>
+
+    <select id="selectZxChangeList" parameterType="ZxChange" resultMap="ZxChangeResult">
+        <include refid="selectZxChangeVo"/>
+        <where>  
+            <if test="assetsId != null "> and assets_id = #{assetsId}</if>
+            <if test="changeType != null "> and change_type = #{changeType}</if>
+            <if test="submittedDepartment != null "> and submitted_department = #{submittedDepartment}</if>
+            <if test="submitOne != null  and submitOne != ''"> and submit_one = #{submitOne}</if>
+            <if test="useDepartment != null "> and use_department = #{useDepartment}</if>
+            <if test="users != null  and users != ''"> and users = #{users}</if>
+            <if test="extend1 != null  and extend1 != ''"> and extend1 = #{extend1}</if>
+            <if test="extend2 != null  and extend2 != ''"> and extend2 = #{extend2}</if>
+            <if test="extend3 != null  and extend3 != ''"> and extend3 = #{extend3}</if>
+            <if test="extend4 != null  and extend4 != ''"> and extend4 = #{extend4}</if>
+            <if test="extend5 != null  and extend5 != ''"> and extend5 = #{extend5}</if>
+        </where>
+    </select>
+    
+    <select id="selectZxChangeById" parameterType="Long" resultMap="ZxChangeResult">
+        <include refid="selectZxChangeVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertZxChange" parameterType="ZxChange">
+        insert into zx_change
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null ">id,</if>
+            <if test="assetsId != null ">assets_id,</if>
+            <if test="changeType != null ">change_type,</if>
+            <if test="submittedDepartment != null ">submitted_department,</if>
+            <if test="submitOne != null  and submitOne != ''">submit_one,</if>
+            <if test="useDepartment != null ">use_department,</if>
+            <if test="users != null  and users != ''">users,</if>
+            <if test="extend1 != null  and extend1 != ''">extend1,</if>
+            <if test="extend2 != null  and extend2 != ''">extend2,</if>
+            <if test="extend3 != null  and extend3 != ''">extend3,</if>
+            <if test="extend4 != null  and extend4 != ''">extend4,</if>
+            <if test="extend5 != null  and extend5 != ''">extend5,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null ">#{id},</if>
+            <if test="assetsId != null ">#{assetsId},</if>
+            <if test="changeType != null ">#{changeType},</if>
+            <if test="submittedDepartment != null ">#{submittedDepartment},</if>
+            <if test="submitOne != null  and submitOne != ''">#{submitOne},</if>
+            <if test="useDepartment != null ">#{useDepartment},</if>
+            <if test="users != null  and users != ''">#{users},</if>
+            <if test="extend1 != null  and extend1 != ''">#{extend1},</if>
+            <if test="extend2 != null  and extend2 != ''">#{extend2},</if>
+            <if test="extend3 != null  and extend3 != ''">#{extend3},</if>
+            <if test="extend4 != null  and extend4 != ''">#{extend4},</if>
+            <if test="extend5 != null  and extend5 != ''">#{extend5},</if>
+         </trim>
+    </insert>
+
+    <update id="updateZxChange" parameterType="ZxChange">
+        update zx_change
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="assetsId != null ">assets_id = #{assetsId},</if>
+            <if test="changeType != null ">change_type = #{changeType},</if>
+            <if test="submittedDepartment != null ">submitted_department = #{submittedDepartment},</if>
+            <if test="submitOne != null  and submitOne != ''">submit_one = #{submitOne},</if>
+            <if test="useDepartment != null ">use_department = #{useDepartment},</if>
+            <if test="users != null  and users != ''">users = #{users},</if>
+            <if test="extend1 != null  and extend1 != ''">extend1 = #{extend1},</if>
+            <if test="extend2 != null  and extend2 != ''">extend2 = #{extend2},</if>
+            <if test="extend3 != null  and extend3 != ''">extend3 = #{extend3},</if>
+            <if test="extend4 != null  and extend4 != ''">extend4 = #{extend4},</if>
+            <if test="extend5 != null  and extend5 != ''">extend5 = #{extend5},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteZxChangeById" parameterType="Long">
+        delete from zx_change where id = #{id}
+    </delete>
+
+    <delete id="deleteZxChangeByIds" parameterType="String">
+        delete from zx_change where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+</mapper>

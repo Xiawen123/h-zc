@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <th:block th:include="include :: header('修改资产变更')" />
+</head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal m" id="form-change-edit" th:object="${zxChange}">
+            <input name="id" th:field="*{id}" type="hidden">
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">资产id：</label>
+                <div class="col-sm-8">
+                    <input name="assetsId" th:field="*{assetsId}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">变动类型：</label>
+                <div class="col-sm-8">
+                    <select name="changeType" class="form-control m-b">
+                        <option value="">所有</option>
+                    </select>
+                    <span class="help-block m-b-none"><i class="fa fa-info-circle"></i> 代码生成请选择字典属性</span>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">提交部门：</label>
+                <div class="col-sm-8">
+                    <input name="submittedDepartment" th:field="*{submittedDepartment}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">提交人：</label>
+                <div class="col-sm-8">
+                    <input name="submitOne" th:field="*{submitOne}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">使用部门：</label>
+                <div class="col-sm-8">
+                    <input name="useDepartment" th:field="*{useDepartment}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">使用人：</label>
+                <div class="col-sm-8">
+                    <input name="users" th:field="*{users}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">使用人：</label>
+                <div class="col-sm-8">
+                    <input name="extend1" th:field="*{extend1}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">使用人：</label>
+                <div class="col-sm-8">
+                    <input name="extend2" th:field="*{extend2}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">使用人：</label>
+                <div class="col-sm-8">
+                    <input name="extend3" th:field="*{extend3}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">使用人：</label>
+                <div class="col-sm-8">
+                    <input name="extend4" th:field="*{extend4}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">使用人：</label>
+                <div class="col-sm-8">
+                    <input name="extend5" th:field="*{extend5}" class="form-control" type="text">
+                </div>
+            </div>
+        </form>
+    </div>
+    <th:block th:include="include :: footer" />
+    <script type="text/javascript">
+        var prefix = ctx + "system/change";
+        $("#form-change-edit").validate({
+            focusCleanup: true
+        });
+
+        function submitHandler() {
+            if ($.validate.form()) {
+                $.operate.save(prefix + "/edit", $('#form-change-edit').serialize());
+            }
+        }
+    </script>
+</body>
+</html>

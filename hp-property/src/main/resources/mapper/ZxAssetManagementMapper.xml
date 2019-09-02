@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hp.system.mapper.ZxAssetManagementMapper">
+    
+    <resultMap type="ZxAssetManagement" id="ZxAssetManagementResult">
+        <result property="id"    column="id"    />
+        <result property="name"    column="name"    />
+        <result property="assetNum"    column="asset_num"    />
+        <result property="brand"    column="brand"    />
+        <result property="assetSpecification"    column="asset_specification"    />
+        <result property="number"    column="number"    />
+        <result property="type"    column="type"    />
+        <result property="units"    column="units"    />
+        <result property="supplier"    column="supplier"    />
+        <result property="picture"    column="picture"    />
+        <result property="price"    column="price"    />
+        <result property="purchasingTime"    column="purchasing_time"    />
+        <result property="storageTime"    column="storage_time"    />
+        <result property="warehousingCampus"    column="warehousing_campus"    />
+        <result property="state"    column="state"    />
+        <result property="operator"    column="operator"    />
+        <result property="location"    column="location"    />
+        <result property="recipientsTime"    column="recipients_time"    />
+        <result property="repairTime"    column="repair_time"    />
+        <result property="transferTime"    column="transfer_time"    />
+        <result property="discardTime"    column="discard_time"    />
+        <result property="returnTime"    column="return_time"    />
+        <result property="campus"    column="campus"    />
+        <result property="department"    column="department"    />
+        <result property="extend1"    column="extend1"    />
+        <result property="extend2"    column="extend2"    />
+        <result property="extend3"    column="extend3"    />
+        <result property="extend4"    column="extend4"    />
+        <result property="extend5"    column="extend5"    />
+    </resultMap>
+
+    <sql id="selectZxAssetManagementVo">
+        select id, name, asset_num, brand, asset_specification, number, type, units, supplier, picture, price, purchasing_time, storage_time, warehousing_campus, state, operator, location, recipients_time, repair_time, transfer_time, discard_time, return_time, campus, department, extend1, extend2, extend3, extend4, extend5 from zx_asset_management
+    </sql>
+
+    <select id="selectZxAssetManagementList" parameterType="ZxAssetManagement" resultMap="ZxAssetManagementResult">
+        <include refid="selectZxAssetManagementVo"/>
+        <where>  
+            <if test="name != null  and name != ''"> and name like concat('%', #{name}, '%')</if>
+            <if test="assetNum != null  and assetNum != ''"> and asset_num = #{assetNum}</if>
+            <if test="brand != null  and brand != ''"> and brand = #{brand}</if>
+            <if test="assetSpecification != null  and assetSpecification != ''"> and asset_specification = #{assetSpecification}</if>
+            <if test="number != null "> and number = #{number}</if>
+            <if test="type != null "> and type = #{type}</if>
+            <if test="units != null "> and units = #{units}</if>
+            <if test="supplier != null  and supplier != ''"> and supplier = #{supplier}</if>
+            <if test="picture != null  and picture != ''"> and picture = #{picture}</if>
+            <if test="price != null "> and price = #{price}</if>
+            <if test="purchasingTime != null "> and purchasing_time = #{purchasingTime}</if>
+            <if test="storageTime != null "> and storage_time = #{storageTime}</if>
+            <if test="warehousingCampus != null "> and warehousing_campus = #{warehousingCampus}</if>
+            <if test="state != null "> and state = #{state}</if>
+            <if test="operator != null  and operator != ''"> and operator = #{operator}</if>
+            <if test="location != null "> and location = #{location}</if>
+            <if test="recipientsTime != null "> and recipients_time = #{recipientsTime}</if>
+            <if test="repairTime != null "> and repair_time = #{repairTime}</if>
+            <if test="transferTime != null "> and transfer_time = #{transferTime}</if>
+            <if test="discardTime != null "> and discard_time = #{discardTime}</if>
+            <if test="returnTime != null "> and return_time = #{returnTime}</if>
+            <if test="campus != null "> and campus = #{campus}</if>
+            <if test="department != null "> and department = #{department}</if>
+            <if test="extend1 != null  and extend1 != ''"> and extend1 = #{extend1}</if>
+            <if test="extend2 != null  and extend2 != ''"> and extend2 = #{extend2}</if>
+            <if test="extend3 != null  and extend3 != ''"> and extend3 = #{extend3}</if>
+            <if test="extend4 != null  and extend4 != ''"> and extend4 = #{extend4}</if>
+            <if test="extend5 != null  and extend5 != ''"> and extend5 = #{extend5}</if>
+        </where>
+    </select>
+    
+    <select id="selectZxAssetManagementById" parameterType="Long" resultMap="ZxAssetManagementResult">
+        <include refid="selectZxAssetManagementVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertZxAssetManagement" parameterType="ZxAssetManagement">
+        insert into zx_asset_management
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null ">id,</if>
+            <if test="name != null  and name != ''">name,</if>
+            <if test="assetNum != null  and assetNum != ''">asset_num,</if>
+            <if test="brand != null  and brand != ''">brand,</if>
+            <if test="assetSpecification != null  and assetSpecification != ''">asset_specification,</if>
+            <if test="number != null ">number,</if>
+            <if test="type != null ">type,</if>
+            <if test="units != null ">units,</if>
+            <if test="supplier != null  and supplier != ''">supplier,</if>
+            <if test="picture != null  and picture != ''">picture,</if>
+            <if test="price != null ">price,</if>
+            <if test="purchasingTime != null ">purchasing_time,</if>
+            <if test="storageTime != null ">storage_time,</if>
+            <if test="warehousingCampus != null ">warehousing_campus,</if>
+            <if test="state != null ">state,</if>
+            <if test="operator != null  and operator != ''">operator,</if>
+            <if test="location != null ">location,</if>
+            <if test="recipientsTime != null ">recipients_time,</if>
+            <if test="repairTime != null ">repair_time,</if>
+            <if test="transferTime != null ">transfer_time,</if>
+            <if test="discardTime != null ">discard_time,</if>
+            <if test="returnTime != null ">return_time,</if>
+            <if test="campus != null ">campus,</if>
+            <if test="department != null ">department,</if>
+            <if test="extend1 != null  and extend1 != ''">extend1,</if>
+            <if test="extend2 != null  and extend2 != ''">extend2,</if>
+            <if test="extend3 != null  and extend3 != ''">extend3,</if>
+            <if test="extend4 != null  and extend4 != ''">extend4,</if>
+            <if test="extend5 != null  and extend5 != ''">extend5,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null ">#{id},</if>
+            <if test="name != null  and name != ''">#{name},</if>
+            <if test="assetNum != null  and assetNum != ''">#{assetNum},</if>
+            <if test="brand != null  and brand != ''">#{brand},</if>
+            <if test="assetSpecification != null  and assetSpecification != ''">#{assetSpecification},</if>
+            <if test="number != null ">#{number},</if>
+            <if test="type != null ">#{type},</if>
+            <if test="units != null ">#{units},</if>
+            <if test="supplier != null  and supplier != ''">#{supplier},</if>
+            <if test="picture != null  and picture != ''">#{picture},</if>
+            <if test="price != null ">#{price},</if>
+            <if test="purchasingTime != null ">#{purchasingTime},</if>
+            <if test="storageTime != null ">#{storageTime},</if>
+            <if test="warehousingCampus != null ">#{warehousingCampus},</if>
+            <if test="state != null ">#{state},</if>
+            <if test="operator != null  and operator != ''">#{operator},</if>
+            <if test="location != null ">#{location},</if>
+            <if test="recipientsTime != null ">#{recipientsTime},</if>
+            <if test="repairTime != null ">#{repairTime},</if>
+            <if test="transferTime != null ">#{transferTime},</if>
+            <if test="discardTime != null ">#{discardTime},</if>
+            <if test="returnTime != null ">#{returnTime},</if>
+            <if test="campus != null ">#{campus},</if>
+            <if test="department != null ">#{department},</if>
+            <if test="extend1 != null  and extend1 != ''">#{extend1},</if>
+            <if test="extend2 != null  and extend2 != ''">#{extend2},</if>
+            <if test="extend3 != null  and extend3 != ''">#{extend3},</if>
+            <if test="extend4 != null  and extend4 != ''">#{extend4},</if>
+            <if test="extend5 != null  and extend5 != ''">#{extend5},</if>
+         </trim>
+    </insert>
+
+    <update id="updateZxAssetManagement" parameterType="ZxAssetManagement">
+        update zx_asset_management
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="name != null  and name != ''">name = #{name},</if>
+            <if test="assetNum != null  and assetNum != ''">asset_num = #{assetNum},</if>
+            <if test="brand != null  and brand != ''">brand = #{brand},</if>
+            <if test="assetSpecification != null  and assetSpecification != ''">asset_specification = #{assetSpecification},</if>
+            <if test="number != null ">number = #{number},</if>
+            <if test="type != null ">type = #{type},</if>
+            <if test="units != null ">units = #{units},</if>
+            <if test="supplier != null  and supplier != ''">supplier = #{supplier},</if>
+            <if test="picture != null  and picture != ''">picture = #{picture},</if>
+            <if test="price != null ">price = #{price},</if>
+            <if test="purchasingTime != null ">purchasing_time = #{purchasingTime},</if>
+            <if test="storageTime != null ">storage_time = #{storageTime},</if>
+            <if test="warehousingCampus != null ">warehousing_campus = #{warehousingCampus},</if>
+            <if test="state != null ">state = #{state},</if>
+            <if test="operator != null  and operator != ''">operator = #{operator},</if>
+            <if test="location != null ">location = #{location},</if>
+            <if test="recipientsTime != null ">recipients_time = #{recipientsTime},</if>
+            <if test="repairTime != null ">repair_time = #{repairTime},</if>
+            <if test="transferTime != null ">transfer_time = #{transferTime},</if>
+            <if test="discardTime != null ">discard_time = #{discardTime},</if>
+            <if test="returnTime != null ">return_time = #{returnTime},</if>
+            <if test="campus != null ">campus = #{campus},</if>
+            <if test="department != null ">department = #{department},</if>
+            <if test="extend1 != null  and extend1 != ''">extend1 = #{extend1},</if>
+            <if test="extend2 != null  and extend2 != ''">extend2 = #{extend2},</if>
+            <if test="extend3 != null  and extend3 != ''">extend3 = #{extend3},</if>
+            <if test="extend4 != null  and extend4 != ''">extend4 = #{extend4},</if>
+            <if test="extend5 != null  and extend5 != ''">extend5 = #{extend5},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteZxAssetManagementById" parameterType="Long">
+        delete from zx_asset_management where id = #{id}
+    </delete>
+
+    <delete id="deleteZxAssetManagementByIds" parameterType="String">
+        delete from zx_asset_management where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+</mapper>
