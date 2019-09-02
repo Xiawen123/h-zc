@@ -36,7 +36,7 @@ public class ZxAssetManagementController extends BaseController
     @Autowired
     private IZxAssetManagementService zxAssetManagementService;
 
-    @RequiresPermissions("system:management:view")
+    @RequiresPermissions("property:management:view")
     @GetMapping()
     public String management()
     {
