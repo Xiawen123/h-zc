@@ -51,6 +51,16 @@ public class ZxChangeController extends BaseController
         return getDataTable(list);
     }
 
+    @RequiresPermissions("property:change:change")
+    @GetMapping("/change")
+    @ResponseBody
+    public TableDataInfo change(ZxChange zxChange)
+    {
+        startPage();
+        List<ZxChange> list = zxChangeService.selectZxChangeList(zxChange);
+        return getDataTable(list);
+    }
+
     /**
      * 导出资产变更列表
      */
@@ -119,4 +129,22 @@ public class ZxChangeController extends BaseController
     {
         return toAjax(zxChangeService.deleteZxChangeByIds(ids));
     }
+    /**
+     *@description:  转移查询
+     *@author:  CaiYan
+     *@createTime:  2019/9/3
+     *@return:
+     *@param:
+     *
+     */
+    @RequiresPermissions("property:change:transferList")
+    @PostMapping("/transferList")
+    @ResponseBody
+    public TableDataInfo transferList(ZxChange zxChange)
+    {
+        startPage();
+        List<ZxChange> list = zxChangeService.selectZxChangeTransferList(zxChange);
+        return getDataTable(list);
+    }
+
 }
