@@ -1,8 +1,9 @@
 package com.hp.property.mapper;
 
+import com.hp.common.base.BaseMapper;
 import com.hp.property.domain.ZxAssetManagement;
 import tk.mybatis.spring.annotation.MapperScan;
-import com.hp.common.base.BaseMapper;
+
 import java.util.List;
 
 /**
@@ -72,4 +73,13 @@ public interface ZxAssetManagementMapper extends BaseMapper<ZxAssetManagement>
      * @return 结果
      */
     public int deleteZxAssetManagementByIds(String[] ids);
+
+    /**
+     * 查询资产状态为领用的所有信息
+     * @param zxAssetManagement
+     * @return
+     */
+   List<ZxAssetManagement> selectAllStateTwo(ZxAssetManagement zxAssetManagement);
+
+
 }

@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('资产信息列表')" />
+</head>
+<body class="gray-bg">
+     <div class="container-div">
+        <div class="row">
+            <div class="col-sm-12 search-collapse">
+                <form id="formId">
+                    <div class="select-list">
+                        <ul>
+                            <li class="select-time">
+                                <p>领用时间：</p>
+                                <input type="text" class="time-input" id="startTime" placeholder="开始时间" name="params[beginPurchasingTime]"/>
+                            </li>
+                            <li>
+                                <p>资产名称：</p>
+                                <input type="text" name="name"/>
+                            </li>
+                            <li>
+                                <p>资产编号：</p>
+                                <input type="text" name="assetNum"/>
+                            </li>
+                            <li>
+                                <p>领用校区：</p>
+                                <input type="text" name="campus"/>
+                            </li>
+                            <li>
+                                <p>使用人：</p>
+                                <input type="text" name="extend2"/>
+                            </li>
+                            <br><br>
+                            <li>
+                                <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+                                <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+                            </li>
+                        </ul>
+                    </div>
+                </form>
+            </div>
+
+            <div class="btn-group-sm" id="toolbar" role="group">
+                <a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="property:campusrecive:add">
+                    <i class="fa fa-plus"></i> 领用登记
+                </a>
+            </div>
+            <div class="col-sm-12 select-table table-striped">
+                <table id="bootstrap-table" data-mobile-responsive="true"></table>
+            </div>
+        </div>
+    </div>
+    <th:block th:include="include :: footer" />
+    <script th:inline="javascript">
+        var editFlag = [[${@permission.hasPermi('system:management:edit')}]];
+        var removeFlag = [[${@permission.hasPermi('system:management:remove')}]];
+        var prefix = ctx + "property/campusrecive";
+
+        $(function() {
+            var options = {
+                url: prefix + "/list",
+                createUrl: prefix + "/add",
+                updateUrl: prefix + "/edit/{id}",
+                removeUrl: prefix + "/remove",
+                exportUrl: prefix + "/export",
+                detailUrl: prefix+"/detail/{id}",
+                modalName: "资产信息",
+                columns: [{
+                    checkbox: true
+                },
+                {
+                    field : 'recipientsTime',
+                    title : '领用时间'
+                },
+                {
+                    field : 'name', 
+                    title : '资产名称'
+                },
+                {
+                    field : 'type',
+                    title : '资产类型'
+                },
+                {
+                    field : 'brand', 
+                    title : '品牌'
+                },
+                {
+                    field : 'assetSpecification', 
+                    title : '资产规格'
+                },
+                {
+                    field : 'number', 
+                    title : '数量'
+                },
+                {
+                    field : 'units', 
+                    title : '单位'
+                },
+                {
+                    field : 'campus', 
+                    title : '校区'
+                },
+                {
+                    field : 'department', 
+                    title : '部门'
+                },
+                {
+                    field : 'extend2',
+                    title : '领用人员'
+                },
+                {
+                    title: '详情',
+                    align: 'center',
+                    formatter: function(value, row, index) {
+                        var actions = [];
+                        actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.detail(\'' + row.id + '\')">查看</a> ');
+                        return actions.join('');
+                    }
+                }]
+            };
+            $.table.init(options);
+        });
+    </script>
+</body>
+</html>

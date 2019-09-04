@@ -91,4 +91,9 @@ public class ZxAssetManagementServiceImpl implements IZxAssetManagementService {
     public int deleteZxAssetManagementById(Long id) {
         return zxAssetManagementMapper.deleteZxAssetManagementById(id);
     }
+
+    @Override
+    public List<ZxAssetManagement> findAllStateTwo(ZxAssetManagement zxAssetManagement) {
+        return zxAssetManagementMapper.selectAllStateTwo(zxAssetManagement);
+    }
 }

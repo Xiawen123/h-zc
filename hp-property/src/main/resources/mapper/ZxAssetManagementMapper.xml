@@ -73,7 +73,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="extend5 != null  and extend5 != ''"> and extend5 = #{extend5}</if>
         </where>
     </select>
-    
+
+
     <select id="selectZxAssetManagementById" parameterType="Long" resultMap="ZxAssetManagementResult">
         <include refid="selectZxAssetManagementVo"/>
         where id = #{id}
@@ -200,4 +201,29 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             #{id}
         </foreach>
     </delete>
+
+    <!--查询所有资产状态为领用的所有信息-->
+    <select id="selectAllStateTwo" resultMap="ZxAssetManagementResult" >
+        <include refid="selectZxAssetManagementVo"/>
+        <where>
+            state = #{state},
+            <if test="params.beginPurchasingTime != null and params.beginPurchasingTime != ''"><!-- 开始时间检索 -->
+                and date_format(recipients_time,'%y%m%d') &gt;= date_format(#{params.beginPurchasingTime},'%y%m%d')
+            </if>
+            <if test="name != null and name != ''">
+                AND name like concat('%', #{name}, '%')
+            </if>
+            <if test="assetNum != null and assetNum != ''">
+                AND asset_num = #{assetNum},
+            </if>
+
+            <if test="campus != null and campus != 0">
+                AND campus = #{campus},
+            </if>
+            <if test="extend2 != null and extend2 != ''">
+                AND extend2 = #{extend2},
+            </if>
+        </where>
+    </select>
+
 </mapper>
