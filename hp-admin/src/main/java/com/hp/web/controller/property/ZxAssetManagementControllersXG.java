@@ -13,7 +13,9 @@ import com.hp.property.domain.ZxChange;
 import com.hp.property.service.IZxAssetManagementService;
 import com.hp.property.service.IZxChangeService;
 import com.hp.system.domain.SysDept;
+import com.hp.system.domain.SysUser;
 import com.hp.system.service.ISysDeptService;
+import com.hp.system.service.ISysUserService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -36,7 +38,8 @@ public class ZxAssetManagementControllersXG extends BaseController
     private IZxChangeService zxChangeService;
     @Autowired
     private ISysDeptService iSysDeptService;
-
+    @Autowired
+    private ISysUserService iSysUserService;
 
     @RequiresPermissions("property:management1:view")
     @GetMapping()
@@ -145,6 +148,9 @@ public class ZxAssetManagementControllersXG extends BaseController
         zxChange.setExtend1(sdf.format(new Date()));
         String b=String.valueOf(zxAssetManagement1.getLocation());
         zxChange.setExtend3(b);
+        SysUser sysUser = iSysUserService.selectUserByLoginName(ShiroUtils.getLoginName());
+        Integer c=sysUser.getDeptId().intValue();
+        zxChange.setSubmittedDepartment(c);
         zxChangeService.insertZxChange(zxChange);
         return toAjax(zxAssetManagementService.updateZxAssetManagement(zxAssetManagement));
     }
