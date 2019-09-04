@@ -5,15 +5,20 @@ import com.hp.common.core.controller.BaseController;
 import com.hp.common.core.domain.AjaxResult;
 import com.hp.common.core.page.TableDataInfo;
 import com.hp.common.enums.BusinessType;
+import com.hp.common.enums.UserStatus;
+import com.hp.common.utils.SnowFlake;
 import com.hp.common.utils.poi.ExcelUtil;
+import com.hp.framework.util.ShiroUtils;
 import com.hp.property.domain.ZxAssetManagement;
 import com.hp.property.service.IZxAssetManagementService;
+import com.hp.system.domain.SysUser;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -67,21 +72,29 @@ public class ZxAssetManagementController extends BaseController
     /**
      * 新增资产信息
      */
-    @GetMapping("/add")
+    @GetMapping("/addition")
     public String add()
     {
-        return prefix + "/add";
+        return prefix + "/addition";
     }
 
     /**
      * 新增保存资产信息
      */
-    @RequiresPermissions("property:management:add")
+    @RequiresPermissions("property:management:addition")
     @Log(title = "资产信息", businessType = BusinessType.INSERT)
-    @PostMapping("/add")
+    @PostMapping("/addition")
     @ResponseBody
     public AjaxResult addSave(ZxAssetManagement zxAssetManagement)
     {
+        //添加雪花算法的商品编号
+        zxAssetManagement.setAssetNum(String.valueOf(SnowFlake.nextId()));
+        //添加入库时间
+        zxAssetManagement.setStorageTime(new Date());
+        //添加操作人,直接获取登录账户
+        zxAssetManagement.setOperator(ShiroUtils.getLoginName());
+        //添加状态为,闲置=1
+        zxAssetManagement.setState(1);
         return toAjax(zxAssetManagementService.insertZxAssetManagement(zxAssetManagement));
     }
 
@@ -93,6 +106,7 @@ public class ZxAssetManagementController extends BaseController
     {
         ZxAssetManagement zxAssetManagement = zxAssetManagementService.selectZxAssetManagementById(id);
         mmap.put("zxAssetManagement", zxAssetManagement);
+
         return prefix + "/edit";
     }
 

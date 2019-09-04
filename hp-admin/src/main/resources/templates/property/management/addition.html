@@ -7,9 +7,10 @@
 <body class="white-bg">
     <div class="wrapper wrapper-content animated fadeInRight ibox-content">
         <form class="form-horizontal m" id="form-management-add">
-            <h2>入库登记</h2>
+            <div style = "margin:0 auto"><h2>入库登记</h2></div>
             <hr/>
             资产信息
+
             <div class="form-group">    
                 <label class="col-sm-3 control-label">资产名称：</label>
                 <div class="col-sm-8">
@@ -19,7 +20,7 @@
             <div class="form-group">
                 <label class="col-sm-3 control-label">类型：</label>
                 <div class="col-sm-8">
-                    <select name="units" class="form-control m-b" th:with="type=${@dict.getType('zc_unit')}">
+                    <select name="type" class="form-control m-b" th:with="type=${@dict.getType('zc_type')}">
                         <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
                     </select>
                 </div>
@@ -66,34 +67,48 @@
                 <label class="col-sm-3 control-label">购置时间：</label>
                 <div class="col-sm-8">
                     <div class="input-group date">
-                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
-                        <input name="purchasingTime" class="form-control" placeholder="yyyy-MM-dd" type="text">
+                        <input class="form-control" type="text" id="purchasingTime" placeholder="购置时间" name="purchasingTime"/>
                     </div>
                 </div>
             </div>
-
-
             <div class="form-group">    
                 <label class="col-sm-3 control-label">上传文件：</label>
                 <div class="col-sm-8">
                     <input name="picture" class="form-control" type="text">
                 </div>
             </div>
+
             <hr/>
             入库信息
+
             <div class="form-group">    
                 <label class="col-sm-3 control-label">入库时间：</label>
                 <div class="col-sm-8">
                     <div class="input-group date">
-                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
-                        <input name="storageTime" class="form-control" placeholder="yyyy-MM-dd" type="text">
+                        <input class="form-control" type="text" name="storageTime" id="storageTime"  placeholder="">
                     </div>
                 </div>
             </div>
-            <div class="form-group">    
+            <div class="form-group" id="xianshi">
                 <label class="col-sm-3 control-label">入库校区：</label>
                 <div class="col-sm-8">
-                    <input name="warehousingCampus" class="form-control" type="text">
+                    <select id="group" name="group" class="form-control">
+                        <option th:each="obj,eStat:${HdGroup}" th:value="${obj.id}"
+                                th:text="${obj.name}"></option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-sm-3 control-label">存放部门：</label>
+                <div class="col-sm-8">
+                    <input name="department" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">存放地点：</label>
+                <div class="col-sm-8">
+                    <input name="location" class="form-control" type="text">
                 </div>
             </div>
             <div class="form-group">    
@@ -104,6 +119,15 @@
             </div>
         </form>
     </div>
+    <div class="row">
+        <div class="col-sm-offset-5 col-sm-10">
+            <button type="button" class="btn btn-sm btn-primary" onclick="submitHandler()"><i class="fa fa-check"></i>保 存</button>&nbsp;
+            <button type="button" class="btn btn-sm btn-danger" onclick="closeItem()"><i class="fa fa-reply-all"></i>关 闭 </button>
+        </div>
+    </div>
+
+    <script th:src="@{/ajax/libs/laydate/laydate.js}"></script>
+
     <th:block th:include="include :: footer" />
     <th:block th:include="include :: datetimepicker-js" />
     <script type="text/javascript">
@@ -114,15 +138,31 @@
 
         function submitHandler() {
             if ($.validate.form()) {
-                $.operate.save(prefix + "/add", $('#form-management-add').serialize());
+                $.operate.save(prefix + "/addition", $('#form-management-add').serialize());
             }
         }
-
-        $("input[name='purchasingTime']").datetimepicker({
-            format: "yyyy-mm-dd",
-            minView: "month",
-            autoclose: true
+        $(function () {
+            laydate.render({
+                elem: '#purchasingTime'
+                , type: 'month'
+                , trigger: 'click'
+            });
         });
+
+        getDates();
+        function getDates(){
+            //设置当前时间
+            var date = new Date();
+            var year = date.getFullYear();//月份从0~11，所以加一
+            var dateArr = [date.getMonth() + 1,date.getDate(),date.getHours(),date.getMinutes(),date.getSeconds()];
+            for(var i=0;i<dateArr.length;i++){
+                if (dateArr[i] >= 1 && dateArr[i] <= 9) {
+                    dateArr[i] = "0" + dateArr[i];
+                }
+            }
+            var strDate = year+'-'+dateArr[0]+'-'+dateArr[1]+' '+dateArr[2]+':'+dateArr[3]+':'+dateArr[4];
+            document.getElementById("dates").value = strDate;
+        }
     </script>
 </body>
 </html>
