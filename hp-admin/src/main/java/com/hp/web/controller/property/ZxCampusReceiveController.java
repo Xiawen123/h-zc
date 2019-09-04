@@ -46,8 +46,10 @@ public class ZxCampusReceiveController extends BaseController {
     @ResponseBody
     public TableDataInfo list(ZxAssetManagement zxAssetManagement)
     {
+        // 资产状态2代表领用
         zxAssetManagement.setState(2);
 
+        // 带条件查询所有
         startPage();
         List<ZxAssetManagement> list = zxAssetManagementService.selectZxAssetManagementList(zxAssetManagement);
         return getDataTable(list);

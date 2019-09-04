@@ -35,7 +35,7 @@
 			</div>
 
 			<button type="button" class="btn btn-primary" onclick="queryAllIdle()">查看闲置资产</button>
-			<table class="table" id="Professional">
+			<table class="table" id="addIdle">
 				<tr>
 					<th>资产编号</th>
 					<th>资产名称</th>
@@ -86,7 +86,7 @@
     <script type="text/javascript">
 		var prefix = ctx + "property/campusrecive";
 
-		/*function queryAllIdle(){
+		function queryAllIdle(){
 		    var state = 1;
 		    $.ajax({
 				url:
@@ -101,40 +101,40 @@
 				}
 
 			})
-		}*/
-
-        $("#form-teachMajor-add").validate({
-            rules: {
-               // onkeyup: true,
-                majorName:{
-                     required:true,
-                    remote: {
-                        url: prefix + "/checkMajorNameUnique",
-                        type: "post",
-                        dataType: "json",
-                        data: {
-                            "majorName": function() {
-                                return $.common.trim($("#majorName").val());
-                            }
-                        },
-                        dataFilter: function(data, type) {
-                            // console.log($.validate.unique(data));
-                            return $.validate.unique(data);
-                        }
-                    }
-                }
-            },
-            messages: {
-                "majorName":{
-                    remote: "此专业已经存在"
-                }
-            },
-            focusCleanup: true
-		});
-
+		}
 
         function del(data) {
 			data.parentNode.parentNode.remove();
+        }
+
+        function add() {
+            var trs="<tr>\n" +
+                "\t\t\t\t\t<td>\n" +
+                "\t\t\t\t\t\t<input type=\"text\" class=\"assetNum\" required=\"required\" placeholder=\"请输入资产编号\" style=\"height: 30px;width: 80%;border: none;\">\n" +
+                "\t\t\t\t\t</td>\n" +
+                "\t\t\t\t\t<td>\n" +
+                "\t\t\t\t\t\t<input type=\"text\" class=\"name\" required=\"required\" placeholder=\"请输入资产名称\" style=\"height: 30px;width: 80%;border: none;\">\n" +
+                "\t\t\t\t\t</td>\n" +
+                "\t\t\t\t\t<td>\n" +
+                "\t\t\t\t\t\t<input type=\"text\" class=\"brand\" required=\"required\" placeholder=\"请输入品牌\" style=\"height: 30px;width: 80%;border: none;\">\n" +
+                "\t\t\t\t\t</td>\n" +
+                "\t\t\t\t\t<td>\n" +
+                "\t\t\t\t\t\t<input type=\"text\" class=\"assetSpecification\" required=\"required\" placeholder=\"请输入资产规格\" style=\"height: 30px;width: 80%;border: none;\">\n" +
+                "\t\t\t\t\t</td>\n" +
+                "\t\t\t\t\t<td>\n" +
+                "\t\t\t\t\t\t<input type=\"text\" class=\"units\" required=\"required\" placeholder=\"请输入单位\" style=\"height: 30px;width: 80%;border: none;\">\n" +
+                "\t\t\t\t\t</td>\n" +
+                "\t\t\t\t\t<td>\n" +
+                "\t\t\t\t\t\t<select name=\"text\" class=\"status\" th:with=\"type=${@dict.getType('zc_state')}\"><option th:each=\"dict : ${type}\" th:text=\"${dict.dictLabel}\" th:value=\"${dict.dictValue}\"></option>></select>\n" +
+                "\t\t\t\t\t</td>\n" +
+                "\t\t\t\t\t<td>\n" +
+                "\t\t\t\t\t\t<input type=\"text\" class=\"number\" required=\"required\" placeholder=\"请输入数量\" style=\"height: 30px;width: 80%;border: none;\">\n" +
+                "\t\t\t\t\t</td>\n" +
+                "\t\t\t\t\t<td>\n" +
+                "\t\t\t\t\t\t<button type=\"button\" class=\"btn btn-danger\" onclick='del(this)'>删除</button>\n" +
+                "\t\t\t\t\t</td>\n" +
+                "\t\t\t\t</tr>";
+            $("#addIdle").append(trs);
         }
 
         function submitHandler() {
