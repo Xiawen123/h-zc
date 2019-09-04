@@ -61,7 +61,10 @@
                             </li>
                             <li>
                                 <p>状态：</p>
-                                <input type="text" name="state"/>
+                                <select name="state" th:with="type=${@dict.getType('zc_state')}">
+                                    <option value="">所有</option>
+                                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+                                </select>
                             </li>
                             <li>
                                 <p>存放地点：</p>
