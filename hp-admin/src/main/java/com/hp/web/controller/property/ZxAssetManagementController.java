@@ -143,7 +143,7 @@ public class ZxAssetManagementController extends BaseController
     }
 
     /**
-     * 修改资产信息
+     * 修改资产信息1.2
      */
     @GetMapping("/edit/{id}")
     public String edit(@PathVariable("id") Long id, ModelMap mmap)
