@@ -1,47 +1,47 @@
 <!DOCTYPE html>
 <html lang="zh" xmlns:th="http://www.thymeleaf.org" >
 <head>
-    <th:block th:include="include :: header('修改资产信息')" />
+    <th:block th:include="include :: header('资产信息详情')" />
     <th:block th:include="include :: datetimepicker-css" />
 </head>
 <body class="white-bg">
     <div class="wrapper wrapper-content animated fadeInRight ibox-content">
-        <form class="form-horizontal m" id="form-management-edit" th:object="${zxAssetManagement}">
+        <form class="form-horizontal m" id="form-management-edit" th:object="${zxAssetManagement}" readonly="readonly">
             <input name="id" th:field="*{id}" type="hidden">
             <div class="form-group">    
                 <label class="col-sm-3 control-label">资产名称：</label>
                 <div class="col-sm-8">
-                    <input name="name" th:field="*{name}" class="form-control" type="text">
+                    <input name="name" th:field="*{name}" class="form-control" type="text" readonly="readonly">
                 </div>
             </div>
             <div class="form-group">    
                 <label class="col-sm-3 control-label">资产编号：</label>
                 <div class="col-sm-8">
-                    <input name="assetNum" th:field="*{assetNum}" class="form-control" type="text">
+                    <input name="assetNum" th:field="*{assetNum}" class="form-control" type="text" readonly="readonly">
                 </div>
             </div>
             <div class="form-group">    
                 <label class="col-sm-3 control-label">品牌：</label>
                 <div class="col-sm-8">
-                    <input name="brand" th:field="*{brand}" class="form-control" type="text">
+                    <input name="brand" th:field="*{brand}" class="form-control" type="text" readonly="readonly">
                 </div>
             </div>
             <div class="form-group">    
                 <label class="col-sm-3 control-label">资产规格：</label>
                 <div class="col-sm-8">
-                    <input name="assetSpecification" th:field="*{assetSpecification}" class="form-control" type="text">
+                    <input name="assetSpecification" th:field="*{assetSpecification}" class="form-control" type="text" readonly="readonly">
                 </div>
             </div>
             <div class="form-group">    
                 <label class="col-sm-3 control-label">数量：</label>
                 <div class="col-sm-8">
-                    <input name="number" th:field="*{number}" class="form-control" type="text">
+                    <input name="number" th:field="*{number}" class="form-control" type="text" readonly="readonly">
                 </div>
             </div>
             <div class="form-group">    
                 <label class="col-sm-3 control-label">资产类型：</label>
                 <div class="col-sm-8">
-                    <select name="type" class="form-control m-b">
+                    <select name="type" class="form-control m-b" disabled="disabled">
                         <option value="">所有</option>
                     </select>
                     <span class="help-block m-b-none"><i class="fa fa-info-circle"></i> 代码生成请选择字典属性</span>
@@ -50,25 +50,25 @@
             <div class="form-group">    
                 <label class="col-sm-3 control-label">单位：</label>
                 <div class="col-sm-8">
-                    <input name="units" th:field="*{units}" class="form-control" type="text">
+                    <input name="units" th:field="*{units}" class="form-control" type="text" readonly="readonly">
                 </div>
             </div>
             <div class="form-group">    
                 <label class="col-sm-3 control-label">供货商：</label>
                 <div class="col-sm-8">
-                    <input name="supplier" th:field="*{supplier}" class="form-control" type="text">
+                    <input name="supplier" th:field="*{supplier}" class="form-control" type="text" readonly="readonly">
                 </div>
             </div>
             <div class="form-group">    
                 <label class="col-sm-3 control-label">图片：</label>
                 <div class="col-sm-8">
-                    <input name="picture" th:field="*{picture}" class="form-control" type="text">
+                    <img th:src="*{picture}" style="width: 50px;height: 50px">
                 </div>
             </div>
             <div class="form-group">    
                 <label class="col-sm-3 control-label">资产原值：</label>
                 <div class="col-sm-8">
-                    <input name="price" th:field="*{price}" class="form-control" type="text">
+                    <input name="price" th:field="*{price}" class="form-control" type="text" readonly="readonly">
                 </div>
             </div>
             <div class="form-group">    
@@ -76,7 +76,7 @@
                 <div class="col-sm-8">
                     <div class="input-group date">
                         <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
-                        <input name="purchasingTime" th:value="${#dates.format(zxAssetManagement.purchasingTime, 'yyyy-MM-dd')}" class="form-control" placeholder="yyyy-MM-dd" type="text">
+                        <input name="purchasingTime" th:value="${#dates.format(zxAssetManagement.purchasingTime, 'yyyy-MM-dd')}" class="form-control" placeholder="yyyy-MM-dd" type="text" readonly="readonly">
                     </div>
                 </div>
             </div>
@@ -85,32 +85,32 @@
                 <div class="col-sm-8">
                     <div class="input-group date">
                         <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
-                        <input name="storageTime" th:value="${#dates.format(zxAssetManagement.storageTime, 'yyyy-MM-dd')}" class="form-control" placeholder="yyyy-MM-dd" type="text">
+                        <input name="storageTime" th:value="${#dates.format(zxAssetManagement.storageTime, 'yyyy-MM-dd')}" class="form-control" placeholder="yyyy-MM-dd" type="text" readonly="readonly">
                     </div>
                 </div>
             </div>
             <div class="form-group">    
                 <label class="col-sm-3 control-label">入库校区：</label>
                 <div class="col-sm-8">
-                    <input name="warehousingCampus" th:field="*{warehousingCampus}" class="form-control" type="text">
+                    <input name="warehousingCampus" th:field="*{warehousingCampus}" class="form-control" type="text" readonly="readonly">
                 </div>
             </div>
             <div class="form-group">    
                 <label class="col-sm-3 control-label">状态：</label>
                 <div class="col-sm-8">
-                    <input name="state" th:field="*{state}" class="form-control" type="text">
+                    <input name="state" th:field="*{state}" class="form-control" type="text" readonly="readonly">
                 </div>
             </div>
             <div class="form-group">    
                 <label class="col-sm-3 control-label">操作人员：</label>
                 <div class="col-sm-8">
-                    <input name="operator" th:field="*{operator}" class="form-control" type="text">
+                    <input name="operator" th:field="*{operator}" class="form-control" type="text" readonly="readonly">
                 </div>
             </div>
             <div class="form-group">    
                 <label class="col-sm-3 control-label">存放地点：</label>
                 <div class="col-sm-8">
-                    <input name="location" th:field="*{location}" class="form-control" type="text">
+                    <input name="location" th:field="*{location}" class="form-control" type="text" readonly="readonly">
                 </div>
             </div>
             <div class="form-group">    
@@ -118,7 +118,7 @@
                 <div class="col-sm-8">
                     <div class="input-group date">
                         <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
-                        <input name="recipientsTime" th:value="${#dates.format(zxAssetManagement.recipientsTime, 'yyyy-MM-dd')}" class="form-control" placeholder="yyyy-MM-dd" type="text">
+                        <input name="recipientsTime" th:value="${#dates.format(zxAssetManagement.recipientsTime, 'yyyy-MM-dd')}" class="form-control" placeholder="yyyy-MM-dd" type="text" readonly="readonly">
                     </div>
                 </div>
             </div>
@@ -127,7 +127,7 @@
                 <div class="col-sm-8">
                     <div class="input-group date">
                         <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
-                        <input name="repairTime" th:value="${#dates.format(zxAssetManagement.repairTime, 'yyyy-MM-dd')}" class="form-control" placeholder="yyyy-MM-dd" type="text">
+                        <input name="repairTime" th:value="${#dates.format(zxAssetManagement.repairTime, 'yyyy-MM-dd')}" class="form-control" placeholder="yyyy-MM-dd" type="text" readonly="readonly">
                     </div>
                 </div>
             </div>
@@ -136,7 +136,7 @@
                 <div class="col-sm-8">
                     <div class="input-group date">
                         <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
-                        <input name="transferTime" th:value="${#dates.format(zxAssetManagement.transferTime, 'yyyy-MM-dd')}" class="form-control" placeholder="yyyy-MM-dd" type="text">
+                        <input name="transferTime" th:value="${#dates.format(zxAssetManagement.transferTime, 'yyyy-MM-dd')}" class="form-control" placeholder="yyyy-MM-dd" type="text" readonly="readonly">
                     </div>
                 </div>
             </div>
@@ -145,7 +145,7 @@
                 <div class="col-sm-8">
                     <div class="input-group date">
                         <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
-                        <input name="discardTime" th:value="${#dates.format(zxAssetManagement.discardTime, 'yyyy-MM-dd')}" class="form-control" placeholder="yyyy-MM-dd" type="text">
+                        <input name="discardTime" th:value="${#dates.format(zxAssetManagement.discardTime, 'yyyy-MM-dd')}" class="form-control" placeholder="yyyy-MM-dd" type="text" readonly="readonly">
                     </div>
                 </div>
             </div>
@@ -154,50 +154,50 @@
                 <div class="col-sm-8">
                     <div class="input-group date">
                         <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
-                        <input name="returnTime" th:value="${#dates.format(zxAssetManagement.returnTime, 'yyyy-MM-dd')}" class="form-control" placeholder="yyyy-MM-dd" type="text">
+                        <input name="returnTime" th:value="${#dates.format(zxAssetManagement.returnTime, 'yyyy-MM-dd')}" class="form-control" placeholder="yyyy-MM-dd" type="text" readonly="readonly">
                     </div>
                 </div>
             </div>
             <div class="form-group">    
                 <label class="col-sm-3 control-label">校区：</label>
                 <div class="col-sm-8">
-                    <input name="campus" th:field="*{campus}" class="form-control" type="text">
+                    <input name="campus" th:field="*{campus}" class="form-control" type="text" readonly="readonly">
                 </div>
             </div>
             <div class="form-group">    
                 <label class="col-sm-3 control-label">部门：</label>
                 <div class="col-sm-8">
-                    <input name="department" th:field="*{department}" class="form-control" type="text">
+                    <input name="department" th:field="*{department}" class="form-control" type="text" readonly="readonly">
                 </div>
             </div>
             <div class="form-group">    
                 <label class="col-sm-3 control-label">部门：</label>
                 <div class="col-sm-8">
-                    <input name="extend1" th:field="*{extend1}" class="form-control" type="text">
+                    <input name="extend1" th:field="*{extend1}" class="form-control" type="text" readonly="readonly">
                 </div>
             </div>
             <div class="form-group">    
                 <label class="col-sm-3 control-label">部门：</label>
                 <div class="col-sm-8">
-                    <input name="extend2" th:field="*{extend2}" class="form-control" type="text">
+                    <input name="extend2" th:field="*{extend2}" class="form-control" type="text" readonly="readonly">
                 </div>
             </div>
             <div class="form-group">    
                 <label class="col-sm-3 control-label">部门：</label>
                 <div class="col-sm-8">
-                    <input name="extend3" th:field="*{extend3}" class="form-control" type="text">
+                    <input name="extend3" th:field="*{extend3}" class="form-control" type="text" readonly="readonly">
                 </div>
             </div>
             <div class="form-group">    
                 <label class="col-sm-3 control-label">部门：</label>
                 <div class="col-sm-8">
-                    <input name="extend4" th:field="*{extend4}" class="form-control" type="text">
+                    <input name="extend4" th:field="*{extend4}" class="form-control" type="text" readonly="readonly">
                 </div>
             </div>
             <div class="form-group">    
                 <label class="col-sm-3 control-label">部门：</label>
                 <div class="col-sm-8">
-                    <input name="extend5" th:field="*{extend5}" class="form-control" type="text">
+                    <input name="extend5" th:field="*{extend5}" class="form-control" type="text" readonly="readonly">
                 </div>
             </div>
         </form>
