@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <th:block th:include="include :: header('新增资产信息')" />
+    <th:block th:include="include :: datetimepicker-css" />
+</head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal m" id="form-return-add">
+            <div class="col-sm-12 select-table table-striped">
+                <table id="bootstrap-table" data-mobile-responsive="true"></table>
+            </div>
+        </form>
+    </div>
+    <th:block th:include="include :: footer" />
+    <th:block th:include="include :: datetimepicker-js" />
+    <script type="text/javascript">
+        var prefix = ctx + "property/return";
+        var unit=[[${@dict.getType('zc_unit')}]]
+        var state=[[${@dict.getType('zc_state')}]]
+        var location=[[${@dict.getType('zc_location')}]]
+        var dept=[[${@dict.getType('zc_department')}]]
+        var type=[[${@dict.getType('zc_type')}]]
+        $("#form-management-add").validate({
+            focusCleanup: true
+        });
+
+        function submitHandler() {
+            if ($.validate.form()) {
+                $.operate.save(prefix + "/adds", $('#form-return-add').serialize());
+            }
+        }
+
+        $("input[name='purchasingTime']").datetimepicker({
+            format: "yyyy-mm-dd",
+            minView: "month",
+            autoclose: true
+        });
+
+
+
+        $(function() {
+            var options = {
+                url: prefix + "/list",
+                createUrl: prefix + "/adds",
+                /* updateUrl: prefix + "/edit/{id}",
+                 exportUrl: prefix + "/export",*/
+                removeUrl: prefix + "/remove",
+                modalName: "资产信息",
+                columns: [{
+                    checkbox: true
+                },
+                    {
+                        field : 'id',
+                        title : '资产ID',
+                        visible: false
+                    },
+                    {
+                        field : 'name',
+                        title : '资产名称'
+                    },
+                    {
+                        field : 'assetNum',
+                        title : '资产编号'
+                    },
+                    {
+                        field : 'brand',
+                        title : '品牌'
+                    },
+                    {
+                        field : 'assetSpecification',
+                        title : '资产规格'
+                    },
+                    {
+                        field : 'number',
+                        title : '数量'
+                    },
+                    {
+                        field : 'type',
+                        title : '资产类型',
+                        formatter:function (value, row, index) {
+                            return $.table.selectDictLabel(type,value);
+                        }
+                    },
+                    {
+                        field : 'units',
+                        title : '单位',
+                        formatter:function (value, row, index) {
+                            return $.table.selectDictLabel(unit,value);
+                        }
+                    },
+                    {
+                        field : 'supplier',
+                        title : '供货商'
+                    },
+                    {
+                        field : 'picture',
+                        title : '图片'
+                    },
+                    {
+                        field : 'price',
+                        title : '资产原值'
+                    },
+                    {
+                        field : 'purchasingTime',
+                        title : '购置时间'
+                    },
+                    {
+                        field : 'storageTime',
+                        title : '入库时间'
+                    },
+                    {
+                        field : 'warehousingCampus',
+                        title : '入库校区'
+                    },
+                    {
+                        field : 'state',
+                        title : '状态',
+                        formatter:function (value, row, index) {
+                            return $.table.selectDictLabel(state,value);
+                        }
+                    },
+                    {
+                        field : 'operator',
+                        title : '操作人员'
+                    },
+                    {
+                        field : 'location',
+                        title : '存放地点',
+                        formatter:function (value, row, index) {
+                            return $.table.selectDictLabel(location,value);
+                        }
+                    },
+                    {
+                        field : 'recipientsTime',
+                        title : '领用时间'
+                    },
+                    {
+                        field : 'repairTime',
+                        title : '报修时间'
+                    },
+                    {
+                        field : 'transferTime',
+                        title : '转移时间'
+                    },
+                    {
+                        field : 'discardTime',
+                        title : '报废时间'
+                    },
+                    {
+                        field : 'returnTime',
+                        title : '退还时间'
+                    },
+                    {
+                        field : 'campus',
+                        title : '校区'
+                    },
+                    {
+                        field : 'department',
+                        title : '部门',
+                        formatter:function (value, row, index) {
+                            return $.table.selectDictLabel(dept,value);
+                        }
+                    },
+                    {
+                        field : 'extend1',
+                        title : '退还部门',
+             formatter:function (value, row, index) {
+                 return $.table.selectDictLabel(dept,value);
+             }
+                    },
+                    {
+                        field : 'extend2',
+                        title : '退还人员'
+                    }]
+            };
+            $.table.init(options);
+        });
+    </script>
+</body>
+</html>
