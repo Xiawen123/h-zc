@@ -60,10 +60,10 @@
                     <input name="supplier" th:field="*{supplier}" class="form-control" type="text">
                 </div>
             </div>
-            <div class="form-group">    
+            <div class="form-group">
                 <label class="col-sm-3 control-label">图片：</label>
                 <div class="col-sm-8">
-                    <img style="width:100px;height:100px;"  th:src="*{picture}" />
+                    <img style="width:150px;height:150px;"  th:src="*{picture}" />
                 </div>
             </div>
             <div class="form-group">    
@@ -134,7 +134,7 @@
                 <div class="col-sm-8">
                     <div class="input-group date" readonly="readonly">
                         <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
-                        <input name="discardTime" th:value="${#dates.format(zxAssetManagement.discardTime, 'yyyy-MM-dd')}" class="form-control" placeholder="yyyy-MM-dd" type="text" >
+                        <input name="discardTime" th:value="${#dates.format(zxAssetManagement.discardTime, 'yyyy-MM-dd')}" class="form-control" placeholder="yyyy-MM-dd" type="text" readonly="readonly">
                     </div>
                 </div>
             </div>
@@ -174,6 +174,7 @@
             minView: "month",
             autoclose: true
         });
+
     </script>
 </body>
 </html>
