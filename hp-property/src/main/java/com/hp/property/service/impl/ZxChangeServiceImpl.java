@@ -91,4 +91,9 @@ public class ZxChangeServiceImpl implements IZxChangeService
     {
         return zxChangeMapper.deleteZxChangeById(id);
     }
+
+    @Override
+    public List<ZxChange> getTimeChange(ZxChange zxChange) {
+        return zxChangeMapper.getTimeChange(zxChange);
+    }
 }
