@@ -134,7 +134,18 @@ public class ZxAssetManagement extends BaseEntity
     @Excel(name = "")
     private String extend5;
 
-    public void setId(Long id) 
+
+    private ZxChange zxChange;
+
+    public ZxChange getZxChange() {
+        return zxChange;
+    }
+
+    public void setZxChange(ZxChange zxChange) {
+        this.zxChange = zxChange;
+    }
+
+    public void setId(Long id)
     {
         this.id = id;
     }

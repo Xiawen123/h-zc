@@ -61,4 +61,8 @@ public interface ZxChangeMapper extends BaseMapper<ZxChange>
      * @return 结果
      */
     public int deleteZxChangeByIds(String[] ids);
+    /**
+     * 时间搜索记录
+     */
+    public List<ZxChange> getTimeChange(ZxChange zxChange);
 }

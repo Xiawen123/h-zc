@@ -59,4 +59,9 @@ public interface IZxChangeService
      * @return 结果
      */
     public int deleteZxChangeById(Long id);
+
+    /**
+     * 根据时间来搜索
+     */
+    public List<ZxChange> getTimeChange(ZxChange zxChange);
 }

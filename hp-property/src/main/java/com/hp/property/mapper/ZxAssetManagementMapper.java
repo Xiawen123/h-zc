@@ -31,6 +31,7 @@ public interface ZxAssetManagementMapper extends BaseMapper<ZxAssetManagement>
      */
     public List<ZxAssetManagement> selectZxAssetManagementList(ZxAssetManagement zxAssetManagement);
 
+
     /**
      * 新增资产信息
      * 
@@ -39,6 +40,16 @@ public interface ZxAssetManagementMapper extends BaseMapper<ZxAssetManagement>
      */
     public int insertZxAssetManagement(ZxAssetManagement zxAssetManagement);
 
+    /**
+     * 查看数据表是否有值
+     * @return
+     */
+    public int allZxAssetManagement();
+    /**
+     * 获取数据库中id最大值
+     * @return
+     */
+    public ZxAssetManagement getMaxId();
     /**
      * 修改资产信息
      * 
