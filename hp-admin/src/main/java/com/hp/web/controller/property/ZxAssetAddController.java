@@ -5,7 +5,6 @@ import com.hp.common.core.controller.BaseController;
 import com.hp.common.core.domain.AjaxResult;
 import com.hp.common.core.page.TableDataInfo;
 import com.hp.common.enums.BusinessType;
-import com.hp.common.enums.UserStatus;
 import com.hp.common.utils.FastJsonUtils;
 import com.hp.common.utils.SnowFlake;
 import com.hp.common.utils.poi.ExcelUtil;
@@ -15,16 +14,19 @@ import com.hp.property.domain.ZxChange;
 import com.hp.property.service.IZxAssetManagementService;
 import com.hp.property.service.IZxChangeService;
 import com.hp.system.domain.SysDept;
-import com.hp.system.domain.SysUser;
 import com.hp.system.service.ISysDeptService;
+import com.hp.web.controller.system.cloud.CloudStorageService;
+import com.hp.web.controller.system.cloud.OSSFactory;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Base64;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 资产信息Controller
@@ -93,6 +95,7 @@ public class ZxAssetAddController extends BaseController
     @GetMapping("/add")
     public String add()
     {
+
         return prefix + "/add";
     }
 
@@ -119,6 +122,19 @@ public class ZxAssetAddController extends BaseController
         zxAssetManagement.setWarehousingCampus(115);
         //添加存放地点?
         zxAssetManagement.setLocation(1);
+
+        //添加图片url
+        List<Map<String, Object>> list = FastJsonUtils.getJsonToListMap(zxAssetManagement.getPicture().toString());
+        list.get(0).get("img");
+        for (int i = 0; i < list.size(); i++) {
+            String a=list.get(i).get("img").toString();
+            String suffix = a.substring(a.indexOf("/")+1,a.indexOf(";"));
+            CloudStorageService storage = OSSFactory.build();
+            String str = a.substring(a.indexOf(",") + 1, a.length());
+            byte[] bytes = Base64.getDecoder().decode(str);
+            String url = storage.uploadSuffix(bytes, "." + suffix);
+            zxAssetManagement.setPicture(url);
+        }
         return toAjax(zxAssetManagementService.insertZxAssetManagement(zxAssetManagement));
     }
 

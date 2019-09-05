@@ -217,7 +217,6 @@
 	            <artifactId>hp-common</artifactId>
 	            <version>${hp.version}</version>
 	        </dependency>
-
 	        
         </dependencies>
     </dependencyManagement>
