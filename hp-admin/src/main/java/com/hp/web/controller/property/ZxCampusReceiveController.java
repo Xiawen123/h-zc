@@ -93,10 +93,27 @@ public class ZxCampusReceiveController extends BaseController {
     /**
      * 查看闲置资产信息
      */
-   /* @RequiresPermissions("property:campusrecive:showIdle")*/
+    /*@RequiresPermissions("property:campusrecive:showIdle")*/
     @GetMapping("/showIdle")
     public String showIdle()
     {
         return prefix + "/showIdle";
+    }
+
+    /**
+     * 查询资产信息列表
+     */
+    @RequiresPermissions("property:campusrecive:list")
+    @PostMapping("/list1")
+    @ResponseBody
+    public TableDataInfo list1(ZxAssetManagement zxAssetManagement)
+    {
+        // 资产状态1代表闲置
+        zxAssetManagement.setState(1);
+
+        // 带条件查询所有
+        startPage();
+        List<ZxAssetManagement> list = zxAssetManagementService.findAllStateOne(zxAssetManagement);
+        return getDataTable(list);
     }
 }

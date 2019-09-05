@@ -1,13 +1,13 @@
 package com.hp.property.service.impl;
 
-import java.util.List;
-
+import com.hp.common.core.text.Convert;
 import com.hp.property.domain.ZxAssetManagement;
 import com.hp.property.mapper.ZxAssetManagementMapper;
 import com.hp.property.service.IZxAssetManagementService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.hp.common.core.text.Convert;
+
+import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * 资产信息Service业务层处理
@@ -17,7 +17,7 @@ import com.hp.common.core.text.Convert;
  */
 @Service
 public class ZxAssetManagementServiceImpl implements IZxAssetManagementService {
-    @Autowired
+    @Resource
     private ZxAssetManagementMapper zxAssetManagementMapper;
 
     /**
@@ -88,5 +88,10 @@ public class ZxAssetManagementServiceImpl implements IZxAssetManagementService {
     @Override
     public List<ZxAssetManagement> findAllStateTwo(ZxAssetManagement zxAssetManagement) {
         return zxAssetManagementMapper.selectAllStateTwo(zxAssetManagement);
+    }
+
+    @Override
+    public List<ZxAssetManagement> findAllStateOne(ZxAssetManagement zxAssetManagement) {
+        return zxAssetManagementMapper.selectAllStateOne(zxAssetManagement);
     }
 }
