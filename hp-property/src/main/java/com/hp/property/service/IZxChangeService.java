@@ -64,4 +64,14 @@ public interface IZxChangeService
      * 根据时间来搜索
      */
     public List<ZxChange> getTimeChange(ZxChange zxChange);
+
+    /**
+     *@description:
+     *@author:  CaiYan
+     *@createTime:  2019/9/3
+     *@return:
+     *@param:
+     *
+     */
+    public List<ZxChange> selectZxChangeTransferList(ZxChange zxChange);
 }
