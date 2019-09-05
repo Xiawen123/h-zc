@@ -3,7 +3,6 @@ package com.hp.web.controller.cloud;
 import com.alibaba.fastjson.JSON;
 import com.hp.common.utils.spring.SpringUtils;
 import com.hp.system.service.ISysConfigService;
-import com.hp.web.controller.system.cloud.CloudConstant.CloudService;
 
 /**
  * 文件上传Factory
@@ -21,15 +20,15 @@ public final class OSSFactory
         String jsonconfig = sysConfigService.selectConfigByKey(CloudConstant.CLOUD_STORAGE_CONFIG_KEY);
         // 获取云存储配置信息
         CloudStorageConfig config = JSON.parseObject(jsonconfig, CloudStorageConfig.class);
-        if (config.getType() == CloudService.QINIU.getValue())
+        if (config.getType() == CloudConstant.CloudService.QINIU.getValue())
         {
             return new QiniuCloudStorageService(config);
         }
-        else if (config.getType() == CloudService.ALIYUN.getValue())
+        else if (config.getType() == CloudConstant.CloudService.ALIYUN.getValue())
         {
             return new AliyunCloudStorageService(config);
         }
-        else if (config.getType() == CloudService.QCLOUD.getValue())
+        else if (config.getType() == CloudConstant.CloudService.QCLOUD.getValue())
         {
             return new QcloudCloudStorageService(config);
         }

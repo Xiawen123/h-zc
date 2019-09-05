@@ -156,8 +156,8 @@ public class SysProfileController extends BaseController
         {
             if (!file.isEmpty())
             {
-                String avatar = FileUploadUtils.upload(Global.getAvatarPath(), file);
-                currentUser.setAvatar(avatar);
+//                String avatar = FileUploadUtils.upload(Global.getAvatarPath(), file);
+//                currentUser.setAvatar(avatar);
 
                 // 上传文件
                 String suffix = filename.substring(filename.lastIndexOf("."));
