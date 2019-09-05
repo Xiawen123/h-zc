@@ -135,6 +135,8 @@ public class SysUserController extends BaseController
         user.setSalt(ShiroUtils.randomSalt());
         user.setPassword(passwordService.encryptPassword(user.getLoginName(), user.getPassword(), user.getSalt()));
         user.setCreateBy(ShiroUtils.getLoginName());
+        //给用户添加默认图片
+        user.setAvatar("http://whhp.oss-cn-hangzhou.aliyuncs.com/image/head/admin.jpg");
         return toAjax(userService.insertUser(user));
     }
 
