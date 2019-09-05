@@ -1,5 +1,5 @@
 <!DOCTYPE HTML>
-<html  lang="zh" xmlns:th="http://www.thymeleaf.org">
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.w3.org/1999/xhtml">
 <meta charset="utf-8">
 <head th:include="include :: header('添加校区领用登记')"></head>
 <body class="white-bg">
@@ -33,8 +33,9 @@
 					</div>
 				</div>
 			</div>
-
-			<button type="button" class="btn btn-primary" onclick="queryAllIdle()">查看闲置资产</button>
+			<div class="btn-group-sm" id="toolbar" role="group">
+				<a class="btn btn-success" onclick="$.operate.addFull()" shiro:hasPermission="property:campusrecive:showIdle"> 查看闲置资产 </a>
+			</div>
 			<table class="table" id="addIdle">
 				<tr>
 					<th>资产编号</th>
@@ -46,7 +47,7 @@
 					<th>数量</th>
 					<th>操作</th>
 				</tr>
-				<tr>
+				<!--<tr>
 					<td>
 						<input type="text" name="assetNum" class="assetNum" required="required" placeholder="请输入资产编号" style="height: 30px;width: 80%;border: none;">
 					</td>
@@ -64,13 +65,13 @@
 						<select name="units" id="units" th:with="type=${@dict.getType('zc_unit')}" style="height: 30px;width: 60%;border: none;">
 							<option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
 						</select>
-						<!--<input type="text" name="units" class="units" required="required" placeholder="请输入单位" style="height: 30px;width: 80%;border: none;">-->
+						&lt;!&ndash;<input type="text" name="units" class="units" required="required" placeholder="请输入单位" style="height: 30px;width: 80%;border: none;">&ndash;&gt;
 					</td>
 					<td>
 						<select name="state" id="state" th:with="type=${@dict.getType('zc_state')}" style="height: 30px;width: 60%;border: none;">
 							<option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
 						</select>
-						<!--<input type="text" class="state" required="required" placeholder="请输入资产状态" style="height: 30px;width: 80%;border: none;">-->
+						&lt;!&ndash;<input type="text" class="state" required="required" placeholder="请输入资产状态" style="height: 30px;width: 80%;border: none;">&ndash;&gt;
 					</td>
 					<td>
 						<input type="text" name="number" class="number" required="required" placeholder="请输入数量" style="height: 30px;width: 80%;border: none;">
@@ -78,7 +79,7 @@
 					<td>
 						<button type="button" class="btn btn-danger" onclick="del(this)">删除</button>
 					</td>
-				</tr>
+				</tr>-->
 			</table>
 		</form>
 	</div>
@@ -86,22 +87,22 @@
     <script type="text/javascript">
 		var prefix = ctx + "property/campusrecive";
 
-		function queryAllIdle(){
-		    var state = 1;
-		    $.ajax({
-				url:
-				type : "POST"
-				data:{"state" : state}
-				dataType:"JSON"
-				success:function () {
-
-            	}
-				error:function(){
-
-				}
-
+		function showIdle() {
+			var state = 1;
+			$.ajax({
+				type:"POST",
+				url:prefix + "/showIdle",
+				data:{"state":state},
+				dataType:"JSON",
+				success:function (data) {
+					console.log(data)
+                },
+				error:function (data) {
+					window.alert("后台服务器异常！！！")
+                }
 			})
-		}
+
+        }
 
         function del(data) {
 			data.parentNode.parentNode.remove();
