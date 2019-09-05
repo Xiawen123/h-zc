@@ -70,13 +70,13 @@
                 </div>
             </div>
         </div>
-        <!--<div class="form-group">
+        <div class="form-group">
             <label class="col-sm-3 control-label">上传文件：</label>
             <div class="col-sm-8">
                 <input name="picture" class="form-control" type="text">
             </div>
-        </div>-->
-        <div class="from-group">
+        </div>
+        <!--<div class="from-group">
             <label class="col-sm-3 control-label"> 上传文件：</label>
             <div class="col-sm-8">
                 <div style="position: relative">
@@ -88,7 +88,7 @@
                     <div style="color:#9b9b9b;font-size:12px;margin-top:6px;">可以上传一张图片，且大小小于3M。</div>
                 </div>
             </div>
-        </div>
+        </div>-->
     </form>
 </div>
 <th:block th:include="include :: footer"/>
@@ -103,22 +103,22 @@
     $("#form-productIn-add").validate({
         focusCleanup: true
     });
-    /*function submitHandler() {
+    function submitHandler() {
         if ($.validate.form()) {
             $.operate.save(prefix + "/add", $('#form-productIn-add').serialize());
         }
-    }*/
+    }
 
 
     //上传文件图片
-    $(document).ready(function () {
+    /*$(document).ready(function () {
         //为外面的盒子绑定一个点击事件
         $("#uploadImgBtn").click(function () {
-            /*
+            /!*
             1、先获取input标签
             2、给input标签绑定change事件
             3、把图片回显
-             */
+             *!/
 //            1、先回去input标签
             var $input = $("#file");
 //                console.log($input)
@@ -230,7 +230,7 @@
 
 
 
-    }
+    }*/
 
 
 </script>
