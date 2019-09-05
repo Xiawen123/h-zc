@@ -73,7 +73,6 @@
                     {
                         field : 'id',
                         title : '资产id',
-                        visible: false
                     },
                     {
                         field : 'name',
@@ -101,19 +100,31 @@
             $.table.init(options);
         }
         function selectUsersToParent(){
-            $.modal.open("选择用户", prefix + "/parent");
+			var url = prefix + "/parent";
+			var options = {
+				title: '选择用户',
+				url: url,
+				callBack: doSubmit
+			};
+			$.modal.openOptions(options);
+            //$.modal.open("选择用户", prefix + "/parent");
         }
-        // $(function () {
-        //     getList();
-        // });
-		function changeVale() {
-            getList();
-        }
+		function doSubmit(index, layero){
+			var body = layer.getChildFrame('body', index);
 
-        $("#ids").bind("input propertychange",function(){
-
-            getList()
-        })
+			var data = body.find('.selected')[0];
+			if(data != "undefined" && data != "" && data != null){
+				var ids = data.children[1].innerHTML
+				$("#ids").val(ids);
+				//判断是否为空
+				if (ids != undefined && ids != null) {
+					getList();
+				}
+			}else{
+				layer.msg("请选择一个资产");
+			}
+			layer.close(index);
+		}
 	</script>
 </body>
 </html>

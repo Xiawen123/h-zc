@@ -17,6 +17,7 @@ import java.util.List;
  */
 @Service
 public class ZxAssetManagementServiceImpl implements IZxAssetManagementService {
+
     @Resource
     private ZxAssetManagementMapper zxAssetManagementMapper;
 
