@@ -70,14 +70,13 @@
                 </div>
             </div>
         </div>
-        <div class="form-group">
+        <!--<div class="form-group">
             <label class="col-sm-3 control-label">上传文件：</label>
             <div class="col-sm-8">
                 <input name="picture" class="form-control" type="text">
             </div>
-        </div>
-
-        <!--<div class="from-group">
+        </div>-->
+        <div class="from-group">
             <label class="col-sm-3 control-label"> 上传文件：</label>
             <div class="col-sm-8">
                 <div style="position: relative">
@@ -89,10 +88,9 @@
                     <div style="color:#9b9b9b;font-size:12px;margin-top:6px;">可以上传一张图片，且大小小于3M。</div>
                 </div>
             </div>
-        </div>-->
+        </div>
     </form>
 </div>
-<script th:src="@{/static/ajax/libs/laydate/laydate.js}"></script>
 <th:block th:include="include :: footer"/>
 <th:block th:include="include :: datetimepicker-js"/>
 <script type="text/javascript">
@@ -105,22 +103,22 @@
     $("#form-productIn-add").validate({
         focusCleanup: true
     });
-    function submitHandler() {
+    /*function submitHandler() {
         if ($.validate.form()) {
             $.operate.save(prefix + "/add", $('#form-productIn-add').serialize());
         }
-    }
+    }*/
 
 
-    //上传选手照片
-    /*$(document).ready(function () {
+    //上传文件图片
+    $(document).ready(function () {
         //为外面的盒子绑定一个点击事件
         $("#uploadImgBtn").click(function () {
-            /!*
+            /*
             1、先获取input标签
             2、给input标签绑定change事件
             3、把图片回显
-             *!/
+             */
 //            1、先回去input标签
             var $input = $("#file");
 //                console.log($input)
@@ -166,13 +164,10 @@
                         $(".tupian").on("click", function () {
                             $(this).parent().remove();
                         })
-
-
                     }
                     fr.readAsDataURL(value);
                 })
             })
-
             //4、我们把当前input标签的id属性remove
             $input.removeAttr("id");
             //我们做个标记，再class中再添加一个类名就叫test
@@ -208,9 +203,6 @@
         }
         var picture = JSON.stringify(b)
 //            console.log(pics)
-        if (b.length < 1) {
-            layer.alert("最少上传一张图片")
-        } else {
             $.ajax({
                 cache: true,
                 type: "POST",
@@ -235,10 +227,10 @@
                     $.operate.successCallback(data);
                 }
             })
-        }
 
 
-    }*/
+
+    }
 
 
 </script>
