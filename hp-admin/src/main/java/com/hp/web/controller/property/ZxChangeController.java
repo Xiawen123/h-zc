@@ -68,7 +68,8 @@ public class ZxChangeController extends BaseController
     @ResponseBody
     public AjaxResult addSave(ZxChange zxChange)
     {
-        return toAjax(zxChangeService.insertZxChange(zxChange));
+
+        return toAjax(zxChangeService.insertZxChange2(zxChange));
     }
 
 //    /**

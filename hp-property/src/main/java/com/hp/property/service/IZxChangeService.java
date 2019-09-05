@@ -35,6 +35,7 @@ public interface IZxChangeService
      * @return 结果
      */
     public int insertZxChange(ZxChange zxChange);
+    public int insertZxChange2(ZxChange zxChange);
 
     /**
      * 修改资产变更

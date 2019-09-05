@@ -57,7 +57,11 @@ public class ZxChangeServiceImpl implements IZxChangeService
      * @return 结果
      */
     @Override
-    public int insertZxChange(ZxChange zxChange)
+    public int insertZxChange(ZxChange zxChange) {
+        return zxChangeMapper.insertZxChange(zxChange);
+    }
+    @Override
+    public int insertZxChange2(ZxChange zxChange)
     {
         //雪花算法获取id
         Long id = SnowFlake.nextId();
