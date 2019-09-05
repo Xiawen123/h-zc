@@ -35,8 +35,8 @@
 <th:block th:include="include :: footer" />
 
 <script th:inline="javascript">
+    var zc_change = [[${@dict.getType('zc_change')}]];
     var zc_department = [[${@dict.getType('zc_department')}]];
-    var zc_state = [[${@dict.getType('zc_state')}]];
     var editFlag = [[${@permission.hasPermi('system:management:edit')}]];
     var removeFlag = [[${@permission.hasPermi('system:management:remove')}]];
     var prefix = ctx + "property/management";
@@ -76,7 +76,7 @@
                     field : 'changeType',
                     title : '变动类型',
                     formatter: function(value, row, index) {
-                        return $.table.selectDictLabel(zc_state,value);
+                        return $.table.selectDictLabel(zc_change,value);
                     }
                 },
                 {

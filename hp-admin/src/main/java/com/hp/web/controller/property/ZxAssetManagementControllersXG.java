@@ -13,8 +13,10 @@ import com.hp.property.domain.ZxChange;
 import com.hp.property.service.IZxAssetManagementService;
 import com.hp.property.service.IZxChangeService;
 import com.hp.system.domain.SysDept;
+import com.hp.system.domain.SysDictData;
 import com.hp.system.domain.SysUser;
 import com.hp.system.service.ISysDeptService;
+import com.hp.system.service.ISysDictDataService;
 import com.hp.system.service.ISysUserService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,6 +42,8 @@ public class ZxAssetManagementControllersXG extends BaseController
     private ISysDeptService iSysDeptService;
     @Autowired
     private ISysUserService iSysUserService;
+    @Autowired
+    private ISysDictDataService iSysDictDataService;
 
     @RequiresPermissions("property:management1:view")
     @GetMapping()
@@ -60,6 +64,7 @@ public class ZxAssetManagementControllersXG extends BaseController
         List<ZxAssetManagement> list = zxAssetManagementService.selectZxAssetManagementList(zxAssetManagement);
         SysDept sysDept = new SysDept();
         List<SysDept> sysDepts = iSysDeptService.selectDeptList(sysDept);
+        //循环存入校区名，存入备用字段5
         for (ZxAssetManagement zxAssetManagement1:list){
             for (SysDept sysDept1:sysDepts) {
                 String a=zxAssetManagement1.getWarehousingCampus().toString();
@@ -112,11 +117,12 @@ public class ZxAssetManagementControllersXG extends BaseController
      * 修改资产信息
      */
     @GetMapping("/edit/{id}")
-    public String edit(@PathVariable("id") Long id, ModelMap mmap)
-    {
+    public String edit(@PathVariable("id") Long id, ModelMap mmap) {
+
         ZxAssetManagement zxAssetManagement = zxAssetManagementService.selectZxAssetManagementById(id);
         SysDept sysDept = new SysDept();
         List<SysDept> sysDepts = iSysDeptService.selectDeptList(sysDept);
+        //循环存入校区名，存入备用字段5
         for (SysDept sysDept1:sysDepts) {
             if (zxAssetManagement.getCampus().equals(sysDept.getDeptId())) {
                 zxAssetManagement.setCampus(Integer.parseInt("sysDept.getDeptName()"));
@@ -136,21 +142,36 @@ public class ZxAssetManagementControllersXG extends BaseController
     @ResponseBody
     public AjaxResult editSave(ZxAssetManagement zxAssetManagement,ZxChange zxChange)
     {
+        //在变更表中存值
         ZxAssetManagement zxAssetManagement1 = zxAssetManagementService.selectZxAssetManagementById(zxAssetManagement.getId());
+        //在变更表中生成ID（雪花算法）
         zxChange.setId(SnowFlake.nextId());
+        //在变更表中存入资产编号
         zxChange.setAssetsId(new Long(zxAssetManagement1.getId()));
+        //在变更表中存入变更类型
         zxChange.setChangeType(5);
+        //在变更表中存入提交人
         zxChange.setSubmitOne(zxAssetManagement1.getOperator());
+        //在变更表中存入使用部门和使用人
         int a=Integer.parseInt(zxAssetManagement1.getExtend1());
         zxChange.setUseDepartment(a);
         zxChange.setUsers(zxAssetManagement1.getExtend2());
+        //在变更表中生成变更时间
         SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
         zxChange.setExtend1(sdf.format(new Date()));
+        //在变更表中生成存放地点
         String b=String.valueOf(zxAssetManagement1.getLocation());
         zxChange.setExtend3(b);
+        //在变更表中存入提交人所属部门
         SysUser sysUser = iSysUserService.selectUserByLoginName(ShiroUtils.getLoginName());
-        Integer c=sysUser.getDeptId().intValue();
-        zxChange.setSubmittedDepartment(c);
+        String c= iSysDeptService.selectDeptById(sysUser.getDeptId()).getDeptName();
+        List<SysDictData> zc_department = iSysDictDataService.selectDictDataByType("zc_department");
+        for (SysDictData sysDictData:zc_department){
+            if (c.equals(sysDictData.getDictLabel())){
+                int d=Integer.parseInt(sysDictData.getDictValue());
+                zxChange.setSubmittedDepartment(d);
+            }
+        }
         zxChangeService.insertZxChange(zxChange);
         return toAjax(zxAssetManagementService.updateZxAssetManagement(zxAssetManagement));
     }
