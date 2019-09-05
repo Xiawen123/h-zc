@@ -6,23 +6,20 @@ import com.hp.common.core.domain.AjaxResult;
 import com.hp.common.core.page.TableDataInfo;
 import com.hp.common.enums.BusinessType;
 import com.hp.common.enums.UserStatus;
+import com.hp.common.utils.FastJsonUtils;
 import com.hp.common.utils.SnowFlake;
-import com.hp.common.utils.DateString;
 import com.hp.common.utils.poi.ExcelUtil;
 import com.hp.framework.util.ShiroUtils;
 import com.hp.property.domain.ZxAssetManagement;
 import com.hp.property.domain.ZxChange;
 import com.hp.property.service.IZxAssetManagementService;
-import com.hp.system.domain.SysDept;
-import com.hp.system.domain.SysUser;
 import com.hp.property.service.IZxChangeService;
 import com.hp.system.domain.SysDept;
-import com.hp.system.service.ISysDeptService;
+import com.hp.system.domain.SysUser;
 import com.hp.system.service.ISysDeptService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 
@@ -36,62 +33,32 @@ import java.util.List;
  * @date 2019-09-02
  */
 @Controller
-@RequestMapping("/property/management")
-public class ZxAssetManagementController extends BaseController
+@RequestMapping("/property/productIn")
+public class ZxAssetAddController extends BaseController
 {
-    private String prefix = "property/management";
-
+    private String prefix = "property/productIn";
     @Autowired
     private IZxAssetManagementService zxAssetManagementService;
     @Autowired
     private IZxChangeService zxChangeService;
     @Autowired
     private ISysDeptService iSysDeptService;
-
-    @RequiresPermissions("property:management:view")
+    @RequiresPermissions("property:productIn:view")
     @GetMapping()
     public String management()
     {
-        return prefix + "/management";
+        return prefix + "/productIn";
     }
-
     /**
      * 查询资产信息列表
      */
-    @RequiresPermissions("property:management:list")
+    @RequiresPermissions("property:productIn:list")
     @PostMapping("/list")
     @ResponseBody
     public TableDataInfo list(ZxAssetManagement zxAssetManagement)
     {
-//        ZxChange zxChange=new ZxChange();
-//       if (zxAssetManagement.getExtend1()!=null&&!zxAssetManagement.getExtend1().equals("")){
-//           zxChange.setUseDepartment(Integer.parseInt(zxAssetManagement.getExtend1()));
-//       }
-//        if (zxAssetManagement.getExtend2()!=null&&!zxAssetManagement.getExtend2().equals("")){
-//            zxChange.setUsers(zxAssetManagement.getExtend2());
-//        }
-     //   List<ZxChange> zxChangess=zxChangeService.selectZxChangeList(zxChange);
-
         startPage();
         List<ZxAssetManagement> list = zxAssetManagementService.selectZxAssetManagementList(zxAssetManagement);
-//        for (ZxAssetManagement z:list){
-//            zxChange.setAssetsId(new Long((long)z.getId()));
-//            List<ZxChange> zxChanges = zxChangeService.selectZxChangeList(zxChange);
-//           if (zxChanges!=null&&zxChanges.equals("")){
-//               for (int i=0;i<zxChanges.size()-1;i++){
-//                   for (int j=0;j<zxChanges.size()-1-i;j++){
-//                       if (DateString.getDate("yy-MM-dd HH:mm:ss",zxChanges.get(j).getExtend1()).compareTo(DateString.getDate("yy-MM-dd HH:mm:ss",zxChanges.get(j+1).getExtend1()))<0){
-//                           String temp=zxChanges.get(j).getExtend1();
-//                           zxChanges.get(j).setExtend1(zxChanges.get(j+1).getExtend1());
-//                           zxChanges.get(j+1).setExtend1(temp);
-//                       }
-//                   }
-//               }
-//               z.setExtend1(zxChanges.get(0).getUseDepartment()+"");
-//               z.setExtend2(zxChanges.get(0).getUsers());
-//           }
-//        }
-
         for (ZxAssetManagement z:list){
             if (z.getCampus()!=null) {
                  int z1=z.getCampus();
@@ -105,7 +72,7 @@ public class ZxAssetManagementController extends BaseController
     /**
      * 导出资产信息列表
      */
-    @RequiresPermissions("property:management:export")
+    @RequiresPermissions("property:productIn:export")
     @PostMapping("/export")
     @ResponseBody
     public AjaxResult export(ZxAssetManagement zxAssetManagement)
@@ -118,21 +85,35 @@ public class ZxAssetManagementController extends BaseController
     /**
      * 新增资产信息
      */
-    @GetMapping("/addition")
+    @GetMapping("/add")
     public String add()
     {
-        return prefix + "/addition";
+        return prefix + "/add";
     }
 
     /**
      * 新增保存资产信息
      */
-    @RequiresPermissions("property:management:addition")
+    @RequiresPermissions("property:productIn:add")
     @Log(title = "资产信息", businessType = BusinessType.INSERT)
-    @PostMapping("/addition")
+    @PostMapping("/add")
     @ResponseBody
     public AjaxResult addSave(ZxAssetManagement zxAssetManagement)
     {
+        //添加雪花算法 表id
+        zxAssetManagement.setId(SnowFlake.nextId());
+        //添加雪花算法资产编号
+        zxAssetManagement.setAssetNum(String.valueOf(SnowFlake.nextId()));
+        //添加入库时间
+        zxAssetManagement.setStorageTime(new Date());
+        //添加操作人,直接获取登录账户
+        zxAssetManagement.setOperator(ShiroUtils.getLoginName());
+        //添加状态为,闲置=1
+        zxAssetManagement.setState(1);
+        //添加入库校区?
+        zxAssetManagement.setWarehousingCampus(115);
+        //添加存放地点?
+        zxAssetManagement.setLocation(1);
         return toAjax(zxAssetManagementService.insertZxAssetManagement(zxAssetManagement));
     }
 
@@ -151,7 +132,7 @@ public class ZxAssetManagementController extends BaseController
     /**
      * 修改保存资产信息
      */
-    @RequiresPermissions("property:management:edit")
+    @RequiresPermissions("property:productIn:edit")
     @Log(title = "资产信息", businessType = BusinessType.UPDATE)
     @PostMapping("/edit")
     @ResponseBody
@@ -163,7 +144,7 @@ public class ZxAssetManagementController extends BaseController
     /**
      * 删除资产信息
      */
-    @RequiresPermissions("property:management:remove")
+    @RequiresPermissions("property:productIn:remove")
     @Log(title = "资产信息", businessType = BusinessType.DELETE)
     @PostMapping( "/remove")
     @ResponseBody
@@ -171,18 +152,6 @@ public class ZxAssetManagementController extends BaseController
     {
         return toAjax(zxAssetManagementService.deleteZxAssetManagementByIds(ids));
     }
-//    /**
-//     * 详情
-//     */
-//    @RequiresPermissions("property:management:onee")
-//    @GetMapping("/onee/{id}")
-//    public String onee(@PathVariable("id") Integer id, ModelMap mmap)
-//    {
-//        mmap.addAttribute("id",id);
-//        return prefix + "/one";
-//    }
-
-
     /**
      * 详情
      */
@@ -190,13 +159,6 @@ public class ZxAssetManagementController extends BaseController
     public String one(@PathVariable("id") Long id, ModelMap mmap)
     {
         ZxAssetManagement zxAssetManagement = zxAssetManagementService.selectZxAssetManagementById(id);
-
-            if (zxAssetManagement.getCampus()!=null) {
-                int z1=zxAssetManagement.getCampus();
-                SysDept s= iSysDeptService.selectDeptById(new Long((long)z1));
-                zxAssetManagement.setExtend5(s.getDeptName());
-            }
-
         mmap.put("zxAssetManagement", zxAssetManagement);
         return prefix + "/one";
     }
@@ -211,7 +173,7 @@ public class ZxAssetManagementController extends BaseController
         mmap.put("id",id);
         return prefix + "/oneChange";
     }
-    @RequiresPermissions("property:management:oneChange")
+    @RequiresPermissions("property:productIn:oneChange")
     @PostMapping("/oneChange")
     @ResponseBody
     public TableDataInfo oneChange(ZxChange zxChange){
