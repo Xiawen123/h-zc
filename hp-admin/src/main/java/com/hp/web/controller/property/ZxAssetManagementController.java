@@ -196,6 +196,13 @@ public class ZxAssetManagementController extends BaseController
     public String one(@PathVariable("id") Long id, ModelMap mmap)
     {
         ZxAssetManagement zxAssetManagement = zxAssetManagementService.selectZxAssetManagementById(id);
+
+            if (zxAssetManagement.getCampus()!=null) {
+                int z1=zxAssetManagement.getCampus();
+                SysDept s= iSysDeptService.selectDeptById(new Long((long)z1));
+                zxAssetManagement.setExtend5(s.getDeptName());
+            }
+
         mmap.put("zxAssetManagement", zxAssetManagement);
         return prefix + "/one";
     }
