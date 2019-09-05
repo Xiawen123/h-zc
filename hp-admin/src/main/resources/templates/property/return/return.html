@@ -13,7 +13,7 @@
                         <ul>
                             <li>
                                 <p>退还日期：</p>
-                                <input type="text" name="returnTime" id="returnTime" class="form-control"/>
+                                <input type="text" name="extend4" id="returnTime"/>
                             </li>
                             <li>
                                 <p>退还物品：</p>
@@ -25,7 +25,7 @@
                             </li>
                             <li>
                                 <p>退还部门：</p>
-                                <select name="extend1" class="form-control m-b" th:with="type=${@dict.getType('zc_department')}">
+                                <select name="extend1" th:with="type=${@dict.getType('zc_department')}">
                                     <option value="">请选择部门</option>
                                     <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
                                 </select>
@@ -156,7 +156,9 @@
          //时间选择器
          laydate.render({
              elem: '#returnTime'
-             ,trigger: 'click'
+             ,trigger: 'click',
+             type:'date'
+             ,range: true
 
          });
      </script>
