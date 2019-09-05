@@ -2,7 +2,10 @@ package com.hp.property.service.impl;
 
 import java.util.List;
 
+import com.hp.common.utils.SnowFlake;
+import com.hp.property.domain.ZxAssetManagement;
 import com.hp.property.domain.ZxChange;
+import com.hp.property.mapper.ZxAssetManagementMapper;
 import com.hp.property.mapper.ZxChangeMapper;
 import com.hp.property.service.IZxChangeService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,8 +21,10 @@ import com.hp.common.core.text.Convert;
 @Service
 public class ZxChangeServiceImpl implements IZxChangeService
 {
-    @Autowired
+    @Autowired(required = false)
     private ZxChangeMapper zxChangeMapper;
+    @Autowired(required = false)
+    private ZxAssetManagementMapper zxAssetManagementMapper;
 
     /**
      * 查询资产变更
@@ -52,8 +57,21 @@ public class ZxChangeServiceImpl implements IZxChangeService
      * @return 结果
      */
     @Override
-    public int insertZxChange(ZxChange zxChange)
+    public int insertZxChange(ZxChange zxChange) {
+        return zxChangeMapper.insertZxChange(zxChange);
+    }
+    @Override
+    public int insertZxChange2(ZxChange zxChange)
     {
+        //雪花算法获取id
+        Long id = SnowFlake.nextId();
+        zxChange.setId(id);
+        zxChange.setChangeType(2);   //2表示转移
+        //在主表修改存放地点
+        ZxAssetManagement z=new ZxAssetManagement();
+        z.setLocation(Integer.parseInt(zxChange.getExtend3()));
+        z.setAssetNum(zxChange.getAssetNum());
+        zxAssetManagementMapper.updateZxAssetManagementByAssetNum(z);
         return zxChangeMapper.insertZxChange(zxChange);
     }
 
@@ -95,5 +113,10 @@ public class ZxChangeServiceImpl implements IZxChangeService
     @Override
     public List<ZxChange> getTimeChange(ZxChange zxChange) {
         return zxChangeMapper.getTimeChange(zxChange);
+    }
+
+
+    public List<ZxChange> selectZxChangeTransferList(ZxChange zxChange){
+        return zxChangeMapper.selectZxChangeTransferList(zxChange);
     }
 }

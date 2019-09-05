@@ -58,6 +58,8 @@ public interface ZxAssetManagementMapper extends BaseMapper<ZxAssetManagement>
      */
     public int updateZxAssetManagement(ZxAssetManagement zxAssetManagement);
 
+    public int updateZxAssetManagementByAssetNum(ZxAssetManagement zxAssetManagement);
+
     /**
      * 删除资产信息
      * 
@@ -80,6 +82,13 @@ public interface ZxAssetManagementMapper extends BaseMapper<ZxAssetManagement>
      * @return
      */
    List<ZxAssetManagement> selectAllStateTwo(ZxAssetManagement zxAssetManagement);
+
+    /**
+     * 查询所有资产为闲置状态的信息
+     * @param zxAssetManagement
+     * @return
+     */
+    List<ZxAssetManagement> selectAllStateOne(ZxAssetManagement zxAssetManagement);
 
 
 }

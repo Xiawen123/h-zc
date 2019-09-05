@@ -70,6 +70,7 @@ spring:
       # 热部署开关
       enabled: false
 
+
 # MyBatis
 mybatis:
     # 搜索指定包别名
@@ -128,3 +129,5 @@ xss:
   excludes: /system/notice/*
   # 匹配链接
   urlPatterns: /system/*,/monitor/*,/tool/*,/property/*
+
+

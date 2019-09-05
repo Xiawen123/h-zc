@@ -1,5 +1,7 @@
 package com.hp.web.controller.system;
 
+import com.hp.web.controller.cloud.CloudStorageService;
+import com.hp.web.controller.cloud.OSSFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -147,15 +149,22 @@ public class SysProfileController extends BaseController
     @Log(title = "个人信息", businessType = BusinessType.UPDATE)
     @PostMapping("/updateAvatar")
     @ResponseBody
-    public AjaxResult updateAvatar(@RequestParam("avatarfile") MultipartFile file)
+    public AjaxResult updateAvatar(@RequestParam("avatarfile") MultipartFile file,@RequestParam("filename") String filename)
     {
         SysUser currentUser = ShiroUtils.getSysUser();
         try
         {
             if (!file.isEmpty())
             {
-                String avatar = FileUploadUtils.upload(Global.getAvatarPath(), file);
-                currentUser.setAvatar(avatar);
+//                String avatar = FileUploadUtils.upload(Global.getAvatarPath(), file);
+//                currentUser.setAvatar(avatar);
+
+                // 上传文件
+                String suffix = filename.substring(filename.lastIndexOf("."));
+                CloudStorageService storage = OSSFactory.build();
+                String url = storage.uploadSuffix(file.getBytes(), suffix);
+
+                currentUser.setAvatar(url);
                 if (userService.updateUserInfo(currentUser) > 0)
                 {
                     ShiroUtils.setSysUser(userService.selectUserById(currentUser.getUserId()));

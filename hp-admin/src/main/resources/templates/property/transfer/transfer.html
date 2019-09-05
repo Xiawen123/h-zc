@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('资产转移列表')" />
+</head>
+<body class="gray-bg">
+     <div class="container-div">
+        <div class="row">
+            <div class="col-sm-12 search-collapse">
+                <form id="formId">
+                    <div class="select-list">
+                        <ul>
+                            <li>
+                                <p>转移日期：</p>
+                                <input type="date" name="extend1"/>
+                            </li>
+
+                            <li>
+                                <p>转移物品：</p>
+                                <input type="text" name="name"/>
+                            </li>
+                            <li>
+                                <p>物品编号：</p>
+                                <input type="text" name="assetNum"/>
+                            </li>
+                            <li>
+                                <p>使用部门：</p>
+                                <input type="text" name="useDepartment"/>
+                            </li>
+                            <li>
+                                <p>使用人员：</p>
+                                <input type="text" name="users"/>
+                            </li>
+                            <li>
+                                <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+                                <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+                            </li>
+                        </ul>
+                    </div>
+                </form>
+            </div>
+
+            <div class="btn-group-sm" id="toolbar" role="group">
+                <a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="system:transfer:add">
+                    <i class="fa fa-plus"></i> 转移登记
+                </a>
+
+            </div>
+            <div class="col-sm-12 select-table table-striped">
+                <table id="bootstrap-table" data-mobile-responsive="true"></table>
+            </div>
+        </div>
+    </div>
+
+    <th:block th:include="include :: footer" />
+    <script th:inline="javascript">
+        var editFlag = [[${@permission.hasPermi('system:transfer:edit')}]];
+        var removeFlag = [[${@permission.hasPermi('system:transfer:remove')}]];
+        var datas1=[[${@dict.getType('zc_department')}]];
+        var datas2=[[${@dict.getType('zc_unit')}]];
+        var datas3=[[${@dict.getType('zc_type')}]];
+        var prefix = ctx + "property/transfer";
+
+        $(function() {
+            var options = {
+                url: prefix + "/transferList",
+                createUrl: prefix + "/add",
+                updateUrl: prefix + "/edit/{id}",
+                removeUrl: prefix + "/remove",
+                exportUrl: prefix + "/export",
+                modalName: "资产转移",
+                columns: [{
+                    checkbox: true
+                },
+                {
+                    field : 'id',
+                    title : '序号',
+                    visible: false
+                },
+                    {
+                        field : 'assetNum',
+                        title : '资产编号'
+                    },
+                {
+                    field : 'extend1',
+                    title : '退还时间'
+                },
+                {
+                    field : 'name',
+                    title : '资产名称'
+                },
+                {
+                    field : 'type',
+                    title : '资产分类',
+                    align : 'center',
+                    formatter:function (value,row,index) {
+                        return $.table.selectDictLabel(datas3,value);
+
+                    }
+                },
+                {
+                    field : 'brand',
+                    title : '品牌'
+                },
+                {
+                    field : 'assetSpecification',
+                    title : '规格型号'
+                },
+                {
+                    field : 'number',
+                    title : '数量'
+                },
+                {
+                    field : 'units',
+                    title : '单位',
+                    align : 'center',
+                    formatter:function (value,row,index) {
+                        return $.table.selectDictLabel(datas2,value);
+
+                    }
+                },
+                {
+                    field : 'useDepartment',
+                    title : '使用部门',
+                    align : 'center',
+                    formatter:function (value,row,index) {
+                        return $.table.selectDictLabel(datas1,value);
+
+                    }
+
+                },
+
+                {
+                    field : 'users',
+                    title : '使用人员'
+                },
+                {
+                    field : 'extend2',
+                    title : '接受人员'
+                },
+                {
+                    field : 'extend5',
+                    title : '详情'
+                }]
+            };
+            $.table.init(options);
+        });
+    </script>
+</body>
+</html>

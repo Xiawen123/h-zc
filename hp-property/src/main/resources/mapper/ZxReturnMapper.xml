@@ -52,7 +52,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 
     <sql id="selectZxAssetManagementVo">
-       SELECT * FROM `zx_asset_management` a LEFT join `zx_change` c ON a.id = c.assets_id
+       SELECT a.id, a.name, a.asset_num, a.brand, a.asset_specification, a.number, a.type, a.units, a.supplier, a.price, a.purchasing_time, a.storage_time, a.warehousing_campus, a.state, a.operator, a.location, a.recipients_time, a.repair_time, a.transfer_time, a.discard_time, a.return_time, a.campus, a.department, a.extend1, a.extend2, a.extend3, a.extend4, a.extend5 FROM `zx_asset_management` a LEFT join `zx_change` c ON a.id = c.assets_id
     </sql>
 
 
@@ -92,17 +92,21 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="repairTime != null "> and a.repair_time = #{repairTime}</if>
             <if test="transferTime != null "> and a.transfer_time = #{transferTime}</if>
             <if test="discardTime != null "> and a.discard_time = #{discardTime}</if>
-            <if test="returnTime != null "> and a.return_time = #{returnTime}</if>
             <if test="campus != null "> and a.campus = #{campus}</if>
             <if test="department != null "> and a.department = #{department}</if>
             <if test="extend1 != null  and extend1 != ''"> and a.extend1 = #{extend1}</if>
-            <if test="extend2 != null  and extend2 != ''"> and a.extend2 = #{extend2}</if>
+            <if test="extend2 != null  and extend2 != ''"> and a.extend2 like concat('%', #{extend2}, '%')</if>
+            <if test="returnTime != null and returnTime != ''">
+                and a.return_time = #{returnTime}
+            </if>
             <if test="extend3 != null  and extend3 != ''"> and a.extend3 = #{extend3}</if>
-            <if test="extend4 != null  and extend4 != ''"> and a.extend4 = #{extend4}</if>
+            <if test="extend4 != null  and extend4 != ''">
+              and a.return_time &gt;= date_format(SUBSTR(#{extend4} FROM 1 FOR 10),'%y%m%d')
+                and a.return_time &lt;= date_format(SUBSTR(#{extend4} FROM 14 FOR 10),'%y%m%d')</if>
             <if test="extend5 != null  and extend5 != ''"> and a.extend5 = #{extend5}</if>
-            a.state&lt;&gt; 1
+           and a.state&lt;&gt; 1
         </where>
-        ORDER BY c.`extend1`
+        ORDER BY c.extend1
     </select>
 
     <select id="selectZxAssetManagementById" parameterType="Long" resultMap="ZxAssetManagementResult">

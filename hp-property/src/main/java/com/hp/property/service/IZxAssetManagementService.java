@@ -65,4 +65,11 @@ public interface IZxAssetManagementService
      * @return
      */
     List<ZxAssetManagement> findAllStateTwo(ZxAssetManagement zxAssetManagement);
+
+    /**
+     * 查询所有资产为闲置状态的信息
+     * @param zxAssetManagement
+     * @return
+     */
+    List<ZxAssetManagement> findAllStateOne(ZxAssetManagement zxAssetManagement);
 }

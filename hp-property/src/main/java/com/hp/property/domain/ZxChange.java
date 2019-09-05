@@ -69,6 +69,77 @@ public class ZxChange extends BaseEntity
     private String oneTime;
     private String twoTime;
 
+    //资产编号
+    private String assetNum;
+    //资产名称
+    private String name;
+    //资产分类
+    private String type;
+    //品牌
+    private String brand;
+    //规格型号
+    private String assetSpecification;
+    // 数量
+    private Integer number;
+    //单位
+    private String  units;
+
+    public String getAssetNum() {
+        return assetNum;
+    }
+
+    public void setAssetNum(String assetNum) {
+        this.assetNum = assetNum;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public String getBrand() {
+        return brand;
+    }
+
+    public void setBrand(String brand) {
+        this.brand = brand;
+    }
+
+    public String getAssetSpecification() {
+        return assetSpecification;
+    }
+
+    public void setAssetSpecification(String assetSpecification) {
+        this.assetSpecification = assetSpecification;
+    }
+
+    public Integer getNumber() {
+        return number;
+    }
+
+    public void setNumber(Integer number) {
+        this.number = number;
+    }
+
+    public String getUnits() {
+        return units;
+    }
+
+    public void setUnits(String units) {
+        this.units = units;
+    }
+
     public String getStartTime() {
         return startTime;
     }
