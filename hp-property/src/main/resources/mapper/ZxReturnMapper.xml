@@ -96,11 +96,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="campus != null "> and a.campus = #{campus}</if>
             <if test="department != null "> and a.department = #{department}</if>
             <if test="extend1 != null  and extend1 != ''"> and a.extend1 = #{extend1}</if>
-            <if test="extend2 != null  and extend2 != ''"> and a.extend2 = #{extend2}</if>
+            <if test="extend2 != null  and extend2 != ''"> and a.extend2 like concat('%', #{extend2}, '%')</if>
             <if test="extend3 != null  and extend3 != ''"> and a.extend3 = #{extend3}</if>
             <if test="extend4 != null  and extend4 != ''"> and a.extend4 = #{extend4}</if>
             <if test="extend5 != null  and extend5 != ''"> and a.extend5 = #{extend5}</if>
-            a.state&lt;&gt; 1
+           and a.state&lt;&gt; 1
         </where>
         ORDER BY c.`extend1`
     </select>
