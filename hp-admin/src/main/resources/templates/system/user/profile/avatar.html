@@ -25,6 +25,7 @@
 <th:block th:include="include :: cropbox-js" />
 <script type="text/javascript">
 var cropper;
+var filename  = "";
 $(window).load(function() {
 	var avatar = '[[${user.avatar}]]';
     var options = {
@@ -45,6 +46,7 @@ $(window).load(function() {
             }
         }
         reader.readAsDataURL(this.files[0]);
+		filename= this.files[0].name
     })
     
 	$('#btnCrop').on('click', function(){
@@ -68,6 +70,7 @@ function submitHandler() {
     var img = cropper.getBlob();
     var formdata = new FormData();
     formdata.append("avatarfile", img);
+	formdata.append("filename",filename);
     $.ajax({
         url: ctx + "system/user/profile/updateAvatar",
         data: formdata,
