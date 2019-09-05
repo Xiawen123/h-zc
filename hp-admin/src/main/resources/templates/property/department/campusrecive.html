@@ -23,8 +23,11 @@
                                 <input type="text" name="assetNum"/>
                             </li>
                             <li>
-                                <p>领用校区：</p>
-                                <input type="text" name="campus"/>
+                                <p>领用部门：</p>
+                                <select name="extend1" class="form-control m-b" th:with="type=${@dict.getType('zc_department')}">
+                                    <option value="">所有</option>
+                                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+                                </select>
                             </li>
                             <li>
                                 <p>使用人：</p>
@@ -41,7 +44,7 @@
             </div>
 
             <div class="btn-group-sm" id="toolbar" role="group">
-                <a class="btn btn-success" onclick="$.operate.addFull()" shiro:hasPermission="property:campusrecive:add">
+                <a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="property:campusrecive:add">
                     <i class="fa fa-plus"></i> 领用登记
                 </a>
             </div>
@@ -54,7 +57,7 @@
     <script th:inline="javascript">
         var editFlag = [[${@permission.hasPermi('system:management:edit')}]];
         var removeFlag = [[${@permission.hasPermi('system:management:remove')}]];
-        var prefix = ctx + "property/campusrecive";
+        var prefix = ctx + "property/department";
 
         $(function() {
             var options = {

@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+	<th:block th:include="include :: header('闲置资产状态信息列表')" />
+</head>
+<body class="white-bg">
+<div class="wrapper wrapper-content animated fadeInRight ibox-content">
+	<h1 align="center">闲置资产状态信息列表</h1>
+	<form class="form-horizontal m" id="form-return-adds">
+		<div class="col-sm-12 select-table table-striped">
+			<table id="bootstrap-table" data-mobile-responsive="true"></table>
+		</div>
+	</form>
+</div>
+<th:block th:include="include :: footer" />
+<th:block th:include="include :: datetimepicker-js" />
+<script th:inline="javascript">
+
+    var prefix = ctx + "property/campusrecive";
+
+    $(function() {
+        var options = {
+            url: prefix + "/list1",
+            modalName: "闲置资产信息列表",
+            columns: [{
+                checkbox: true
+            },
+			{
+				field : 'id',
+				title : '资产ID',
+				visible: false
+			},
+			{
+				field : 'assetNum',
+				title : '资产编号'
+			},
+			{
+				field : 'name',
+				title : '资产名称'
+			},
+			{
+				field : 'brand',
+				title : '品牌'
+			},
+			{
+				field : 'assetSpecification',
+				title : '资产规格'
+			},
+			{
+				field : 'units',
+				title : '单位'
+				/*formatter:function (value, row, index) {
+					return $.table.selectDictLabel(unit,value);
+				}*/
+			},
+			{
+				field : 'state',
+				title : '资产状态'
+				/*formatter:function (value, row, index) {
+					return $.table.selectDictLabel(state,value);
+				}*/
+			},
+			{
+				field : 'number',
+				title : '数量'
+			}]
+        };
+        $.table.init(options);
+    });
+</script>
+</body>
+</html>
