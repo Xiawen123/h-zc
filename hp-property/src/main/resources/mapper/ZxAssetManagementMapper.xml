@@ -156,6 +156,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
          </trim>
     </insert>
 
+
+
     <update id="updateZxAssetManagement" parameterType="ZxAssetManagement">
         update zx_asset_management
         <trim prefix="SET" suffixOverrides=",">
@@ -190,6 +192,42 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </trim>
         where id = #{id}
     </update>
+
+    <update id="updateZxAssetManagementByAssetNum" parameterType="ZxAssetManagement">
+        update zx_asset_management
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="name != null  and name != ''">name = #{name},</if>
+<!--            <if test="assetNum != null  and assetNum != ''">asset_num = #{assetNum},</if>-->
+            <if test="brand != null  and brand != ''">brand = #{brand},</if>
+            <if test="assetSpecification != null  and assetSpecification != ''">asset_specification = #{assetSpecification},</if>
+            <if test="number != null ">number = #{number},</if>
+            <if test="type != null ">type = #{type},</if>
+            <if test="units != null ">units = #{units},</if>
+            <if test="supplier != null  and supplier != ''">supplier = #{supplier},</if>
+            <if test="picture != null  and picture != ''">picture = #{picture},</if>
+            <if test="price != null ">price = #{price},</if>
+            <if test="purchasingTime != null ">purchasing_time = #{purchasingTime},</if>
+            <if test="storageTime != null ">storage_time = #{storageTime},</if>
+            <if test="warehousingCampus != null ">warehousing_campus = #{warehousingCampus},</if>
+            <if test="state != null ">state = #{state},</if>
+            <if test="operator != null  and operator != ''">operator = #{operator},</if>
+            <if test="location != null ">location = #{location},</if>
+            <if test="recipientsTime != null ">recipients_time = #{recipientsTime},</if>
+            <if test="repairTime != null ">repair_time = #{repairTime},</if>
+            <if test="transferTime != null ">transfer_time = #{transferTime},</if>
+            <if test="discardTime != null ">discard_time = #{discardTime},</if>
+            <if test="returnTime != null ">return_time = #{returnTime},</if>
+            <if test="campus != null ">campus = #{campus},</if>
+            <if test="department != null ">department = #{department},</if>
+            <if test="extend1 != null  and extend1 != ''">extend1 = #{extend1},</if>
+            <if test="extend2 != null  and extend2 != ''">extend2 = #{extend2},</if>
+            <if test="extend3 != null  and extend3 != ''">extend3 = #{extend3},</if>
+            <if test="extend4 != null  and extend4 != ''">extend4 = #{extend4},</if>
+            <if test="extend5 != null  and extend5 != ''">extend5 = #{extend5},</if>
+        </trim>
+        where asset_num = #{assetNum}
+    </update>
+
 
     <delete id="deleteZxAssetManagementById" parameterType="Long">
         delete from zx_asset_management where id = #{id}
