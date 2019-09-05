@@ -35,6 +35,7 @@ public interface IZxChangeService
      * @return 结果
      */
     public int insertZxChange(ZxChange zxChange);
+    public int insertZxChange2(ZxChange zxChange);
 
     /**
      * 修改资产变更
@@ -64,4 +65,14 @@ public interface IZxChangeService
      * 根据时间来搜索
      */
     public List<ZxChange> getTimeChange(ZxChange zxChange);
+
+    /**
+     *@description:
+     *@author:  CaiYan
+     *@createTime:  2019/9/3
+     *@return:
+     *@param:
+     *
+     */
+    public List<ZxChange> selectZxChangeTransferList(ZxChange zxChange);
 }

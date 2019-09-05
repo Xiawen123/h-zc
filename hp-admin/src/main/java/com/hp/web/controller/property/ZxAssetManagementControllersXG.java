@@ -138,7 +138,7 @@ public class ZxAssetManagementControllersXG extends BaseController
     {
         ZxAssetManagement zxAssetManagement1 = zxAssetManagementService.selectZxAssetManagementById(zxAssetManagement.getId());
         zxChange.setId(SnowFlake.nextId());
-        zxChange.setAssetsId(new Long(zxAssetManagement1.getAssetNum()));
+        zxChange.setAssetsId(new Long(zxAssetManagement1.getId()));
         zxChange.setChangeType(5);
         zxChange.setSubmitOne(zxAssetManagement1.getOperator());
         int a=Integer.parseInt(zxAssetManagement1.getExtend1());

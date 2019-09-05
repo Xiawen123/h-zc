@@ -2,6 +2,7 @@ package com.hp.web.controller.property;
 
 import com.hp.common.core.controller.BaseController;
 import com.hp.common.core.page.TableDataInfo;
+import com.hp.common.utils.DateString;
 import com.hp.property.domain.ZxAssetManagement;
 import com.hp.property.service.IZxAssetManagementService;
 import com.hp.property.service.IZxReturnService;
@@ -11,7 +12,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -48,10 +52,8 @@ public class ZxReturnController extends BaseController {
     @RequiresPermissions("property:return:list")
     @PostMapping("/list")
     @ResponseBody
-    public TableDataInfo list(ZxAssetManagement zxAssetManagement)
-    {
+    public TableDataInfo list(ZxAssetManagement zxAssetManagement){
         startPage();
-
         List<ZxAssetManagement> list = zxReturnService.selectZxReturnList(zxAssetManagement);
         return getDataTable(list);
     }
