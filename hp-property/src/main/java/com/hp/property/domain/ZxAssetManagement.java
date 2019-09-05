@@ -137,6 +137,16 @@ public class ZxAssetManagement extends BaseEntity
 
     private ZxChange zxChange;
 
+    private String ids;
+
+    public String getIds() {
+        return ids;
+    }
+
+    public void setIds(String ids) {
+        this.ids = ids;
+    }
+
     public ZxChange getZxChange() {
         return zxChange;
     }
