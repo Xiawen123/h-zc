@@ -11,6 +11,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -33,6 +35,7 @@ public class ZxReturnController extends BaseController {
     public String returns()
     {
 
+
         return prefix + "/return";
     }
 
@@ -45,9 +48,10 @@ public class ZxReturnController extends BaseController {
     @RequiresPermissions("property:return:list")
     @PostMapping("/list")
     @ResponseBody
-    public TableDataInfo list(ZxAssetManagement zxAssetManagement)
+    public TableDataInfo list(ZxAssetManagement zxAssetManagement,String returnTime)
     {
         startPage();
+
         List<ZxAssetManagement> list = zxReturnService.selectZxReturnList(zxAssetManagement);
         return getDataTable(list);
     }
@@ -79,11 +83,14 @@ public class ZxReturnController extends BaseController {
         return getDataTable(list);
     }*/
 
+    @RequiresPermissions("property:return:adds")
     @GetMapping("/adds")
     public String adds()
     {
+
         return prefix + "/adds";
     }
+
 
     /**
      * 新增资产退还页面
@@ -94,6 +101,17 @@ public class ZxReturnController extends BaseController {
         ZxAssetManagement zxAssetManagement = zxReturnService.selectZxAssetManagementById(id);
         mmap.put("zxAssetManagement", zxAssetManagement);
         return prefix + "/select";
+    }
+
+
+    @RequiresPermissions("property:return:list")
+    @PostMapping("/lists")
+    @ResponseBody
+    public TableDataInfo lists(ZxAssetManagement zxAssetManagement,String returnTime)
+    {
+        startPage();
+        List<ZxAssetManagement> list = zxReturnService.selectZxReturnList(zxAssetManagement);
+        return getDataTable(list);
     }
 
 }

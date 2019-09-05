@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.w3.org/1999/xhtml">
 <head>
     <th:block th:include="include :: header('新增退还信息')" />
     <th:block th:include="include :: datetimepicker-css" />
@@ -11,8 +11,8 @@
             <div class="form-group">    
                 <label class="col-sm-3 control-label">退还部门：</label>
                 <div class="col-sm-8">
-                    <select name="extend1" class="form-control m-b" th:with="type=${@dict.getType('zc_department')}">
-                        <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+                    <select name="extend1" class="form-control m-b" th:with="dept=${@dict.getType('zc_department')}">
+                        <option th:each="dict : ${dept}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
                         </select>
                 </div>
             </div>
@@ -29,7 +29,7 @@
                 </div>
             </div>
             <div class="btn-group-sm" id="toolbar" role="group">
-                <a class="btn btn-success" onclick="$.operate.addFull()" shiro:hasPermission="system:return:adds">
+                <a class="btn btn-success" onclick="$.operate.addFull()" shiro:hasPermission="property:return:adds">
                     <i class="fa fa-plus"></i> 添加退还资产
                 </a>
                 <!-- <a class="btn btn-primary single disabled" onclick="$.operate.edit()" shiro:hasPermission="system:management:edit">
@@ -45,8 +45,8 @@
             </div>
             <div class="col-sm-12 select-table table-striped">
                 <table id="bootstrap-table" data-mobile-responsive="true">
-                    <tr>
-                        <th style="height: 30px;width: 10%;border: none;"><checkbox>选择</checkbox></th>
+                   <!-- <tr>
+                        <th style="height: 30px;width: 10%;border: none;"><input type="checkbox">&nbsp;选择</th>
                         <th style="height: 30px;width: 11%;border: none;">资产编号</th>
                         <th style="height: 30px;width: 11%;border: none;">资产名称</th>
                         <th style="height: 30px;width: 11%;border: none;">资产分类</th>
@@ -56,39 +56,6 @@
                         <th style="height: 30px;width: 11%;border: none;">供货商</th>
                         <th style="height: 30px;width: 10%;border: none;">资产原值</th>
                         <th style="height: 30px;width: 40px;border: none;">数量</th>
-                    </tr>
-                    <!--<tr>
-                        <td>
-                            <input type="text" name="assetNum" class="assetNum" required="required" placeholder="请输入资产编号" >
-                        </td>
-                        <td>
-                            <input type="text" name="name" class="name" required="required" placeholder="请输入资产名称" style="height: 30px;width: 80%;border: none;">
-                        </td>
-                        <td>
-                            <input type="text" name="brand" class="brand" required="required" placeholder="请输入品牌" style="height: 30px;width: 80%;border: none;">
-                        </td>
-                        <td>
-
-                            <input type="text" name="assetSpecification" class="assetSpecification" required="required" placeholder="请输入资产规格" style="height: 30px;width: 80%;border: none;">
-                        </td>
-                        <td>
-                            <select name="units" id="units" th:with="type=${@dict.getType('zc_unit')}" style="height: 30px;width: 60%;border: none;">
-                                <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
-                            </select>
-                            &lt;!&ndash;<input type="text" name="units" class="units" required="required" placeholder="请输入单位" style="height: 30px;width: 80%;border: none;">&ndash;&gt;
-                        </td>
-                        <td>
-                            <select name="state" id="state" th:with="type=${@dict.getType('zc_state')}" style="height: 30px;width: 60%;border: none;">
-                                <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
-                            </select>
-                            &lt;!&ndash;<input type="text" class="state" required="required" placeholder="请输入资产状态" style="height: 30px;width: 80%;border: none;">&ndash;&gt;
-                        </td>
-                        <td>
-                            <input type="text" name="number" class="number" required="required" placeholder="请输入数量" style="height: 30px;width: 80%;border: none;">
-                        </td>
-                        <td>
-                            <button type="button" class="btn btn-danger" onclick="del(this)">删除</button>
-                        </td>
                     </tr>-->
                 </table>
             </div>
@@ -96,12 +63,13 @@
     </div>
     <th:block th:include="include :: footer" />
     <th:block th:include="include :: datetimepicker-js" />
-    <script type="text/javascript">
+    <!--<script type="text/javascript">
+        var selectFlag = [[${@permission.hasPermi('property:return:select')}]];
         var prefix = ctx + "property/return";
-        var type=[[${@dict.getType('zc_type')}]]
-        var dept=[[${@dict.getType('zc_department')}]]
-        var unit=[[${@dict.getType('zc_unit')}]]
-        $("#form-management-add").validate({
+        var type=[[${@dict.getType('zc_type')}]];
+      /*  var dept=[[${@dict.getType('zc_department')}]]*/
+        var unit=[[${@dict.getType('zc_unit')}]];
+        $("#form-return-add").validate({
             focusCleanup: true
         });
 
@@ -121,7 +89,7 @@
 
         $(function() {
             var options = {
-                url: prefix + "/list",
+               /* url: prefix + "/list",*/
                 createUrl: prefix + "/adds",
                 /* updateUrl: prefix + "/edit/{id}",
                  exportUrl: prefix + "/export",*/
@@ -142,7 +110,10 @@
                     },
                     {
                         field : 'type',
-                        title : '资产分类'
+                        title : '资产分类',
+                        formatter:function (value, row, index) {
+                            return $.table.selectDictLabel(type,value);
+                        }
                     },
                     {
                         field : 'brand',
@@ -172,6 +143,76 @@
                         title : '数量'
                     }]
 
+            };
+            $.table.init(options);
+        });
+    </script>-->
+    <script th:inline="javascript">
+
+        var selectFlag = [[${@permission.hasPermi('property:return:select')}]];
+        /* var removeFlag = [[${@permission.hasPermi('system:management:remove')}]];*/
+        var prefix = ctx + "property/return";
+        var type=[[${@dict.getType('zc_type')}]]
+        var dept=[[${@dict.getType('zc_department')}]]
+        var unit=[[${@dict.getType('zc_unit')}]]
+
+        $(function() {
+            var options = {
+               /* url: prefix + "/lists",*/
+                createUrl: prefix + "/adds",
+                /*updateUrl: prefix + "/select/{id}",*/
+                /*removeUrl: prefix + "/remove",
+                exportUrl: prefix + "/export",*/
+               /* detailUrl: prefix+"/select/{id}",*/
+                modalName: "未退还资产信息",
+                columns: [{
+                    title:"选择",
+                    checkbox: true
+                },
+                    {
+                        field : 'assetNum',
+                        title : '资产编号',
+                        visible: false
+                    },
+                    {
+                        field : 'name',
+                        title : '资产名称'
+                    },
+                    {
+                        field : 'type',
+                        title : '资产分类',
+                        formatter:function (value, row, index) {
+                            return $.table.selectDictLabel(type,value);
+                        }
+                    },
+                    {
+                        field : 'brand',
+                        title : '品牌'
+                    },
+                    {
+                        field : 'assetSpecification',
+                        title : '规格型号'
+                    },
+                    {
+                        field : 'units',
+                        title : '单位',
+                        formatter:function (value, row, index) {
+                            return $.table.selectDictLabel(unit,value);
+                        }
+                    },
+                    {
+                        field : 'supplier',
+                        title : '供货商'
+                    },
+                    {
+                        field : 'price',
+                        title : '资产原值'
+                    },
+                    {
+                        field : 'number',
+                        title : '数量'
+                    }
+                   ]
             };
             $.table.init(options);
         });
