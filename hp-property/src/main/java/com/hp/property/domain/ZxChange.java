@@ -65,7 +65,41 @@ public class ZxChange extends BaseEntity
     @Excel(name = "")
     private String extend5;
 
-    public void setId(Long id) 
+    private String startTime;
+    private String oneTime;
+    private String twoTime;
+
+    public String getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(String startTime) {
+        this.startTime = startTime;
+        try {
+            this.setOneTime(startTime.substring(0,10));
+            this.setTwoTime(startTime.substring(13));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public String getOneTime() {
+        return oneTime;
+    }
+
+    public void setOneTime(String oneTime) {
+        this.oneTime = oneTime;
+    }
+
+    public String getTwoTime() {
+        return twoTime;
+    }
+
+    public void setTwoTime(String twoTime) {
+        this.twoTime = twoTime;
+    }
+
+    public void setId(Long id)
     {
         this.id = id;
     }
