@@ -48,7 +48,7 @@ public class ZxReturnController extends BaseController {
     @RequiresPermissions("property:return:list")
     @PostMapping("/list")
     @ResponseBody
-    public TableDataInfo list(ZxAssetManagement zxAssetManagement,String returnTime)
+    public TableDataInfo list(ZxAssetManagement zxAssetManagement)
     {
         startPage();
 
@@ -107,7 +107,7 @@ public class ZxReturnController extends BaseController {
     @RequiresPermissions("property:return:list")
     @PostMapping("/lists")
     @ResponseBody
-    public TableDataInfo lists(ZxAssetManagement zxAssetManagement,String returnTime)
+    public TableDataInfo lists(ZxAssetManagement zxAssetManagement)
     {
         startPage();
         List<ZxAssetManagement> list = zxReturnService.selectZxReturnList(zxAssetManagement);
