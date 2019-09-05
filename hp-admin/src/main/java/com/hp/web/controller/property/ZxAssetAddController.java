@@ -59,11 +59,16 @@ public class ZxAssetAddController extends BaseController
     {
         startPage();
         List<ZxAssetManagement> list = zxAssetManagementService.selectZxAssetManagementList(zxAssetManagement);
-        for (ZxAssetManagement z:list){
-            if (z.getCampus()!=null) {
-                 int z1=z.getCampus();
-               SysDept s= iSysDeptService.selectDeptById(new Long((long)z1));
-                z.setExtend5(s.getDeptName());
+        SysDept sysDept = new SysDept();
+        List<SysDept> sysDepts = iSysDeptService.selectDeptList(sysDept);
+        for (ZxAssetManagement zxAssetManagement1:list){
+            for (SysDept sysDept1:sysDepts) {
+                String a=zxAssetManagement1.getWarehousingCampus().toString();
+                String b=sysDept1.getDeptId().toString();
+                if (a.equals(b)) {
+                    String c=sysDept1.getDeptName();
+                    zxAssetManagement1.setExtend5(c);
+                }
             }
         }
         return getDataTable(list);

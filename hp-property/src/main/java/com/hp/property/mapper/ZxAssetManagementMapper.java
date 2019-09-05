@@ -58,6 +58,8 @@ public interface ZxAssetManagementMapper extends BaseMapper<ZxAssetManagement>
      */
     public int updateZxAssetManagement(ZxAssetManagement zxAssetManagement);
 
+    public int updateZxAssetManagementByAssetNum(ZxAssetManagement zxAssetManagement);
+
     /**
      * 删除资产信息
      * 

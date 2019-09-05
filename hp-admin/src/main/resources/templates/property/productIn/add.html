@@ -76,7 +76,6 @@
                 <input name="picture" class="form-control" type="text">
             </div>
         </div>
-
         <!--<div class="from-group">
             <label class="col-sm-3 control-label"> 上传文件：</label>
             <div class="col-sm-8">
@@ -92,7 +91,6 @@
         </div>-->
     </form>
 </div>
-<script th:src="@{/static/ajax/libs/laydate/laydate.js}"></script>
 <th:block th:include="include :: footer"/>
 <th:block th:include="include :: datetimepicker-js"/>
 <script type="text/javascript">
@@ -112,7 +110,7 @@
     }
 
 
-    //上传选手照片
+    //上传文件图片
     /*$(document).ready(function () {
         //为外面的盒子绑定一个点击事件
         $("#uploadImgBtn").click(function () {
@@ -166,13 +164,10 @@
                         $(".tupian").on("click", function () {
                             $(this).parent().remove();
                         })
-
-
                     }
                     fr.readAsDataURL(value);
                 })
             })
-
             //4、我们把当前input标签的id属性remove
             $input.removeAttr("id");
             //我们做个标记，再class中再添加一个类名就叫test
@@ -208,9 +203,6 @@
         }
         var picture = JSON.stringify(b)
 //            console.log(pics)
-        if (b.length < 1) {
-            layer.alert("最少上传一张图片")
-        } else {
             $.ajax({
                 cache: true,
                 type: "POST",
@@ -235,7 +227,7 @@
                     $.operate.successCallback(data);
                 }
             })
-        }
+
 
 
     }*/

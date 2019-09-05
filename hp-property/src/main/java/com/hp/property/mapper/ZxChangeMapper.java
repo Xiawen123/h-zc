@@ -65,4 +65,6 @@ public interface ZxChangeMapper extends BaseMapper<ZxChange>
      * 时间搜索记录
      */
     public List<ZxChange> getTimeChange(ZxChange zxChange);
+
+    public List<ZxChange> selectZxChangeTransferList(ZxChange zxChange);
 }
