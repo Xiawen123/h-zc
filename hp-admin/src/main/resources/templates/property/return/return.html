@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('退还信息列表')" />
+    <script th:src="@{/ajax/libs/laydate/laydate.js}"></script>
+</head>
+<body class="gray-bg">
+     <div class="container-div">
+        <div class="row">
+            <div class="col-sm-12 search-collapse">
+                <form id="formId">
+                    <div class="select-list">
+                        <ul>
+                            <li>
+                                <p>退还日期：</p>
+                                <input type="text" name="returnTime" id="returnTime" class="form-control"/>
+                            </li>
+                            <li>
+                                <p>退还物品：</p>
+                                <input type="text" name="name"/>
+                            </li>
+                            <li>
+                                <p>物品编号：</p>
+                                <input type="text" name="assetNum"/>
+                            </li>
+                            <li>
+                                <p>退还部门：</p>
+                                <select name="extend1" class="form-control m-b" th:with="type=${@dict.getType('zc_department')}">
+                                    <option value="">请选择部门</option>
+                                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+                                </select>
+                            </li>
+                            <li>
+                                <p>退还人员：</p>
+                                <input type="text" name="extend2"/>
+                            </li>
+                            <li>
+                                <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+                                <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+                            </li>
+                        </ul>
+                    </div>
+                </form>
+            </div>
+
+            <div class="btn-group-sm" id="toolbar" role="group">
+                <a class="btn btn-success" onclick="$.operate.addFull()" shiro:hasPermission="property:return:add">
+                    <i class="fa fa-plus"></i> 退还登记
+                </a>
+               <!-- <a class="btn btn-primary single disabled" onclick="$.operate.edit()" shiro:hasPermission="system:management:edit">
+                    <i class="fa fa-edit"></i> 修改
+                </a>
+                <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()" shiro:hasPermission="system:management:remove">
+                    <i class="fa fa-remove"></i> 删除
+                </a>
+                <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="system:management:export">
+                    <i class="fa fa-download"></i> 导出
+                 </a>-->
+            </div>
+            <div class="col-sm-12 select-table table-striped">
+                <table id="bootstrap-table" data-mobile-responsive="true"></table>
+            </div>
+        </div>
+    </div>
+    <th:block th:include="include :: footer" />
+    <script th:inline="javascript">
+
+       var selectFlag = [[${@permission.hasPermi('property:return:select')}]];
+       /* var removeFlag = [[${@permission.hasPermi('system:management:remove')}]];*/
+        var prefix = ctx + "property/return";
+        var type=[[${@dict.getType('zc_type')}]]
+       var dept=[[${@dict.getType('zc_department')}]]
+       var unit=[[${@dict.getType('zc_unit')}]]
+
+        $(function() {
+            var options = {
+                url: prefix + "/list",
+                createUrl: prefix + "/add",
+                /*updateUrl: prefix + "/select/{id}",*/
+                /*removeUrl: prefix + "/remove",
+                exportUrl: prefix + "/export",*/
+                detailUrl: prefix+"/select/{id}",
+                modalName: "退还登记",
+                columns: [{
+                    checkbox: true
+                },
+                {
+                    field : 'id', 
+                    title : '资产ID',
+                    visible: false
+                },
+                {
+                    field : 'returnTime',
+                    title : '退还时间'
+                },
+                {
+                    field : 'assetNum', 
+                    title : '资产编号'
+                },
+                {
+                    field : 'name',
+                    title : '资产名称'
+                },
+                {
+                    field : 'type',
+                    title : '资产分类',
+                    formatter:function (value, row, index) {
+                        return $.table.selectDictLabel(type,value);
+                    }
+                },
+                {
+                    field : 'brand',
+                    title : '品牌'
+                },
+                {
+                    field : 'assetSpecification',
+                    title : '规格型号'
+                },
+                {
+                    field : 'number',
+                    title : '数量'
+                },
+                {
+                    field : 'units',
+                    title : '单位',
+                    formatter:function (value, row, index) {
+                        return $.table.selectDictLabel(unit,value);
+                    }
+                },
+                {
+                    field : 'extend1',
+                    title : '退还部门',
+                    formatter:function (value, row, index) {
+                        return $.table.selectDictLabel(dept,value);
+                    }
+                },
+                {
+                    field : 'extend2',
+                    title : '退还人员'
+                },
+                {
+                    title: '详情',
+                    align: 'center',
+                    formatter: function(value, row, index) {
+                        var actions = [];
+                       actions.push('<a class="btn btn-info btn-xs ' + selectFlag + '" href="javascript:void(0)" onclick="$.operate.detail(\'' + row.id + '\')"><i class="fa fa-list-ul"></i>查看</a> ');
+                       /* actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.id + '\')"><i class="fa fa-remove"></i>删除</a>');*/
+                        return actions.join('');
+                    }
+                }]
+            };
+            $.table.init(options);
+        });
+    </script>
+     <script type="text/javascript">
+         //时间选择器
+         laydate.render({
+             elem: '#returnTime'
+             ,trigger: 'click'
+
+         });
+     </script>
+</body>
+</html>

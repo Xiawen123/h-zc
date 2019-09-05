@@ -46,10 +46,12 @@ public class ZxCampusReceiveController extends BaseController {
     @ResponseBody
     public TableDataInfo list(ZxAssetManagement zxAssetManagement)
     {
+        // 资产状态2代表领用
         zxAssetManagement.setState(2);
 
+        // 带条件查询所有
         startPage();
-        List<ZxAssetManagement> list = zxAssetManagementService.selectZxAssetManagementList(zxAssetManagement);
+        List<ZxAssetManagement> list = zxAssetManagementService.findAllStateTwo(zxAssetManagement);
         return getDataTable(list);
     }
 
@@ -87,5 +89,14 @@ public class ZxCampusReceiveController extends BaseController {
         ZxAssetManagement zxAssetManagement = zxAssetManagementService.selectZxAssetManagementById(id);
         mmap.put("zxAssetManagement", zxAssetManagement);
         return prefix + "/detail";
+    }
+    /**
+     * 查看闲置资产信息
+     */
+   /* @RequiresPermissions("property:campusrecive:showIdle")*/
+    @GetMapping("/showIdle")
+    public String showIdle()
+    {
+        return prefix + "/showIdle";
     }
 }

@@ -50,13 +50,6 @@ public class ZxAssetManagementServiceImpl implements IZxAssetManagementService {
      */
     @Override
     public int insertZxAssetManagement(ZxAssetManagement zxAssetManagement) {
-        long I = zxAssetManagementMapper.allZxAssetManagement();
-        Integer id = 1;
-        Long LongID = new Long((long) id);
-        if (I != 0) {
-            LongID = zxAssetManagementMapper.getMaxId().getId() + 1;
-        }
-        zxAssetManagement.setId(LongID);
         return zxAssetManagementMapper.insertZxAssetManagement(zxAssetManagement);
     }
 

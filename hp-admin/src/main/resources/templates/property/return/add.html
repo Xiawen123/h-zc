@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.w3.org/1999/xhtml">
+<head>
+    <th:block th:include="include :: header('新增退还信息')" />
+    <th:block th:include="include :: datetimepicker-css" />
+    <script th:src="@{/ajax/libs/laydate/laydate.js}"></script>
+</head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal m" id="form-return-add">
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">退还部门：</label>
+                <div class="col-sm-8">
+                    <select name="extend1" class="form-control m-b" th:with="dept=${@dict.getType('zc_department')}">
+                        <option th:each="dict : ${dept}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+                        </select>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">退还人员：</label>
+                <div class="col-sm-8">
+                    <input name="extend2" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">退还时间：</label>
+                <div class="col-sm-8">
+                    <input name="returnTime" class="form-control" type="text" id="returnTime">
+                </div>
+            </div>
+            <div class="btn-group-sm" id="toolbar" role="group">
+                <a class="btn btn-success" onclick="$.operate.addFull()" shiro:hasPermission="property:return:adds">
+                    <i class="fa fa-plus"></i> 添加退还资产
+                </a>
+                <!-- <a class="btn btn-primary single disabled" onclick="$.operate.edit()" shiro:hasPermission="system:management:edit">
+                     <i class="fa fa-edit"></i> 修改
+                 </a>
+                -->
+                 <!--<a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="system:management:export">
+                     <i class="fa fa-download"></i> 导出-->
+                     <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()" shiro:hasPermission="system:management:remove">
+                         <i class="fa fa-remove"></i> 删除
+                     </a>
+                  </a>
+            </div>
+            <div class="col-sm-12 select-table table-striped">
+                <table id="bootstrap-table" data-mobile-responsive="true">
+                   <!-- <tr>
+                        <th style="height: 30px;width: 10%;border: none;"><input type="checkbox">&nbsp;选择</th>
+                        <th style="height: 30px;width: 11%;border: none;">资产编号</th>
+                        <th style="height: 30px;width: 11%;border: none;">资产名称</th>
+                        <th style="height: 30px;width: 11%;border: none;">资产分类</th>
+                        <th style="height: 30px;width: 11%;border: none;">品牌</th>
+                        <th style="height: 30px;width: 11%;border: none;">规格型号</th>
+                        <th style="height: 30px;width: 11%;border: none;">单位</th>
+                        <th style="height: 30px;width: 11%;border: none;">供货商</th>
+                        <th style="height: 30px;width: 10%;border: none;">资产原值</th>
+                        <th style="height: 30px;width: 40px;border: none;">数量</th>
+                    </tr>-->
+                </table>
+            </div>
+        </form>
+    </div>
+    <th:block th:include="include :: footer" />
+    <th:block th:include="include :: datetimepicker-js" />
+    <!--<script type="text/javascript">
+        var selectFlag = [[${@permission.hasPermi('property:return:select')}]];
+        var prefix = ctx + "property/return";
+        var type=[[${@dict.getType('zc_type')}]];
+      /*  var dept=[[${@dict.getType('zc_department')}]]*/
+        var unit=[[${@dict.getType('zc_unit')}]];
+        $("#form-return-add").validate({
+            focusCleanup: true
+        });
+
+        function submitHandler() {
+            if ($.validate.form()) {
+                $.operate.save(prefix + "/add", $('#form-return-add').serialize());
+            }
+        }
+
+        $("input[name='purchasingTime']").datetimepicker({
+            format: "yyyy-mm-dd",
+            minView: "month",
+            autoclose: true
+        });
+
+
+
+        $(function() {
+            var options = {
+               /* url: prefix + "/list",*/
+                createUrl: prefix + "/adds",
+                /* updateUrl: prefix + "/edit/{id}",
+                 exportUrl: prefix + "/export",*/
+                removeUrl: prefix + "/remove",
+                modalName: "退还登记",
+                columns: [{
+                    title:"选择",
+                    checkbox: true
+                },
+                    {
+                        field : 'assetNum',
+                        title : '资产编号',
+                        visible: false
+                    },
+                    {
+                        field : 'name',
+                        title : '资产名称'
+                    },
+                    {
+                        field : 'type',
+                        title : '资产分类',
+                        formatter:function (value, row, index) {
+                            return $.table.selectDictLabel(type,value);
+                        }
+                    },
+                    {
+                        field : 'brand',
+                        title : '品牌'
+                    },
+                    {
+                        field : 'assetSpecification',
+                        title : '规格型号'
+                    },
+                    {
+                        field : 'units',
+                        title : '单位',
+                        formatter:function (value, row, index) {
+                            return $.table.selectDictLabel(unit,value);
+                        }
+                    },
+                    {
+                        field : 'supplier',
+                        title : '供货商'
+                    },
+                    {
+                        field : 'price',
+                        title : '资产原值'
+                    },
+                    {
+                        field : 'number',
+                        title : '数量'
+                    }]
+
+            };
+            $.table.init(options);
+        });
+    </script>-->
+    <script th:inline="javascript">
+
+        var selectFlag = [[${@permission.hasPermi('property:return:select')}]];
+        /* var removeFlag = [[${@permission.hasPermi('system:management:remove')}]];*/
+        var prefix = ctx + "property/return";
+        var type=[[${@dict.getType('zc_type')}]]
+        var dept=[[${@dict.getType('zc_department')}]]
+        var unit=[[${@dict.getType('zc_unit')}]]
+
+        $(function() {
+            var options = {
+               /* url: prefix + "/lists",*/
+                createUrl: prefix + "/adds",
+                /*updateUrl: prefix + "/select/{id}",*/
+                /*removeUrl: prefix + "/remove",
+                exportUrl: prefix + "/export",*/
+               /* detailUrl: prefix+"/select/{id}",*/
+                modalName: "未退还资产信息",
+                columns: [{
+                    title:"选择",
+                    checkbox: true
+                },
+                    {
+                        field : 'assetNum',
+                        title : '资产编号',
+                        visible: false
+                    },
+                    {
+                        field : 'name',
+                        title : '资产名称'
+                    },
+                    {
+                        field : 'type',
+                        title : '资产分类',
+                        formatter:function (value, row, index) {
+                            return $.table.selectDictLabel(type,value);
+                        }
+                    },
+                    {
+                        field : 'brand',
+                        title : '品牌'
+                    },
+                    {
+                        field : 'assetSpecification',
+                        title : '规格型号'
+                    },
+                    {
+                        field : 'units',
+                        title : '单位',
+                        formatter:function (value, row, index) {
+                            return $.table.selectDictLabel(unit,value);
+                        }
+                    },
+                    {
+                        field : 'supplier',
+                        title : '供货商'
+                    },
+                    {
+                        field : 'price',
+                        title : '资产原值'
+                    },
+                    {
+                        field : 'number',
+                        title : '数量'
+                    }
+                   ]
+            };
+            $.table.init(options);
+        });
+    </script>
+    <script type="text/javascript">
+        //时间选择器
+        laydate.render({
+            elem: '#returnTime'
+            ,trigger: 'click'
+
+        });
+    </script>
+</body>
+</html>
