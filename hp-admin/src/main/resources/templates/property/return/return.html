@@ -44,7 +44,7 @@
             </div>
 
             <div class="btn-group-sm" id="toolbar" role="group">
-                <a class="btn btn-success" onclick="$.operate.addFull()" shiro:hasPermission="system:return:add">
+                <a class="btn btn-success" onclick="$.operate.addFull()" shiro:hasPermission="property:return:add">
                     <i class="fa fa-plus"></i> 退还登记
                 </a>
                <!-- <a class="btn btn-primary single disabled" onclick="$.operate.edit()" shiro:hasPermission="system:management:edit">
@@ -65,7 +65,7 @@
     <th:block th:include="include :: footer" />
     <script th:inline="javascript">
 
-       var selectFlag = [[${@permission.hasPermi('system:return:select')}]];
+       var selectFlag = [[${@permission.hasPermi('property:return:select')}]];
        /* var removeFlag = [[${@permission.hasPermi('system:management:remove')}]];*/
         var prefix = ctx + "property/return";
         var type=[[${@dict.getType('zc_type')}]]
@@ -80,7 +80,7 @@
                 /*removeUrl: prefix + "/remove",
                 exportUrl: prefix + "/export",*/
                 detailUrl: prefix+"/select/{id}",
-                modalName: "退还信息",
+                modalName: "退还登记",
                 columns: [{
                     checkbox: true
                 },
