@@ -124,7 +124,7 @@ public class ZxAssetAddController extends BaseController
         zxAssetManagement.setLocation(1);
 
         //添加图片url
-        List<Map<String, Object>> list = FastJsonUtils.getJsonToListMap(zxAssetManagement.getPicture().toString());
+        List<Map<String, Object>> list = FastJsonUtils.getJsonToListMap(zxAssetManagement.getPicture());
         list.get(0).get("img");
         for (int i = 0; i < list.size(); i++) {
             String a=list.get(i).get("img").toString();
@@ -139,7 +139,7 @@ public class ZxAssetAddController extends BaseController
     }
 
     /**
-     * 修改资产信息1.2
+     * 修改资产信息
      */
     @GetMapping("/edit/{id}")
     public String edit(@PathVariable("id") Long id, ModelMap mmap)
