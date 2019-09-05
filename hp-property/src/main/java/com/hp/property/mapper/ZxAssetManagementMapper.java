@@ -81,5 +81,12 @@ public interface ZxAssetManagementMapper extends BaseMapper<ZxAssetManagement>
      */
    List<ZxAssetManagement> selectAllStateTwo(ZxAssetManagement zxAssetManagement);
 
+    /**
+     * 查询所有资产为闲置状态的信息
+     * @param zxAssetManagement
+     * @return
+     */
+    List<ZxAssetManagement> selectAllStateOne(ZxAssetManagement zxAssetManagement);
+
 
 }

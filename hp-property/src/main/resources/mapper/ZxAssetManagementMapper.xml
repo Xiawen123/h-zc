@@ -226,4 +226,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </where>
     </select>
 
+    <!--查询所有资产为闲置状态的信息-->
+    <select id="selectAllStateOne" resultMap="ZxAssetManagementResult" parameterType="ZxAssetManagement">
+        <include refid="selectZxAssetManagementVo"/> WHERE state = #{state}
+    </select>
+
 </mapper>
