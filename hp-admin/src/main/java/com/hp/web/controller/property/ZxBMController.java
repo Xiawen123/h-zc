@@ -18,6 +18,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
@@ -49,10 +50,16 @@ public class ZxBMController extends BaseController {
     @ResponseBody
     public TableDataInfo list(ZxAssetManagement zxAssetManagement)
     {
-        zxAssetManagement.setState(2);
-
+        ZxChange zxChange=new ZxChange();
+        zxChange.setChangeType(1);
+        List<ZxChange> zxChanges = zxChangeService.selectZxChangeList(zxChange);
         startPage();
-        List<ZxAssetManagement> list = zxAssetManagementService.selectZxAssetManagementList(zxAssetManagement);
+        List<ZxAssetManagement> list =new ArrayList<>();
+        for (ZxChange z:zxChanges){
+            Long id = z.getAssetsId();
+            ZxAssetManagement zxAssetManagement1 = zxAssetManagementService.selectZxAssetManagementById(id);
+            list.add(zxAssetManagement1);
+        }
         return getDataTable(list);
     }
 
