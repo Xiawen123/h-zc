@@ -16,12 +16,12 @@ import java.util.Enumeration;
 public class SnowFlake {
     private final static long twepoch = 12888349746579L;
     // 机器标识位数
-    private final static long workerIdBits = 5L;
+    private final static long workerIdBits = 3L;
     // 数据中心标识位数
-    private final static long datacenterIdBits = 5L;
+    private final static long datacenterIdBits = 3L;
 
     // 毫秒内自增位数
-    private final static long sequenceBits = 12L;
+    private final static long sequenceBits = 9L;
     // 机器ID偏左移12位
     private final static long workerIdShift = sequenceBits;
     // 数据中心ID左移17位
