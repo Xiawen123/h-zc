@@ -5,8 +5,10 @@ import com.hp.common.core.controller.BaseController;
 import com.hp.common.core.domain.AjaxResult;
 import com.hp.common.core.page.TableDataInfo;
 import com.hp.common.enums.BusinessType;
+import com.hp.common.utils.DateString;
 import com.hp.common.utils.SnowFlake;
 import com.hp.property.domain.ZxAssetManagement;
+import com.hp.property.domain.ZxChange;
 import com.hp.property.service.IZxAssetManagementService;
 import com.hp.property.service.IZxChangeService;
 import com.hp.system.service.ISysDeptService;
@@ -16,6 +18,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -71,11 +74,27 @@ public class ZxBMController extends BaseController {
     @ResponseBody
     public AjaxResult addSave(ZxAssetManagement zxAssetManagement)
     {
-        Long id = SnowFlake.nextId();
-        zxAssetManagement.setId(id);
-        System.out.println("zxAssetManagement:________________________" + zxAssetManagement.toString());
-
-        return toAjax(zxAssetManagementService.insertZxAssetManagement(zxAssetManagement));
+        String ids = zxAssetManagement.getIds();
+        int i1=0;
+        if (ids!=null&&!ids.equals("")){
+            String[] split = ids.split(",");
+            ZxChange zxChange=new ZxChange();
+            for (int i=0;i<split.length;i++){
+                ZxAssetManagement zxone = zxAssetManagementService.selectZxAssetManagementById(Long.parseLong(split[i]));
+                zxone.setState(2);
+                zxChange.setAssetsId(Long.parseLong(split[i]));
+                long l = SnowFlake.nextId();
+                zxChange.setId(l);
+                zxChange.setChangeType(1);
+                zxChange.setUseDepartment(zxAssetManagement.getDepartment());
+                zxChange.setUsers(zxAssetManagement.getExtend2());
+                zxChange.setExtend1(DateString.getString(new Date(),"yyyy-MM-dd HH:mm:ss"));
+                zxChangeService.insertZxChange(zxChange);
+                i1 = zxAssetManagementService.updateZxAssetManagement(zxone);
+            }
+            return toAjax(i1);
+        }
+        return toAjax(zxChangeService.insertZxChange(null));
     }
 
     /**
@@ -149,5 +168,7 @@ public class ZxBMController extends BaseController {
            return getDataTable(list);
        }
     }
+
+
     }
 
