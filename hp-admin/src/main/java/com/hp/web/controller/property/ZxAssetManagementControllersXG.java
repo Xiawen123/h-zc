@@ -67,11 +67,12 @@ public class ZxAssetManagementControllersXG extends BaseController
         //循环存入校区名，存入备用字段5
         for (ZxAssetManagement zxAssetManagement1:list){
             for (SysDept sysDept1:sysDepts) {
+                if (zxAssetManagement1.getWarehousingCampus()!=null){
                 String a=zxAssetManagement1.getWarehousingCampus().toString();
                 String b=sysDept1.getDeptId().toString();
                 if (a.equals(b)) {
                     String c=sysDept1.getDeptName();
-                    zxAssetManagement1.setExtend5(c);
+                    zxAssetManagement1.setExtend5(c);}
                 }
             }
         }
