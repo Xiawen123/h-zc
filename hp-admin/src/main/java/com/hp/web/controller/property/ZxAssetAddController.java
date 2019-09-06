@@ -120,11 +120,13 @@ public class ZxAssetAddController extends BaseController
         zxAssetManagement.setState(1);
         //添加入库校区?
         zxAssetManagement.setWarehousingCampus(115);
+        //添加所在校区
+        zxAssetManagement.setCampus(115);
         //添加存放地点?
         zxAssetManagement.setLocation(1);
 
         //添加图片url
-        List<Map<String, Object>> list = FastJsonUtils.getJsonToListMap(zxAssetManagement.getPicture());
+        List<Map<String, Object>> list = FastJsonUtils.getJsonToListMap(zxAssetManagement.getPicture().toString());
         list.get(0).get("img");
         for (int i = 0; i < list.size(); i++) {
             String a=list.get(i).get("img").toString();
