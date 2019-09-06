@@ -61,6 +61,7 @@
             updateUrl: prefix + "/edit/{id}",
             removeUrl: prefix + "/remove",
             exportUrl: prefix + "/export",
+            xuanUrl:prefix+"/xuan",
             modalName: "闲置资产",
             search: false,
             showExport: true,
@@ -91,7 +92,8 @@
                     field : 'state',
                     title : '资产状态'
 
-                }]
+                }
+			]
         };
         $.table.init(options);
     }
@@ -122,6 +124,34 @@
             layer.msg("请选择要领用的资产");
         }
         layer.close(index);
+    }
+    function submitHandler() {
+
+        //获取资产名称
+        var ids = $("#ids").val();
+        var campus = $("#campus").val();
+        var department = $("#department").val();
+        var extend2 = $("#extend2").val();
+        var recipientsTime = $("#recipientsTime").val();
+        $.ajax({
+            cache: true,
+            type: "POST",
+            url: prefix + "/add",
+            data: {
+                "ids": ids,
+                "campus": campus,
+                "department": department,
+                "extend2": extend2,
+                "recipientsTime": recipientsTime
+            },
+            async: false,
+            error: function (request) {
+                $.modal.alertError("系统错误");
+            },
+            success: function (data) {
+                $.operate.successCallback(data);
+            }
+        })
     }
 </script>
 </body>
