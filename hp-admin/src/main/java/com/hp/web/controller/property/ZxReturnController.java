@@ -1,10 +1,17 @@
 package com.hp.web.controller.property;
 
+import com.hp.common.annotation.Log;
 import com.hp.common.core.controller.BaseController;
+import com.hp.common.core.domain.AjaxResult;
 import com.hp.common.core.page.TableDataInfo;
+import com.hp.common.core.text.Convert;
+import com.hp.common.enums.BusinessType;
 import com.hp.common.utils.DateString;
+import com.hp.common.utils.FastJsonUtils;
 import com.hp.property.domain.ZxAssetManagement;
+import com.hp.property.domain.ZxChange;
 import com.hp.property.service.IZxAssetManagementService;
+import com.hp.property.service.IZxChangeService;
 import com.hp.property.service.IZxReturnService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +37,8 @@ public class ZxReturnController extends BaseController {
     private IZxReturnService zxReturnService;
     @Autowired
     private IZxAssetManagementService zxAssetManagementService;
+    @Autowired
+    private IZxChangeService zxChangeService;
     /**
      * 页面展示
      * @return
@@ -71,17 +80,31 @@ public class ZxReturnController extends BaseController {
         return prefix + "/add";
     }
 
+    /**
+     * 新增退还信息
+     */
 
+    @RequiresPermissions("property:return:add")
+    @Log(title = "退还登记", businessType = BusinessType.INSERT)
+    @PostMapping("/add")
+    @ResponseBody
+    public AjaxResult addSave(ZxChange zxChange,String ids)
+    {
+        Long[] Ids = Convert.toLongArray(ids);
+
+      /*List<ZxAssetManagement> list= FastJsonUtils.getJsonToList(zxAssetsManagement, ZxAssetManagement.class);*/
+        System.out.println(Ids);
+        return toAjax(zxReturnService.insertManagementAndChange(zxChange,Ids));
+    }
     /**
      * 新增资产退还页面
      */
-    /*@RequiresPermissions("property:return:list")
-    @PostMapping("/adds")
+/*    @RequiresPermissions("property:return:adds")
+    @PostMapping("/addss")
     @ResponseBody
-    public TableDataInfo adds(ZxAssetManagement zxAssetManagement)
-    {
+    public TableDataInfo addss(String ids){
         startPage();
-        List<ZxAssetManagement> list = zxReturnService.selectZxReturnList(zxAssetManagement);
+        List<ZxAssetManagement> list = zxReturnService.selectZxAssetManagementsById(ids);
         return getDataTable(list);
     }*/
 
@@ -107,13 +130,34 @@ public class ZxReturnController extends BaseController {
 
 
     @RequiresPermissions("property:return:list")
+    @PostMapping("/listss")
+    @ResponseBody
+    public TableDataInfo listss(ZxAssetManagement zxAssetManagement)
+    {
+        startPage();
+        List<ZxAssetManagement> list = zxReturnService.selectZxAssetManagementList(zxAssetManagement);
+        return getDataTable(list);
+    }
+
+
+    @RequiresPermissions("property:return:list")
     @PostMapping("/lists")
     @ResponseBody
     public TableDataInfo lists(ZxAssetManagement zxAssetManagement)
     {
-        startPage();
-        List<ZxAssetManagement> list = zxReturnService.selectZxReturnList(zxAssetManagement);
-        return getDataTable(list);
+        if (zxAssetManagement.getIds()!=null&&!zxAssetManagement.getIds().equals("")){
+            List<ZxAssetManagement> list=new LinkedList<>();
+            String s=zxAssetManagement.getIds();
+            String[] split = s.split(",");
+            for (int i=0;i<split.length;i++){
+                ZxAssetManagement ls = zxAssetManagementService.selectZxAssetManagementById(Long.parseLong(split[i]));
+                list.add(ls);
+            }
+            return getDataTable(list);
+        }else {
+            List<ZxAssetManagement> list=new LinkedList<>();
+            return getDataTable(list);
+        }
     }
 
 }
