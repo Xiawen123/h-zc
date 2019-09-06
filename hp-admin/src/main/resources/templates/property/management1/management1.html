@@ -49,7 +49,7 @@
                             </li>
                             <li>
                                 <p>使用部门：</p>
-                                <select name="department" th:with="type=${@dict.getType('zc_department')}">
+                                <select name="extend1" th:with="type=${@dict.getType('zc_department')}">
                                     <option value="">所有</option>
                                     <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
                                 </select>

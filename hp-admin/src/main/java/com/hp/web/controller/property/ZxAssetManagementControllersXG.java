@@ -151,17 +151,21 @@ public class ZxAssetManagementControllersXG extends BaseController
         //在变更表中存入变更类型
         zxChange.setChangeType(5);
         //在变更表中存入提交人
-        zxChange.setSubmitOne(zxAssetManagement1.getOperator());
+        zxChange.setSubmitOne(ShiroUtils.getLoginName());
         //在变更表中存入使用部门和使用人
+        if (zxAssetManagement1.getExtend1()!=null){
         int a=Integer.parseInt(zxAssetManagement1.getExtend1());
-        zxChange.setUseDepartment(a);
-        zxChange.setUsers(zxAssetManagement1.getExtend2());
+        zxChange.setUseDepartment(a);}
+        if (zxAssetManagement1.getExtend2()!=null){
+        zxChange.setUsers(zxAssetManagement1.getExtend2());}
         //在变更表中生成变更时间
         SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
         zxChange.setExtend1(sdf.format(new Date()));
         //在变更表中生成存放地点
+        if (zxAssetManagement1.getLocation()!=null){
         String b=String.valueOf(zxAssetManagement1.getLocation());
-        zxChange.setExtend3(b);
+        zxChange.setExtend3(b);}
+
         //在变更表中存入提交人所属部门
         SysUser sysUser = iSysUserService.selectUserByLoginName(ShiroUtils.getLoginName());
         String c= iSysDeptService.selectDeptById(sysUser.getDeptId()).getDeptName();
@@ -172,7 +176,9 @@ public class ZxAssetManagementControllersXG extends BaseController
                 zxChange.setSubmittedDepartment(d);
             }
         }
+        //添加变更表操作
         zxChangeService.insertZxChange(zxChange);
+        //修改操作
         return toAjax(zxAssetManagementService.updateZxAssetManagement(zxAssetManagement));
     }
     /**
