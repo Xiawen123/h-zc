@@ -51,8 +51,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="extend5"    column="extend5"    />
     </resultMap>
 
+    <!--<sql id="selectZxAssetManagementVo">
+       SELECT distinct a.id, a.name, a.asset_num, a.brand, a.asset_specification, a.number, a.type, a.units, a.supplier, a.price, a.purchasing_time, a.storage_time, a.warehousing_campus, a.state, a.operator, a.location, a.recipients_time, a.repair_time, a.transfer_time, a.discard_time, a.return_time, a.campus, a.department, a.extend1, a.extend2, a.extend3, a.extend4, a.extend5 FROM `zx_asset_management` a LEFT join `zx_change` c ON a.id = c.assets_id
+    </sql>-->
     <sql id="selectZxAssetManagementVo">
-       SELECT a.id, a.name, a.asset_num, a.brand, a.asset_specification, a.number, a.type, a.units, a.supplier, a.price, a.purchasing_time, a.storage_time, a.warehousing_campus, a.state, a.operator, a.location, a.recipients_time, a.repair_time, a.transfer_time, a.discard_time, a.return_time, a.campus, a.department, a.extend1, a.extend2, a.extend3, a.extend4, a.extend5 FROM `zx_asset_management` a LEFT join `zx_change` c ON a.id = c.assets_id
+    select a.id, a.name, a.asset_num, a.brand, a.asset_specification, a.number, a.type, a.units, a.supplier, a.picture, a.price, a.purchasing_time, a.storage_time, a.warehousing_campus, a.state, a.operator, a.location, a.recipients_time, a.repair_time, a.transfer_time, a.discard_time, a.return_time, a.campus, a.department, a.extend1, a.extend2, a.extend3, a.extend4, a.extend5, c.submitted_department, c.submit_one, c.change_type
+    FROM `zx_change` c LEFT join `zx_asset_management` a ON c.assets_id= a.id
     </sql>
 
 
@@ -104,7 +108,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
               and a.return_time &gt;= date_format(SUBSTR(#{extend4} FROM 1 FOR 10),'%y%m%d')
                 and a.return_time &lt;= date_format(SUBSTR(#{extend4} FROM 14 FOR 10),'%y%m%d')</if>
             <if test="extend5 != null  and extend5 != ''"> and a.extend5 = #{extend5}</if>
-           and a.state&lt;&gt; 1
+           and not c.change_type=1
         </where>
         ORDER BY c.extend1
     </select>
@@ -112,6 +116,98 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <select id="selectZxAssetManagementById" parameterType="Long" resultMap="ZxAssetManagementResult">
         select id, name, asset_num, brand, asset_specification, number, type, units, supplier, picture, price, purchasing_time, storage_time, warehousing_campus, state, operator, location, recipients_time, repair_time, transfer_time, discard_time, return_time, campus, department, extend1, extend2 from zx_asset_management
         where id = #{id}
+    </select>
+
+    <select id="selectZxAssetManagementsList" parameterType="ZxAssetManagement" resultMap="ZxAssetManagementResult">
+    select id, name, asset_num, brand, asset_specification, number, type, units, supplier, picture, price, purchasing_time, storage_time, warehousing_campus, state, operator, location, recipients_time, repair_time, transfer_time, discard_time, return_time, campus, department, extend1, extend2, extend3, extend4, extend5 from zx_asset_management
+    where state=2
+     </select>
+
+
+
+    <update id="updateManagementStateById" parameterType="Long">
+        update zx_asset_management
+        set state=1,return_time=sysdate()
+        where id = #{id}
+    </update>
+
+
+
+    <insert id="insertChange" parameterType="ZxChange">
+        insert into zx_change
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null ">id,</if>
+            <if test="assetsId != null ">assets_id,</if>
+            <if test="changeType != null ">change_type,</if>
+            <if test="submittedDepartment != null ">submitted_department,</if>
+            <if test="submitOne != null  and submitOne != ''">submit_one,</if>
+            <if test="useDepartment != null ">use_department,</if>
+            <if test="users != null  and users != ''">users,</if>
+            extend1,
+            <if test="extend2 != null  and extend2 != ''">extend2,</if>
+            <if test="extend3 != null  and extend3 != ''">extend3,</if>
+            <if test="extend4 != null  and extend4 != ''">extend4,</if>
+            <if test="extend5 != null  and extend5 != ''">extend5,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null ">#{id},</if>
+            <if test="assetsId != null ">#{assetsId},</if>
+            <if test="changeType != null ">#{changeType},</if>
+            <if test="submittedDepartment != null ">#{submittedDepartment},</if>
+            <if test="submitOne != null  and submitOne != ''">#{submitOne},</if>
+            <if test="useDepartment != null ">#{useDepartment},</if>
+            <if test="users != null  and users != ''">#{users},</if>
+            sysdate(),
+            <if test="extend2 != null  and extend2 != ''">#{extend2},</if>
+            <if test="extend3 != null  and extend3 != ''">#{extend3},</if>
+            <if test="extend4 != null  and extend4 != ''">#{extend4},</if>
+            <if test="extend5 != null  and extend5 != ''">#{extend5},</if>
+        </trim>
+    </insert>
+
+
+    <select id=" selectZxAssetManagementsById" parameterType="ZxAssetManagement" resultMap="ZxAssetManagementResult">
+        <include refid="selectZxAssetManagementVo"/>
+        <where>
+            <if test="name != null  and name != ''"> and a.name like concat('%', #{name}, '%')</if>
+            <if test="assetNum != null  and assetNum != ''"> and a.asset_num = #{assetNum}</if>
+            <if test="brand != null  and brand != ''"> and a.brand = #{brand}</if>
+            <if test="assetSpecification != null  and assetSpecification != ''"> and a.asset_specification = #{assetSpecification}</if>
+            <if test="number != null "> and a.number = #{number}</if>
+            <if test="type != null "> and a.type = #{type}</if>
+            <if test="units != null "> and a.units = #{units}</if>
+            <if test="supplier != null  and supplier != ''"> and a.supplier = #{supplier}</if>
+            <if test="picture != null  and picture != ''"> and a.picture = #{picture}</if>
+            <if test="price != null "> and a.price = #{price}</if>
+            <if test="purchasingTime != null "> and a.purchasing_time = #{purchasingTime}</if>
+            <if test="storageTime != null "> and a.storage_time = #{storageTime}</if>
+            <if test="warehousingCampus != null "> and a.warehousing_campus = #{warehousingCampus}</if>
+            <if test="state != null ">and a.state=#{state}</if>
+            <if test="operator != null  and operator != ''"> and a.operator = #{operator}</if>
+            <if test="location != null "> and a.location = #{location}</if>
+            <if test="recipientsTime != null "> and a.recipients_time = #{recipientsTime}</if>
+            <if test="repairTime != null "> and a.repair_time = #{repairTime}</if>
+            <if test="transferTime != null "> and a.transfer_time = #{transferTime}</if>
+            <if test="discardTime != null "> and a.discard_time = #{discardTime}</if>
+            <if test="campus != null "> and a.campus = #{campus}</if>
+            <if test="department != null "> and a.department = #{department}</if>
+            <if test="extend1 != null  and extend1 != ''"> and a.extend1 = #{extend1}</if>
+            <if test="extend2 != null  and extend2 != ''"> and a.extend2 like concat('%', #{extend2}, '%')</if>
+            <if test="returnTime != null and returnTime != ''">
+                and a.return_time = #{returnTime}
+            </if>
+            <if test="extend3 != null  and extend3 != ''"> and a.extend3 = #{extend3}</if>
+            <if test="extend4 != null  and extend4 != ''">
+                and a.return_time &gt;= date_format(SUBSTR(#{extend4} FROM 1 FOR 10),'%y%m%d')
+                and a.return_time &lt;= date_format(SUBSTR(#{extend4} FROM 14 FOR 10),'%y%m%d')</if>
+            <if test="extend5 != null  and extend5 != ''"> and a.extend5 = #{extend5}</if>
+            and not c.change_type=1
+            and a.id in
+            <foreach collection="array" item="id" open="(" separator="," close=")">
+                #{id}
+            </foreach>
+        </where>
+        ORDER BY c.extend1
     </select>
 
 </mapper>

@@ -22,4 +22,12 @@ public interface ZxReturnMapper
     List<ZxAssetManagement> selectZxAssetManagementList(ZxAssetManagement zxAssetManagement);
 
     ZxAssetManagement selectZxAssetManagementById(Long id);
+
+    List<ZxAssetManagement> selectZxAssetManagementsList(ZxAssetManagement zxAssetManagement);
+
+    int updateManagementStateById(Long id);
+
+    int insertChange(ZxChange zxChange);
+
+   /* List<ZxAssetManagement> selectZxAssetManagementsByIds(Long[] ids);*/
 }
