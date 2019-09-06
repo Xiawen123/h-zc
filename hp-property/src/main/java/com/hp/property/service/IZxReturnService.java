@@ -1,6 +1,7 @@
 package com.hp.property.service;
 
 import com.hp.property.domain.ZxAssetManagement;
+import com.hp.property.domain.ZxChange;
 
 import java.util.List;
 
@@ -16,4 +17,11 @@ public interface IZxReturnService
     List<ZxAssetManagement> selectZxReturnList(ZxAssetManagement zxAssetManagement);
 
     ZxAssetManagement selectZxAssetManagementById(Long id);
+
+    List<ZxAssetManagement> selectZxAssetManagementList(ZxAssetManagement zxAssetManagement);
+
+
+    int insertManagementAndChange(ZxChange zxChange, Long[] Ids);
+
+/*    List<ZxAssetManagement> selectZxAssetManagementsById(String ids);*/
 }

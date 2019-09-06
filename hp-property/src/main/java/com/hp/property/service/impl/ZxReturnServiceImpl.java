@@ -1,5 +1,7 @@
 package com.hp.property.service.impl;
 
+import com.hp.common.core.text.Convert;
+import com.hp.common.utils.SnowFlake;
 import com.hp.property.domain.ZxAssetManagement;
 import com.hp.property.domain.ZxChange;
 import com.hp.property.mapper.ZxAssetManagementMapper;
@@ -60,5 +62,35 @@ public class ZxReturnServiceImpl implements IZxReturnService
     public ZxAssetManagement selectZxAssetManagementById(Long id) {
         return zxReturnMapper.selectZxAssetManagementById(id);
     }
+
+    @Override
+    public List<ZxAssetManagement> selectZxAssetManagementList(ZxAssetManagement zxAssetManagement) {
+        return zxReturnMapper.selectZxAssetManagementsList(zxAssetManagement);
+    }
+
+    @Override
+    public int insertManagementAndChange(ZxChange zxChange,Long[] Ids) {
+        for(int a=0;a<Ids.length;a++){
+           Long id= Ids[a];
+           zxChange.setAssetsId(id);
+            Long cid = SnowFlake.nextId();
+            zxChange.setId(cid);
+            int i= zxReturnMapper.updateManagementStateById(id);
+            if(i>0){
+                zxReturnMapper.insertChange(zxChange);
+
+            }else{
+                return 0;
+            }
+        }
+        return 1;
+
+    }
+
+   /* @Override
+    public List<ZxAssetManagement> selectZxAssetManagementsById(String ids) {
+        Long[] Ids = Convert.toLongArray(ids);
+        return zxReturnMapper.selectZxAssetManagementsByIds(Ids);
+    }*/
 
 }
