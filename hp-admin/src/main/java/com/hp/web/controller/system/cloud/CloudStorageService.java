@@ -1,4 +1,4 @@
-package com.hp.web.controller.cloud;
+package com.hp.web.controller.system.cloud;
 
 import com.hp.common.utils.DateUtils;
 import org.apache.commons.lang.StringUtils;

@@ -74,7 +74,7 @@
                     <i class="fa fa-plus"></i> 入库登记
                 </a>
                 <a class="btn btn-info" onclick="$.table.importExcel()" shiro:hasPermission="property:productIn:import">
-                    <i class="fa fa-upload"></i> 标签打印?
+                    <i class="fa fa-upload"></i> 标签打印
                 </a>
                 <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="property:productIn:export">
                     <i class="fa fa-download"></i> 导出
@@ -91,12 +91,7 @@
     <th:block th:include="include :: layout-latest-js" />
     <th:block th:include="include :: ztree-js" />
     <script th:inline="javascript">
-
-        var zc_type = [[${@dict.getType('zc_type')}]];
-        var zc_location = [[${@dict.getType('zc_location')}]];
         var zc_unit = [[${@dict.getType('zc_unit')}]];
-        var zc_department = [[${@dict.getType('zc_department')}]];
-        var zc_state = [[${@dict.getType('zc_state')}]];
         var editFlag = [[${@permission.hasPermi('system:productIn:edit')}]];
         var removeFlag = [[${@permission.hasPermi('system:productIn:remove')}]];
         var prefix = ctx + "property/productIn";
@@ -213,14 +208,14 @@
         }
         $(function () {
             laydate.render({
-                    elem: '#storageTime'
-                    ,type: 'datetime'
+                elem: '#storageTime'
+                ,format: 'yyyy-MM-dd'
             });
         });
         $(function () {
             laydate.render({
                 elem: '#purchasingTime'
-                ,type: 'datetime'
+                ,format: 'yyyy-MM-dd'
             });
         });
 

@@ -3,7 +3,7 @@
 <head>
     <th:block th:include="include :: header('入库登记')"/>
     <th:block th:include="include :: datetimepicker-css"/>
-
+    <script th:src="@{/ajax/libs/laydate/laydate.js}"></script>
 </head>
 <body class="white-bg">
 <div class="wrapper wrapper-content animated fadeInRight ibox-content">
@@ -12,13 +12,13 @@
         <div class="form-group">
             <label class="col-sm-3 control-label">资产名称：</label>
             <div class="col-sm-8">
-                <input name="name" class="form-control" type="text">
+                <input  id="name" name="name" class="form-control" type="text">
             </div>
         </div>
         <div class="form-group">
             <label class="col-sm-3 control-label">类型：</label>
             <div class="col-sm-8">
-                <select name="type" class="form-control m-b" th:with="type=${@dict.getType('zc_type')}">
+                <select id="type" name="type" class="form-control m-b" th:with="type=${@dict.getType('zc_type')}">
                     <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
                 </select>
             </div>
@@ -26,19 +26,19 @@
         <div class="form-group">
             <label class="col-sm-3 control-label">规格型号：</label>
             <div class="col-sm-8">
-                <input name="assetSpecification" class="form-control" type="text">
+                <input id="assetSpecification" name="assetSpecification" class="form-control" type="text">
             </div>
         </div>
         <div class="form-group">
             <label class="col-sm-3 control-label">品牌：</label>
             <div class="col-sm-8">
-                <input name="brand" class="form-control" type="text">
+                <input id="brand" name="brand" class="form-control" type="text">
             </div>
         </div>
         <div class="form-group">
             <label class="col-sm-3 control-label">单位：</label>
             <div class="col-sm-8">
-                <select name="units" class="form-control m-b" th:with="type=${@dict.getType('zc_unit')}">
+                <select id="units" name="units" class="form-control m-b" th:with="type=${@dict.getType('zc_unit')}">
                     <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
                 </select>
             </div>
@@ -46,19 +46,19 @@
         <div class="form-group">
             <label class="col-sm-3 control-label">数量：</label>
             <div class="col-sm-8">
-                <input name="number" class="form-control" type="text">
+                <input id="number" name="number" class="form-control" type="text">
             </div>
         </div>
         <div class="form-group">
             <label class="col-sm-3 control-label">供货商：</label>
             <div class="col-sm-8">
-                <input name="supplier" class="form-control" type="text">
+                <input id="supplier" name="supplier" class="form-control" type="text">
             </div>
         </div>
         <div class="form-group">
             <label class="col-sm-3 control-label">资产原值：</label>
             <div class="col-sm-8">
-                <input name="price" class="form-control" type="text">
+                <input id="price" name="price" class="form-control" type="text">
             </div>
         </div>
         <div class="form-group">
@@ -70,13 +70,7 @@
                 </div>
             </div>
         </div>
-        <div class="form-group">
-            <label class="col-sm-3 control-label">上传文件：</label>
-            <div class="col-sm-8">
-                <input name="picture" class="form-control" type="text">
-            </div>
-        </div>
-        <!--<div class="from-group">
+        <div class="from-group">
             <label class="col-sm-3 control-label"> 上传文件：</label>
             <div class="col-sm-8">
                 <div style="position: relative">
@@ -88,37 +82,26 @@
                     <div style="color:#9b9b9b;font-size:12px;margin-top:6px;">可以上传一张图片，且大小小于3M。</div>
                 </div>
             </div>
-        </div>-->
+        </div>
     </form>
 </div>
 <th:block th:include="include :: footer"/>
 <th:block th:include="include :: datetimepicker-js"/>
 <script type="text/javascript">
-    $("input[name='purchasingTime']").datetimepicker({
-        format: "yyyy-mm-dd",
-        minView: "month",
-        autoclose: true
-    });
     var prefix = ctx + "property/productIn"
     $("#form-productIn-add").validate({
         focusCleanup: true
     });
-    function submitHandler() {
-        if ($.validate.form()) {
-            $.operate.save(prefix + "/add", $('#form-productIn-add').serialize());
-        }
-    }
-
 
     //上传文件图片
-    /*$(document).ready(function () {
+    $(document).ready(function () {
         //为外面的盒子绑定一个点击事件
         $("#uploadImgBtn").click(function () {
-            /!*
+            /*
             1、先获取input标签
             2、给input标签绑定change事件
             3、把图片回显
-             *!/
+             */
 //            1、先回去input标签
             var $input = $("#file");
 //                console.log($input)
@@ -184,7 +167,6 @@
             $("#xianshi").attr('style', 'display:none')
             groupId = null
         }
-
         //获取资产名称
         var name = $("#name").val();
         var type = $("#type").val();
@@ -230,8 +212,13 @@
 
 
 
-    }*/
-
+    }
+    $(function () {
+        laydate.render({
+            elem: '#purchasingTime'
+            ,type: 'datetime'
+        })
+    });
 
 </script>
 </body>

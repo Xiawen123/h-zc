@@ -1,7 +1,7 @@
 package com.hp.web.controller.system;
 
-import com.hp.web.controller.cloud.CloudStorageService;
-import com.hp.web.controller.cloud.OSSFactory;
+import com.hp.web.controller.system.cloud.CloudStorageService;
+import com.hp.web.controller.system.cloud.OSSFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,12 +14,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import com.hp.common.annotation.Log;
-import com.hp.common.config.Global;
 import com.hp.common.core.controller.BaseController;
 import com.hp.common.core.domain.AjaxResult;
 import com.hp.common.enums.BusinessType;
 import com.hp.common.utils.StringUtils;
-import com.hp.common.utils.file.FileUploadUtils;
 import com.hp.framework.shiro.service.SysPasswordService;
 import com.hp.framework.util.ShiroUtils;
 import com.hp.system.domain.SysUser;

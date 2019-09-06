@@ -1,4 +1,4 @@
-package com.hp.web.controller.cloud;
+package com.hp.web.controller.system.cloud;
 
 public class CloudConstant
 {

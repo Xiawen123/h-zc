@@ -1,8 +1,8 @@
-package com.hp.web.controller.cloud;
+package com.hp.web.controller.system.cloud;
 
-import com.hp.web.controller.cloud.valdator.AliyunGroup;
-import com.hp.web.controller.cloud.valdator.QcloudGroup;
-import com.hp.web.controller.cloud.valdator.QiniuGroup;
+import com.hp.web.controller.system.cloud.valdator.AliyunGroup;
+import com.hp.web.controller.system.cloud.valdator.QcloudGroup;
+import com.hp.web.controller.system.cloud.valdator.QiniuGroup;
 import org.hibernate.validator.constraints.Range;
 import org.hibernate.validator.constraints.URL;
 

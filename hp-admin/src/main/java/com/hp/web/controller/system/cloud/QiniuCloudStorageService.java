@@ -1,4 +1,4 @@
-package com.hp.web.controller.cloud;
+package com.hp.web.controller.system.cloud;
 
 import com.hp.common.exception.oss.OssException;
 import com.qiniu.common.Zone;

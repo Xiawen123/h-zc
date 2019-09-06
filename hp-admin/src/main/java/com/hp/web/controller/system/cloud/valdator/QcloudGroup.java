@@ -1,4 +1,4 @@
-package com.hp.web.controller.cloud.valdator;
+package com.hp.web.controller.system.cloud.valdator;
 
 /**
  * 腾讯云
