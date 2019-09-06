@@ -12,7 +12,7 @@
                         <ul>
                             <li class="select-time">
                                 <p>领用时间：</p>
-                                <input type="text" class="time-input" id="startTime" placeholder="开始时间" name="params[beginPurchasingTime]"/>
+                                <input type="text" class="time-input" id="repairTime" placeholder="领用时间"/>
                             </li>
                             <li>
                                 <p>资产名称：</p>
@@ -132,6 +132,15 @@
                 }]
             };
             $.table.init(options);
+        });
+
+        //时间选择器
+        laydate.render({
+            elem: '#recipientsTime'
+            ,trigger: 'click',
+            type:'date'
+            ,range: true
+
         });
     </script>
 </body>

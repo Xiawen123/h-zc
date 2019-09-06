@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+	<th:block th:include="include :: header('添加校区领用登记')" />
+</head>
+<body class="gray-bg">
+<div class="container-div">
+	<div class="row">
+		<div class="col-sm-12 search-collapse">
+			<form id="formId">
+				<div class="select-list">
+					<ul>
+						<li>
+							<p>领用校区：</p>
+							<input name="campus" class="form-control" type="text">
+						</li>
+						<li>
+							<p>领用部门：</p>
+							<select name="department" class="form-control m-b" th:with="type=${@dict.getType('zc_department')}">
+								<option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+							</select>
+						</li>
+						<li>
+							<p>领用人员：</p>
+							<input name="extend2" class="form-control" type="text">
+						</li>
+						<li class="select-time">
+							<p>领用时间：</p>
+							<input type="text" class="time-input" id="startTime" placeholder="开始时间" name="params[beginPurchasingTime]"/>
+						</li>
+
+						<<li>
+							<a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+						</li>
+					</ul>
+				</div>
+			</form>
+		</div>
+
+		<div class="btn-group-sm" id="toolbar" role="group">
+			<a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="property:campusrecive:showIdle">
+				<i class="fa fa-plus"></i> 查看闲置资产信息
+			</a>
+		</div>
+
+		<div class="col-sm-12 select-table table-striped">
+			<table id="bootstrap-table" data-mobile-responsive="true"></table>
+		</div>
+	</div>
+</div>
+<th:block th:include="include :: footer" />
+<script th:inline="javascript">
+    var editFlag = [[${@permission.hasPermi('system:management:edit')}]];
+    var removeFlag = [[${@permission.hasPermi('system:management:remove')}]];
+    var prefix = ctx + "property/campusrecive";
+
+    $(function() {
+        var options = {
+            createUrl: prefix + "/showIdle",
+            updateUrl: prefix + "/edit/{id}",
+            removeUrl: prefix + "/remove",
+            exportUrl: prefix + "/export",
+            detailUrl: prefix+"/detail/{id}",
+            modalName: "闲置资产信息",
+            columns: [{
+                checkbox: true
+            },
+			{
+				field : 'assetNum',
+				title : '资产编号'
+			},
+			{
+				field : 'name',
+				title : '资产名称'
+			},
+			{
+				field : 'brand',
+				title : '品牌'
+			},
+			{
+				field : 'assetSpecification',
+				title : '资产规格'
+			},
+			{
+				field : 'units',
+				title : '单位'
+			},
+			{
+				field : 'state',
+				title : '资产状态'
+			},
+			{
+				field : 'number',
+				title : '数量'
+			},
+			{
+				title: '详情',
+				align: 'center',
+				formatter: function(value, row, index) {
+					var actions = [];
+					actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.detail(\'' + row.id + '\')">查看</a> ');
+					return actions.join('');
+				}
+			}]
+        };
+        $.table.init(options);
+    });
+</script>
+</body>
+</html>

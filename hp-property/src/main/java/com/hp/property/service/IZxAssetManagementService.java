@@ -59,12 +59,7 @@ public interface IZxAssetManagementService
      */
     public int deleteZxAssetManagementById(Long id);
 
-    /**
-     * 查询资产状态为领用的所有信息
-     * @param zxAssetManagement
-     * @return
-     */
-    List<ZxAssetManagement> findAllStateTwo(ZxAssetManagement zxAssetManagement);
+
 
     /**
      * 查询所有资产为闲置状态的信息
@@ -72,4 +67,11 @@ public interface IZxAssetManagementService
      * @return
      */
     List<ZxAssetManagement> findAllStateOne(ZxAssetManagement zxAssetManagement);
+
+    /**
+     * 根据id修改资产状态为领用
+     * @param ids
+     * @return
+     */
+    Integer modifyZxAssertManagement(String ids);
 }

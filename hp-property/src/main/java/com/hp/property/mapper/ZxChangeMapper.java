@@ -1,8 +1,10 @@
 package com.hp.property.mapper;
 
+import com.hp.common.base.BaseMapper;
+import com.hp.property.domain.ZxAssetManagement;
 import com.hp.property.domain.ZxChange;
 import tk.mybatis.spring.annotation.MapperScan;
-import com.hp.common.base.BaseMapper;
+
 import java.util.List;
 
 /**
@@ -67,4 +69,13 @@ public interface ZxChangeMapper extends BaseMapper<ZxChange>
     public List<ZxChange> getTimeChange(ZxChange zxChange);
 
     public List<ZxChange> selectZxChangeTransferList(ZxChange zxChange);
+
+    Integer insertZxChangeByAssert(ZxAssetManagement zxAssetManagement);
+
+    /**
+     * 查询变动类型为1,即领用的所有信息
+     * @param zxChange
+     * @return
+     */
+    List<ZxAssetManagement> selectAllStateOne(ZxChange zxChange);
 }

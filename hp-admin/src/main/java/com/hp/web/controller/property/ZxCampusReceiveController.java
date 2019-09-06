@@ -5,15 +5,17 @@ import com.hp.common.core.controller.BaseController;
 import com.hp.common.core.domain.AjaxResult;
 import com.hp.common.core.page.TableDataInfo;
 import com.hp.common.enums.BusinessType;
-import com.hp.common.utils.SnowFlake;
 import com.hp.property.domain.ZxAssetManagement;
+import com.hp.property.domain.ZxChange;
 import com.hp.property.service.IZxAssetManagementService;
+import com.hp.property.service.impl.ZxChangeServiceImpl;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -29,6 +31,9 @@ public class ZxCampusReceiveController extends BaseController {
     private String prefix = "property/campusrecive";
 
     @Autowired
+    private ZxChangeServiceImpl zxChangeService;
+
+    @Autowired(required = false)
     private IZxAssetManagementService zxAssetManagementService;
 
     @RequiresPermissions("property:campusrecive:view")
@@ -44,14 +49,22 @@ public class ZxCampusReceiveController extends BaseController {
     @RequiresPermissions("property:campusrecive:list")
     @PostMapping("/list")
     @ResponseBody
-    public TableDataInfo list(ZxAssetManagement zxAssetManagement)
+    public TableDataInfo list(ZxChange zxChange)
     {
-        // 资产状态2代表领用
-        zxAssetManagement.setState(2);
+        // 变动类型为1代表领用
+        zxChange.setChangeType(1);
 
-        // 带条件查询所有
+       /* List<ZxChange> zxChanges = zxChangeService.selectZxChangeList(zxChange);
+        List<ZxAssetManagement> list=new LinkedList<>();
+        for (ZxChange l:zxChanges){
+            ZxAssetManagement zxAssetManagement = zxAssetManagementService.selectZxAssetManagementById(l.getAssetsId());
+            zxAssetManagement.setZxChange(l);
+            list.add(zxAssetManagement);
+        }
+*/
+        // 查询变动类型为1,即领用的所有信息
         startPage();
-        List<ZxAssetManagement> list = zxAssetManagementService.findAllStateTwo(zxAssetManagement);
+        List<ZxAssetManagement> list = zxChangeService.findAllStateOne(zxChange);
         return getDataTable(list);
     }
 
@@ -64,25 +77,25 @@ public class ZxCampusReceiveController extends BaseController {
         return prefix + "/add";
     }
 
-    /**
-     * 新增保存资产信息
-     */
+
+   // 新增保存资产信息
+
     @RequiresPermissions("property:campusrecive:add")
     @Log(title = "资产信息", businessType = BusinessType.INSERT)
     @PostMapping("/add")
     @ResponseBody
-    public AjaxResult addSave(ZxAssetManagement zxAssetManagement)
+    public AjaxResult addSave(String ids, ZxAssetManagement zxAssetManagement)
     {
-        Long id = SnowFlake.nextId();
-        zxAssetManagement.setId(id);
-        System.out.println("zxAssetManagement:________________________" + zxAssetManagement.toString());
+        // 修改资产状态：闲置变为领用
+        zxAssetManagementService.modifyZxAssertManagement(ids);
+
+        System.out.println("ids:_____________" + ids);
+        System.out.println("zxAssetManagement:_____________" + zxAssetManagement.toString());
 
         return toAjax(zxAssetManagementService.insertZxAssetManagement(zxAssetManagement));
     }
 
-    /**
-     * 修改资产信息
-     */
+    // 修改资产信息
     @GetMapping("/detail/{id}")
     public String edit(@PathVariable("id") Long id, ModelMap mmap)
     {
@@ -90,19 +103,15 @@ public class ZxCampusReceiveController extends BaseController {
         mmap.put("zxAssetManagement", zxAssetManagement);
         return prefix + "/detail";
     }
-    /**
-     * 查看闲置资产信息
-     */
-    /*@RequiresPermissions("property:campusrecive:showIdle")*/
+
+    // 跳转到闲置资产信息页面
     @GetMapping("/showIdle")
     public String showIdle()
     {
         return prefix + "/showIdle";
     }
 
-    /**
-     * 查询资产信息列表
-     */
+    // 查询闲置资产信息列表
     @RequiresPermissions("property:campusrecive:list")
     @PostMapping("/list1")
     @ResponseBody
@@ -115,5 +124,26 @@ public class ZxCampusReceiveController extends BaseController {
         startPage();
         List<ZxAssetManagement> list = zxAssetManagementService.findAllStateOne(zxAssetManagement);
         return getDataTable(list);
+    }
+
+    // 查询所有选中的闲置资产信息
+    @RequiresPermissions("property:campusrecive:list")
+    @PostMapping("/list2")
+    @ResponseBody
+    public TableDataInfo listsan(ZxAssetManagement zxAssetManagement)
+    {
+        if (zxAssetManagement.getIds()!=null&&!zxAssetManagement.getIds().equals("")){
+            List<ZxAssetManagement> list=new LinkedList<>();
+            String s=zxAssetManagement.getIds();
+            String[] split = s.split(",");
+            for (int i=0;i<split.length;i++){
+                ZxAssetManagement ls = zxAssetManagementService.selectZxAssetManagementById(Long.parseLong(split[i]));
+                list.add(ls);
+            }
+            return getDataTable(list);
+        }else {
+            List<ZxAssetManagement> list=new LinkedList<>();
+            return getDataTable(list);
+        }
     }
 }

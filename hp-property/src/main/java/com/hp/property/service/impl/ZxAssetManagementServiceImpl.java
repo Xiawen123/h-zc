@@ -86,13 +86,15 @@ public class ZxAssetManagementServiceImpl implements IZxAssetManagementService {
         return zxAssetManagementMapper.deleteZxAssetManagementById(id);
     }
 
-    @Override
-    public List<ZxAssetManagement> findAllStateTwo(ZxAssetManagement zxAssetManagement) {
-        return zxAssetManagementMapper.selectAllStateTwo(zxAssetManagement);
-    }
+
 
     @Override
     public List<ZxAssetManagement> findAllStateOne(ZxAssetManagement zxAssetManagement) {
         return zxAssetManagementMapper.selectAllStateOne(zxAssetManagement);
+    }
+
+    @Override
+    public Integer modifyZxAssertManagement(String ids) {
+        return zxAssetManagementMapper.updateZxAssertManagement(Convert.toStrArray(ids));
     }
 }

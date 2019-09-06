@@ -1,5 +1,6 @@
 package com.hp.property.service;
 
+import com.hp.property.domain.ZxAssetManagement;
 import com.hp.property.domain.ZxChange;
 
 import java.util.List;
@@ -75,4 +76,11 @@ public interface IZxChangeService
      *
      */
     public List<ZxChange> selectZxChangeTransferList(ZxChange zxChange);
+
+    /**
+     * 查询资产状态为领用的所有信息
+     * @param zxChange
+     * @return
+     */
+    List<ZxAssetManagement> findAllStateOne(ZxChange zxChange);
 }

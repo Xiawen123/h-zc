@@ -149,4 +149,37 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </if>
     </select>
 
+    <insert id="insertZxChangeByAssert" parameterType="ZxAssetManagement">
+        INSERT INTO zx_change
+    </insert>
+
+    <!--查询变动类型为1,即领用的所有信息-->
+    <select id="selectAllStateOne" resultMap="ZxChangeResult" parameterType="ZxChange">
+        SELECT * FROM `zx_change` c
+        LEFT join `zx_asset_management` a
+        ON c.assets_id= a.id
+        WHERE c.change_type = #{changeType}
+        ORDER BY c.`extend1`
+        <!--<include refid="selectZxChangeVo"/>
+        <where>
+            state = #{state}
+            <if test="repairTime != null and repairTime != ''">&lt;!&ndash; 开始时间检索 &ndash;&gt;
+                and recipients_time == #{repairTime)
+            </if>
+            <if test="name != null and name != ''">
+                AND name like concat('%', #{name},'%')
+            </if>
+            <if test="assetNum != null and assetNum != ''">
+                AND asset_num = #{assetNum}
+            </if>
+
+            <if test="campus != null and campus != 0">
+                AND campus = #{campus}
+            </if>
+            <if test="extend2 != null and extend2 != ''">
+                AND extend2 = #{extend2}
+            </if>
+        </where>-->
+    </select>
+
 </mapper>

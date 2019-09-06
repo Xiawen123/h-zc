@@ -38,7 +38,7 @@ public interface ZxAssetManagementMapper extends BaseMapper<ZxAssetManagement>
      * @param zxAssetManagement 资产信息
      * @return 结果
      */
-    public int insertZxAssetManagement(ZxAssetManagement zxAssetManagement);
+    public int insertZxAssetManagement(ZxAssetManagement insertZxChangeByAssert);
 
     /**
      * 查看数据表是否有值
@@ -76,12 +76,7 @@ public interface ZxAssetManagementMapper extends BaseMapper<ZxAssetManagement>
      */
     public int deleteZxAssetManagementByIds(String[] ids);
 
-    /**
-     * 查询资产状态为领用的所有信息
-     * @param zxAssetManagement
-     * @return
-     */
-   List<ZxAssetManagement> selectAllStateTwo(ZxAssetManagement zxAssetManagement);
+
 
     /**
      * 查询所有资产为闲置状态的信息
@@ -90,5 +85,11 @@ public interface ZxAssetManagementMapper extends BaseMapper<ZxAssetManagement>
      */
     List<ZxAssetManagement> selectAllStateOne(ZxAssetManagement zxAssetManagement);
 
+    /**
+     * 根据id修改资产状态为领用
+     * @param ids
+     * @return
+     */
+    Integer updateZxAssertManagement(String[] ids);
 
 }

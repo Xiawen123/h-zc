@@ -1,7 +1,6 @@
 package com.hp.property.service.impl;
 
-import java.util.List;
-
+import com.hp.common.core.text.Convert;
 import com.hp.common.utils.SnowFlake;
 import com.hp.property.domain.ZxAssetManagement;
 import com.hp.property.domain.ZxChange;
@@ -10,7 +9,8 @@ import com.hp.property.mapper.ZxChangeMapper;
 import com.hp.property.service.IZxChangeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.hp.common.core.text.Convert;
+
+import java.util.List;
 
 /**
  * 资产变更Service业务层处理
@@ -118,5 +118,15 @@ public class ZxChangeServiceImpl implements IZxChangeService
 
     public List<ZxChange> selectZxChangeTransferList(ZxChange zxChange){
         return zxChangeMapper.selectZxChangeTransferList(zxChange);
+    }
+
+    /**
+     *  查询变动类型为1,即领用的所有信息
+     * @param zxChange
+     * @return
+     */
+    @Override
+    public List<ZxAssetManagement> findAllStateOne(ZxChange zxChange) {
+        return zxChangeMapper.selectAllStateOne(zxChange);
     }
 }
