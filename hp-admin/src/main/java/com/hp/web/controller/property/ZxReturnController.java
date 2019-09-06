@@ -15,10 +15,13 @@ import com.hp.property.service.IZxChangeService;
 import com.hp.property.service.IZxReturnService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -143,12 +146,15 @@ public class ZxReturnController extends BaseController {
     @RequiresPermissions("property:return:list")
     @PostMapping("/lists")
     @ResponseBody
-    public TableDataInfo lists(ZxAssetManagement zxAssetManagement)
+    public TableDataInfo lists(ZxAssetManagement zxAssetManagement, HttpServletRequest request)
     {
         if (zxAssetManagement.getIds()!=null&&!zxAssetManagement.getIds().equals("")){
             List<ZxAssetManagement> list=new LinkedList<>();
             String s=zxAssetManagement.getIds();
             String[] split = s.split(",");
+            HttpSession session = request.getSession();
+            session.setAttribute("split",split);
+            System.out.println(session.getAttribute("split").toString());
             for (int i=0;i<split.length;i++){
                 ZxAssetManagement ls = zxAssetManagementService.selectZxAssetManagementById(Long.parseLong(split[i]));
                 list.add(ls);

@@ -75,6 +75,7 @@ public class ZxReturnServiceImpl implements IZxReturnService
            zxChange.setAssetsId(id);
             Long cid = SnowFlake.nextId();
             zxChange.setId(cid);
+            zxChange.setChangeType(5);
             int i= zxReturnMapper.updateManagementStateById(id);
             if(i>0){
                 zxReturnMapper.insertChange(zxChange);

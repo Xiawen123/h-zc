@@ -220,9 +220,11 @@
                     console.log(data.children[1].innerHTML)
                     ids = data.children[1].innerHTML+","+ids;
                 }
+
                 $("#ids").val(ids);
                 //判断是否为空
                 if (ids != undefined && ids != null) {
+
                     getList();
                 }
             }else{
