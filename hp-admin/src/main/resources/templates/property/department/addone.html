@@ -109,22 +109,25 @@
 			$.modal.openOptions(options);
             //$.modal.open("选择用户", prefix + "/parent");
         }
-		function doSubmit(index, layero){
-			var body = layer.getChildFrame('body', index);
-
-			var data = body.find('.selected')[0];
-			if(data != "undefined" && data != "" && data != null){
-				var ids = data.children[1].innerHTML
-				$("#ids").val(ids);
-				//判断是否为空
-				if (ids != undefined && ids != null) {
-					getList();
-				}
-			}else{
-				layer.msg("请选择一个资产");
-			}
-			layer.close(index);
-		}
+        function doSubmit(index, layero){
+            var body = layer.getChildFrame('body', index);
+            if(body != "undefined" && body != "" && body != null){
+                var ids="";
+                for (var i=0;i<body.find('.selected').length;i++){
+                    var data = body.find('.selected')[i];
+                    console.log(data.children[1].innerHTML)
+                     ids = data.children[1].innerHTML+","+ids;
+                }
+                $("#ids").val(ids);
+                //判断是否为空
+                if (ids != undefined && ids != null) {
+                    getList();
+                }
+            }else{
+                layer.msg("请选择一个资产");
+            }
+            layer.close(index);
+        }
 	</script>
 </body>
 </html>
