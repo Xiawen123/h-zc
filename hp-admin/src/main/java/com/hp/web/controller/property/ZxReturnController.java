@@ -171,7 +171,6 @@ public class ZxReturnController extends BaseController {
             set.remove(" ");
             for(Object id:set){
                 String s1 = id.toString();
-                System.out.println(id);
                 if(!s1.equals("")){
                     ZxAssetManagement ls = zxAssetManagementService.selectZxAssetManagementById(Long.parseLong(s1));
                     list.add(ls);
