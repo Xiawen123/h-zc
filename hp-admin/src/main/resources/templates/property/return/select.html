@@ -196,18 +196,17 @@
     <th:block th:include="include :: footer" />
     <th:block th:include="include :: datetimepicker-js" />
     <script type="text/javascript">
-        var prefix = ctx + "property/management";
         var type=[[${@dict.getType('zc_type')}]]
         var unit=[[${@dict.getType('zc_unit')}]]
         $("#form-management-edit").validate({
             focusCleanup: true
         });
 
-        function submitHandler() {
+       /* function submitHandler() {
             if ($.validate.form()) {
                 $.operate.save(prefix + "/edit", $('#form-management-edit').serialize());
             }
-        }
+        }*/
 
         $("input[name='purchasingTime']").datetimepicker({
             format: "yyyy-mm-dd",

@@ -24,10 +24,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 /**
  * 资产退还控制层
@@ -91,8 +88,9 @@ public class ZxReturnController extends BaseController {
     @Log(title = "退还登记", businessType = BusinessType.INSERT)
     @PostMapping("/add")
     @ResponseBody
-    public AjaxResult addSave(ZxChange zxChange,String ids)
+    public AjaxResult addSave(ZxChange zxChange,String ids,HttpServletRequest request)
     {
+        request.getSession().removeAttribute("s");
         Long[] Ids = Convert.toLongArray(ids);
 
       /*List<ZxAssetManagement> list= FastJsonUtils.getJsonToList(zxAssetsManagement, ZxAssetManagement.class);*/
@@ -151,13 +149,35 @@ public class ZxReturnController extends BaseController {
         if (zxAssetManagement.getIds()!=null&&!zxAssetManagement.getIds().equals("")){
             List<ZxAssetManagement> list=new LinkedList<>();
             String s=zxAssetManagement.getIds();
-            String[] split = s.split(",");
-            HttpSession session = request.getSession();
-            session.setAttribute("split",split);
-            System.out.println(session.getAttribute("split").toString());
+            HttpSession session=request.getSession();
+            if(session.getAttribute("s")==null){
+                session.setAttribute("s","0");
+                session.setAttribute("s",session.getAttribute("s")+","+s);
+            }else{
+                session.setAttribute("s",session.getAttribute("s")+","+s);
+            }
+            String spl=session.getAttribute("s").toString();
+            Set set = new HashSet();
+            String[] split =spl.split(",");
+            /*System.out.println(Arrays.toString(split));*/
+           /* String[] split=s.split(",");*/
             for (int i=0;i<split.length;i++){
-                ZxAssetManagement ls = zxAssetManagementService.selectZxAssetManagementById(Long.parseLong(split[i]));
-                list.add(ls);
+                set.add(split[i]);
+                System.out.println(set);
+                   /* ZxAssetManagement ls = zxAssetManagementService.selectZxAssetManagementById(Long.parseLong(set));
+                    list.add(ls);*/
+            }
+            set.remove("0");
+            set.remove(" ");
+            for(Object id:set){
+                String s1 = id.toString();
+                System.out.println("我是你"+s1+"爸爸！");
+                System.out.println(id);
+                if(!s1.equals("")){
+                    ZxAssetManagement ls = zxAssetManagementService.selectZxAssetManagementById(Long.parseLong(s1));
+                    list.add(ls);
+                }
+
             }
             return getDataTable(list);
         }else {
