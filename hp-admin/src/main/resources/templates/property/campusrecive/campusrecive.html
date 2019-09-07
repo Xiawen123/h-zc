@@ -2,6 +2,7 @@
 <html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
 <head>
     <th:block th:include="include :: header('资产信息列表')" />
+    <script th:src="@{/ajax/libs/laydate/laydate.js}"></script>
 </head>
 <body class="gray-bg">
      <div class="container-div">
@@ -12,7 +13,7 @@
                         <ul>
                             <li class="select-time">
                                 <p>领用时间：</p>
-                                <input type="text" class="time-input" id="startTime" placeholder="开始时间" name="params[beginPurchasingTime]"/>
+                                <input type="text" name="extend4" id="recipientsTime" placeholder="领用时间"/>
                             </li>
                             <li>
                                 <p>资产名称：</p>
@@ -53,7 +54,6 @@
     <th:block th:include="include :: footer" />
     <script th:inline="javascript">
         var editFlag = [[${@permission.hasPermi('system:management:edit')}]];
-        var removeFlag = [[${@permission.hasPermi('system:management:remove')}]];
         var prefix = ctx + "property/campusrecive";
 
         var type=[[${@dict.getType('zc_type')}]];
@@ -132,6 +132,15 @@
                 }]
             };
             $.table.init(options);
+        });
+
+        //时间选择器
+        laydate.render({
+            elem: '#recipientsTime'
+            ,trigger: 'click',
+            type:'date'
+            ,range: true
+
         });
     </script>
 </body>

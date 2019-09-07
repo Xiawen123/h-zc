@@ -75,4 +75,11 @@ public interface IZxChangeService
      *
      */
     public List<ZxChange> selectZxChangeTransferList(ZxChange zxChange);
+
+    /**
+     * 查询变更表中所有变动类型为1即领用的所有记录
+     * @param zxChange
+     * @return
+     */
+    List<ZxChange> findAllChangeTypeOne(ZxChange zxChange);
 }
