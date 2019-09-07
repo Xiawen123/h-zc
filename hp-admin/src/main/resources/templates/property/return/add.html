@@ -8,7 +8,7 @@
 <body class="white-bg">
     <div class="wrapper wrapper-content animated fadeInRight ibox-content">
         <form class="form-horizontal m" id="form-return-add">
-            <input type="text" id="ids" name="ids" value="">
+            <input type="hidden" id="ids" name="ids" value="">
             <div class="form-group">    
                 <label class="col-sm-3 control-label">退还部门：</label>
                 <div class="col-sm-8">
@@ -35,10 +35,10 @@
                 </a>
 
                 <!--<button type="button" class="btn btn-primary" onclick="add()">添加</button>-->
-                     <a class="btn btn-danger multiple disabled" onclick="del(this)" shiro:hasPermission="system:management:remove">
+                   <!--  <a class="btn btn-danger multiple disabled" onclick="del(this)" shiro:hasPermission="system:management:remove">
                          <i class="fa fa-remove"></i> 删除
                      </a>
-                  </a>
+                  </a>-->
             </div>
             <div class="col-sm-12 select-table table-striped">
                 <table id="bootstrap-table" data-mobile-responsive="true">
@@ -226,6 +226,7 @@
                 if (ids != undefined && ids != null) {
 
                     getList();
+                    $.table.search();
                 }
             }else{
                 layer.msg("请选择一个资产");

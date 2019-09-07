@@ -26,5 +26,9 @@
             <artifactId>hp-system</artifactId>
             <version>${hp.version}</version>
         </dependency>
+        <dependency>
+            <groupId>com.hp</groupId>
+            <artifactId>hp-framework</artifactId>
+        </dependency>
     </dependencies>
 </project>
