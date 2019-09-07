@@ -288,5 +288,22 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </insert>
 
 
+    <!--查询变更表对应资产信息列表中领用的记录-->
+    <select id="selectZxAssetManagementListById" parameterType="ZxAssetManagement" resultMap="ZxAssetManagementResult">
+        <include refid="selectZxAssetManagementVo"/>
+        <where>
+            id = #{id}
+            <if test="extend4 != null and extend4 != ''">
+                and recipients_time >= date_format(SUBSTR(#{extend4} FROM 1 FOR 10),'%y%m%d')
+                and recipients_time <![CDATA[ <= ]]> date_format(SUBSTR(#{extend4} FROM 14 FOR 10),'%y%m%d')
+            </if>
+            <if test="name != null  and name != ''"> and name like concat('%', #{name}, '%')</if>
+            <if test="assetNum != null  and assetNum != ''"> and asset_num = #{assetNum}</if>
+            <if test="campus != null "> and campus = #{campus}</if>
+            <if test="extend2 != null  and extend2 != ''"> and extend2 = #{extend2}</if>
+        </where>
+    </select>
+
+
 
 </mapper>

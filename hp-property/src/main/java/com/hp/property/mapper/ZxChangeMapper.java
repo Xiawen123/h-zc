@@ -73,9 +73,9 @@ public interface ZxChangeMapper extends BaseMapper<ZxChange>
     Integer insertZxChangeByAssert(ZxAssetManagement zxAssetManagement);
 
     /**
-     * 查询变动类型为1,即领用的所有信息
+     * 查询变更表中所有变动类型为1即领用的所有记录
      * @param zxChange
      * @return
      */
-    List<ZxAssetManagement> selectAllStateOne(ZxChange zxChange);
+    List<ZxChange> selectAllChangeTypeOne(ZxChange zxChange);
 }

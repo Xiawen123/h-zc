@@ -97,4 +97,10 @@ public class ZxAssetManagementServiceImpl implements IZxAssetManagementService {
     public Integer modifyZxAssertManagement(String ids) {
         return zxAssetManagementMapper.updateZxAssertManagement(Convert.toStrArray(ids));
     }
+
+    // 查询变更表对应资产信息列表中领用的记录
+    @Override
+    public List<ZxAssetManagement> selectZxAssetManagementListById(ZxAssetManagement zxAssetManagement) {
+        return zxAssetManagementMapper.selectZxAssetManagementListById(zxAssetManagement);
+    }
 }

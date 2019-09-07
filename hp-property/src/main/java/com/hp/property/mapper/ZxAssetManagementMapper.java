@@ -92,4 +92,11 @@ public interface ZxAssetManagementMapper extends BaseMapper<ZxAssetManagement>
      */
     Integer updateZxAssertManagement(String[] ids);
 
+    /**
+     * 查询变更表对应资产信息列表中领用的记录
+     * @param zxAssetManagement 资产信息
+     * @return 资产信息集合
+     */
+    List<ZxAssetManagement> selectZxAssetManagementListById(ZxAssetManagement zxAssetManagement);
+
 }

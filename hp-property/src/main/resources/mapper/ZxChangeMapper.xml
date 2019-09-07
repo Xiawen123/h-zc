@@ -154,12 +154,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </insert>
 
     <!--查询变动类型为1,即领用的所有信息-->
-    <select id="selectAllStateOne" resultMap="ZxChangeResult" parameterType="ZxChange">
-        SELECT * FROM `zx_change` c
+    <select id="selectAllChangeTypeOne" resultMap="ZxChangeResult" parameterType="ZxChange">
+        <include refid="selectZxChangeVo"/> where change_type = #{changeType}
+        /*SELECT * FROM `zx_change` c
         LEFT join `zx_asset_management` a
         ON c.assets_id= a.id
         WHERE c.change_type = #{changeType}
-        ORDER BY c.`extend1`
+        ORDER BY c.`extend1`*/
         <!--<include refid="selectZxChangeVo"/>
         <where>
             state = #{state}

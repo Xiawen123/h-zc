@@ -126,7 +126,7 @@ public class ZxChangeServiceImpl implements IZxChangeService
      * @return
      */
     @Override
-    public List<ZxAssetManagement> findAllStateOne(ZxChange zxChange) {
-        return zxChangeMapper.selectAllStateOne(zxChange);
+    public List<ZxChange> findAllChangeTypeOne(ZxChange zxChange) {
+        return zxChangeMapper.selectAllChangeTypeOne(zxChange);
     }
 }
