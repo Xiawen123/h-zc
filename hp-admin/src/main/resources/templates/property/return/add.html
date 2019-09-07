@@ -35,10 +35,10 @@
                 </a>
 
                 <!--<button type="button" class="btn btn-primary" onclick="add()">添加</button>-->
-                   <!--  <a class="btn btn-danger multiple disabled" onclick="del(this)" shiro:hasPermission="system:management:remove">
+                     <!--<a class="btn btn-danger multiple disabled" onclick="del(this)" shiro:hasPermission="system:management:remove">
                          <i class="fa fa-remove"></i> 删除
-                     </a>
-                  </a>-->
+                     </a>-->
+                 <!-- </a>-->
             </div>
             <div class="col-sm-12 select-table table-striped">
                 <table id="bootstrap-table" data-mobile-responsive="true">
@@ -58,10 +58,11 @@
         var type=[[${@dict.getType('zc_type')}]]
         var dept=[[${@dict.getType('zc_department')}]]
         var unit=[[${@dict.getType('zc_unit')}]]
-
+var id="";
 
         function del(data) {
             data.parentNode.parentNode.remove();
+          /* id= data.parentNode.children.namedItem("id");*/
         }
 
         $("#form-return-add").validate({
@@ -186,8 +187,8 @@
                     {
                         field: 'number',
                         title: '数量'
-                    },
-                    {
+                    }
+                   /* {
                         title: '操作',
                         align: 'center',
                         formatter: function (value, row, index) {
@@ -195,7 +196,7 @@
                             actions.push('<a class="btn btn-danger btn-xs" href="javascript:void(0)" onclick="del(this)"><i class="fa fa-remove"></i>删除</a>');
                             return actions.join('');
                         }
-                    }
+                    }*/
                 ]
             };
             $.table.init(options);

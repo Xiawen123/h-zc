@@ -163,7 +163,7 @@ public class ZxReturnController extends BaseController {
            /* String[] split=s.split(",");*/
             for (int i=0;i<split.length;i++){
                 set.add(split[i]);
-                System.out.println(set);
+
                    /* ZxAssetManagement ls = zxAssetManagementService.selectZxAssetManagementById(Long.parseLong(set));
                     list.add(ls);*/
             }
@@ -171,7 +171,6 @@ public class ZxReturnController extends BaseController {
             set.remove(" ");
             for(Object id:set){
                 String s1 = id.toString();
-                System.out.println("我是你"+s1+"爸爸！");
                 System.out.println(id);
                 if(!s1.equals("")){
                     ZxAssetManagement ls = zxAssetManagementService.selectZxAssetManagementById(Long.parseLong(s1));
