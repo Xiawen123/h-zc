@@ -8,6 +8,7 @@ import com.hp.common.core.text.Convert;
 import com.hp.common.enums.BusinessType;
 import com.hp.common.utils.DateString;
 import com.hp.common.utils.FastJsonUtils;
+import com.hp.common.utils.SnowFlake;
 import com.hp.property.domain.ZxAssetManagement;
 import com.hp.property.domain.ZxChange;
 import com.hp.property.service.IZxAssetManagementService;
@@ -61,9 +62,9 @@ public class ZxReturnController extends BaseController {
     @RequiresPermissions("property:return:list")
     @PostMapping("/list")
     @ResponseBody
-    public TableDataInfo list(ZxAssetManagement zxAssetManagement){
+    public TableDataInfo list(ZxChange zxChange){
         startPage();
-        List<ZxAssetManagement> list = zxReturnService.selectZxReturnList(zxAssetManagement);
+        List<ZxChange> list = zxReturnService.selectZxReturnList(zxChange);
         return getDataTable(list);
     }
 
@@ -74,8 +75,11 @@ public class ZxReturnController extends BaseController {
 
     @RequiresPermissions("property:return:add")
     @GetMapping("/add")
-    public String add()
+    public String add(HttpServletRequest request)
     {
+        if(request.getSession().getAttribute("s")!=null){
+            request.getSession().removeAttribute("s");
+        }
 
         return prefix + "/add";
     }
@@ -88,31 +92,50 @@ public class ZxReturnController extends BaseController {
     @Log(title = "退还登记", businessType = BusinessType.INSERT)
     @PostMapping("/add")
     @ResponseBody
-    public AjaxResult addSave(ZxChange zxChange,String ids,HttpServletRequest request)
+    public AjaxResult addSave(ZxChange zxChange,ZxAssetManagement zxAssetManagement,HttpServletRequest request)
     {
-        request.getSession().removeAttribute("s");
-        Long[] Ids = Convert.toLongArray(ids);
 
-      /*List<ZxAssetManagement> list= FastJsonUtils.getJsonToList(zxAssetsManagement, ZxAssetManagement.class);*/
-        System.out.println(Ids);
-        return toAjax(zxReturnService.insertManagementAndChange(zxChange,Ids));
+        String ids =  request.getSession().getAttribute("s").toString();
+        Date returnTime = zxAssetManagement.getReturnTime();
+        int i1=0;
+        if (ids!=null&&!ids.equals("")){
+            Set set = new HashSet();
+            String[] split = ids.split(",");
+            for (int i=0;i<split.length;i++){
+                set.add(split[i]);
+            }
+            set.remove("0");
+            set.remove(" ");
+            for(Object id:set) {
+                String s1 = id.toString();
+                if (!s1.equals("")) {
+                    System.out.println(s1);
+                    ZxAssetManagement zxone = zxAssetManagementService.selectZxAssetManagementById(Long.parseLong(s1));
+                    zxone.setState(1);
+                    zxChange.setAssetsId(Long.parseLong(s1));
+                    long l = SnowFlake.nextId();
+                    zxChange.setId(l);
+                    zxChange.setChangeType(5);
+                    zxChange.setUseDepartment(zxAssetManagement.getDepartment());
+                    zxChange.setUsers(zxAssetManagement.getExtend2());
+                    int i = zxChangeService.insertZxChange(zxChange);
+                    System.out.println(i);
+                    i1 = zxAssetManagementService.updateZxAssetManagement(zxone);
+                    System.out.println(i1);
+                }
+            }
+            return toAjax(i1);
+        }else{
+
+            return toAjax(zxChangeService.insertZxChange(null));
+        }
     }
-    /**
-     * 新增资产退还页面
-     */
-/*    @RequiresPermissions("property:return:adds")
-    @PostMapping("/addss")
-    @ResponseBody
-    public TableDataInfo addss(String ids){
-        startPage();
-        List<ZxAssetManagement> list = zxReturnService.selectZxAssetManagementsById(ids);
-        return getDataTable(list);
-    }*/
 
     @RequiresPermissions("property:return:adds")
     @GetMapping("/adds")
     public String adds()
     {
+
 
         return prefix + "/adds";
     }
@@ -159,13 +182,8 @@ public class ZxReturnController extends BaseController {
             String spl=session.getAttribute("s").toString();
             Set set = new HashSet();
             String[] split =spl.split(",");
-            /*System.out.println(Arrays.toString(split));*/
-           /* String[] split=s.split(",");*/
             for (int i=0;i<split.length;i++){
                 set.add(split[i]);
-
-                   /* ZxAssetManagement ls = zxAssetManagementService.selectZxAssetManagementById(Long.parseLong(set));
-                    list.add(ls);*/
             }
             set.remove("0");
             set.remove(" ");

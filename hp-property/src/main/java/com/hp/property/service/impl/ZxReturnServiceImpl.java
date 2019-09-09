@@ -34,8 +34,8 @@ public class ZxReturnServiceImpl implements IZxReturnService
     private ZxReturnMapper zxReturnMapper;
 
     @Override
-    public List<ZxAssetManagement> selectZxReturnList(ZxAssetManagement zxAssetManagement) {
-        List<ZxAssetManagement> zxAssetManagements = zxReturnMapper.selectZxAssetManagementList(zxAssetManagement);
+    public List<ZxChange> selectZxReturnList(ZxChange zxChange) {
+        List<ZxChange> zxChanges = zxReturnMapper.selectZxAssetManagementList(zxChange);
        /* ZxChange zxChange1 = new ZxChange();
         List<ZxChange> zxChanges = zxChangeMapper.selectZxChangeList(zxChange1);
         for(ZxChange zx:zxChanges) {
@@ -56,7 +56,7 @@ public class ZxReturnServiceImpl implements IZxReturnService
             }
         }
 */
-     return zxAssetManagements;
+     return zxChanges;
     }
 
     @Override

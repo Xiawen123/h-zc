@@ -13,7 +13,7 @@
                         <ul>
                             <li>
                                 <p>退还日期：</p>
-                                <input type="text" name="extend4" id="returnTime"/>
+                                <input type="text" name="extend1" id="returnTime"/>
                             </li>
                             <li>
                                 <p>退还物品：</p>
@@ -25,7 +25,7 @@
                             </li>
                             <li>
                                 <p>退还部门：</p>
-                                <select name="extend1" th:with="type=${@dict.getType('zc_department')}">
+                                <select name="submittedDepartment" th:with="type=${@dict.getType('zc_department')}">
                                     <option value="">请选择部门</option>
                                     <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
                                 </select>
@@ -90,7 +90,7 @@
                     visible: false
                 },
                 {
-                    field : 'returnTime',
+                    field : 'extend1',
                     title : '退还时间'
                 },
                 {

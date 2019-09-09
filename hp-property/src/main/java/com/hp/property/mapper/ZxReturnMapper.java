@@ -19,7 +19,7 @@ public interface ZxReturnMapper
 
     List<ZxChange> selectZxChangeByAssetsId(Long id);
 
-    List<ZxAssetManagement> selectZxAssetManagementList(ZxAssetManagement zxAssetManagement);
+    List<ZxChange> selectZxAssetManagementList(ZxChange zxChange);
 
     ZxAssetManagement selectZxAssetManagementById(Long id);
 

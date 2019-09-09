@@ -14,7 +14,7 @@ import java.util.List;
 public interface IZxReturnService
 {
 
-    List<ZxAssetManagement> selectZxReturnList(ZxAssetManagement zxAssetManagement);
+    List<ZxChange> selectZxReturnList(ZxChange zxChange);
 
     ZxAssetManagement selectZxAssetManagementById(Long id);
 
