@@ -85,6 +85,7 @@ public interface ZxAssetManagementMapper extends BaseMapper<ZxAssetManagement>
      */
     List<ZxAssetManagement> selectAllStateOne(ZxAssetManagement zxAssetManagement);
 
+    List<ZxAssetManagement> selectAAAStateTwo(ZxAssetManagement zxAssetManagement);
     /**
      * 根据id修改资产状态为领用
      * @param ids

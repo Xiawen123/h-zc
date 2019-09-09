@@ -94,6 +94,11 @@ public class ZxAssetManagementServiceImpl implements IZxAssetManagementService {
     }
 
     @Override
+    public List<ZxAssetManagement> seleAll(ZxAssetManagement zxAssetManagement) {
+        return zxAssetManagementMapper.selectAAAStateTwo(zxAssetManagement);
+    }
+
+    @Override
     public Integer modifyZxAssertManagement(String ids) {
         return zxAssetManagementMapper.updateZxAssertManagement(Convert.toStrArray(ids));
     }
