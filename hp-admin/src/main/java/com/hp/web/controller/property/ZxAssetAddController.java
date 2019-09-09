@@ -103,6 +103,7 @@ public class ZxAssetAddController extends BaseController
     @ResponseBody
     public AjaxResult addSave(ZxAssetManagement zxAssetManagement)
     {
+
             //添加雪花算法 表id
             zxAssetManagement.setId(SnowFlake.nextId());
             //添加资产编号
@@ -120,9 +121,7 @@ public class ZxAssetAddController extends BaseController
 
             zxAssetManagement.setWarehousingCampus(115);
             //添加所在校区
-            zxAssetManagement.setCampus(115);
-            //添加存放地点?
-            zxAssetManagement.setLocation(1);
+            zxAssetManagement.setCampus(zxAssetManagement.getWarehousingCampus());
             //添加图片url
             List<Map<String, Object>> list = FastJsonUtils.getJsonToListMap(zxAssetManagement.getPicture().toString());
             list.get(0).get("img");
