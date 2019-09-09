@@ -56,7 +56,7 @@
 
     function getList() {
         var options = {
-            url: prefix + "/list3",
+            url: prefix + "/list2",
             createUrl: prefix + "/add",
             updateUrl: prefix + "/edit/{id}",
             removeUrl: prefix + "/remove",
@@ -119,6 +119,7 @@
             //判断是否为空
             if (ids != undefined && ids != null) {
                 getList();
+                $.table.search();
             }
         }else{
             layer.msg("请选择要领用的资产");

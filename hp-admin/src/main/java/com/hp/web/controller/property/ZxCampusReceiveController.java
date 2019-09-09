@@ -182,6 +182,18 @@ public class ZxCampusReceiveController extends BaseController {
     @ResponseBody
     public TableDataInfo list3(ZxAssetManagement zxAssetManagement, HttpServletRequest request)
     {
+       /* String ids = zxAssetManagement.getIds();
+        if(ids != null && !ids.equals("")){
+            LinkedList<ZxAssetManagement> list = new LinkedList<>();
+            HttpSession session = request.getSession();
+            String ids1 = (String) session.getAttribute("ids");
+            if(ids1 == null){
+                session.setAttribute("ids",ids1);
+            }
+        }*/
+
+
+
         if (zxAssetManagement.getIds()!=null&&!zxAssetManagement.getIds().equals("")){
             List<ZxAssetManagement> list=new LinkedList<>();
             String s=zxAssetManagement.getIds();
@@ -195,18 +207,16 @@ public class ZxCampusReceiveController extends BaseController {
             String spl=session.getAttribute("s").toString();
             Set set = new HashSet();
             String[] split =spl.split(",");
-            /*System.out.println(Arrays.toString(split));*/
-            /* String[] split=s.split(",");*/
             for (int i=0;i<split.length;i++){
                 set.add(split[i]);
-                System.out.println(set);
+                System.out.println("set********************:" + set);
             }
             set.remove("0");
             set.remove(" ");
             for(Object id:set){
                 String s1 = id.toString();
-                System.out.println("我是你"+s1+"爸爸！");
-                System.out.println(id);
+                System.out.println("s1*****************:" + s1);
+                System.out.println("id********************:" + id);
                 if(!s1.equals("")){
                     ZxAssetManagement ls = zxAssetManagementService.selectZxAssetManagementById(Long.parseLong(s1));
                     list.add(ls);
