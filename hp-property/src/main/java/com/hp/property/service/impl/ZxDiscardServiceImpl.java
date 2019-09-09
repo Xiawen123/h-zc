@@ -8,6 +8,7 @@ import com.hp.property.mapper.ZxDiscardMapper;
 import com.hp.property.service.IZxDiscardService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -26,28 +27,17 @@ public class ZxDiscardServiceImpl implements IZxDiscardService {
     @Autowired
     private ZxDiscardMapper zxDiscardMapper;
     /**
-     * 查询报废信息列表
+     * 查询报废的变更记录信息列表
      *
-     * @param zxAssetManagement
+     * @param zxChange
      * @return
      */
     @Override
-    public List<ZxAssetManagement> selectZxDiscardList(ZxAssetManagement zxAssetManagement) {
-        List<ZxAssetManagement> managements = zxDiscardMapper.selectDiscardZxAssetList(zxAssetManagement);
-        List<ZxChange> changes = zxChangeMapper.selectZxChangeList(new ZxChange());
-        for (ZxChange change:changes){
-            if (change.getAssetsId()!=null){
-                for (ZxAssetManagement management:managements){
-                    if (change.getSubmittedDepartment()!=null){
-                        management.setExtend1(Integer.toString(change.getSubmittedDepartment()));
-                    }
-                    if (change.getSubmitOne()!=null){
-                        management.setExtend2(change.getSubmitOne());
-                    }
-                }
-            }
-        }
-        return managements;
+    public List<ZxChange> selectZxDiscardList(ZxChange zxChange) {
+        zxChange.setChangeType(4);
+        System.out.println(zxChange.toString());
+        List<ZxChange> changes = zxDiscardMapper.selectZxChangeList(zxChange);
+        return changes;
     }
 
     /**
@@ -58,6 +48,36 @@ public class ZxDiscardServiceImpl implements IZxDiscardService {
     @Override
     public ZxAssetManagement selectDiscardById(Long id) {
         return zxAssetManagementMapper.selectZxAssetManagementById(id);
+    }
+
+    /**
+     * 查询未报废的资产
+     *
+     * @param zxAssetManagement
+     * @return
+     */
+    @Override
+    public List<ZxAssetManagement> selectZxNoDiscardList(ZxAssetManagement zxAssetManagement) {
+        return zxDiscardMapper.selectNoDiscardZxAssetList(zxAssetManagement);
+    }
+
+    /**
+     * 新增变更记录（报废的）
+     *
+     * @param zxChange
+     * @return
+     */
+    @Override
+    public int insertZxDiscardChange(ZxChange zxChange) {
+        Long assetsId = zxChange.getAssetsId();
+         zxDiscardMapper.updateDiscardManagement(assetsId);
+
+        return zxDiscardMapper.insertZxDiscardChange(zxChange);
+    }
+
+    @Override
+    public int updateZxDiscardAsset(ZxAssetManagement management) {
+        return 0;
     }
 
 
