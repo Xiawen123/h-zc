@@ -71,31 +71,8 @@ public class ZxCampusReceiveController extends BaseController {
     public TableDataInfo list(ZxChange zxChange /*ZxAssetManagement zxAssetManagement*/)
     {
         startPage();
-
-
         // 查询变更表中所有变动类型为1即领用的所有记录
         List<ZxChange> list = zxChangeService.findAllChangeTypeOne(zxChange);
-
-       /* ZxChange zxChange=new ZxChange();
-        zxChange.setChangeType(1);
-        List<ZxChange> zxChanges = zxChangeService.selectZxChangeList(zxChange);
-
-
-        // 查询变更记录表中，变动类型为领用的记录对应资产表的记录
-        List<ZxAssetManagement> list =new ArrayList<>();
-        for (ZxChange z:zxChanges){
-
-            // 获得变更表中的id
-            Long id = z.getAssetsId();
-
-            zxAssetManagement.setId(id);
-            List<ZxAssetManagement> list1 = zxAssetManagementService.selectZxAssetManagementListById(zxAssetManagement);
-            if(list1 != null){
-                ZxAssetManagement zxAssetManagement1 = list1.get(0);
-
-                list.add(zxAssetManagement1);
-            }
-        }*/
         return getDataTable(list);
     }
 
