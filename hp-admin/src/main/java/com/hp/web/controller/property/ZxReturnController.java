@@ -131,7 +131,6 @@ public class ZxReturnController extends BaseController {
                     zxChange.setId(l);
                     zxChange.setChangeType(5);
                     zxChange.setUseDepartment(zxChange.getSubmittedDepartment());
-                    zxChange.setUsers(zxAssetManagement.getExtend2());
 
                    /* SysUser sysUser = iSysUserService.selectUserByLoginName(ShiroUtils.getLoginName());
                     String c= iSysDeptService.selectDeptById(sysUser.getDeptId()).getDeptName();
@@ -158,6 +157,7 @@ public class ZxReturnController extends BaseController {
                     }
 
                     zxChange.setSubmitOne(ShiroUtils.getLoginName());
+                    zxone.setReturnTime(new Date());
                     int i = zxChangeService.insertZxChange(zxChange);
                     System.out.println(i);
                     i1 = zxAssetManagementService.updateZxAssetManagement(zxone);

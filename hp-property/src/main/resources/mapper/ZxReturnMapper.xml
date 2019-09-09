@@ -128,7 +128,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="submitOne != null  and submitOne != ''">submit_one,</if>
             <if test="useDepartment != null ">use_department,</if>
             <if test="users != null  and users != ''">users,</if>
-            extend1,
             <if test="extend2 != null  and extend2 != ''">extend2,</if>
             <if test="extend3 != null  and extend3 != ''">extend3,</if>
             <if test="extend4 != null  and extend4 != ''">extend4,</if>
@@ -142,7 +141,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="submitOne != null  and submitOne != ''">#{submitOne},</if>
             <if test="useDepartment != null ">#{useDepartment},</if>
             <if test="users != null  and users != ''">#{users},</if>
-            sysdate(),
             <if test="extend2 != null  and extend2 != ''">#{extend2},</if>
             <if test="extend3 != null  and extend3 != ''">#{extend3},</if>
             <if test="extend4 != null  and extend4 != ''">#{extend4},</if>
