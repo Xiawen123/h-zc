@@ -16,13 +16,6 @@ import java.util.List;
  */
 @Service
 public class ZxDiscardServiceImpl implements IZxDiscardService {
-
-    @Autowired
-    private ZxAssetManagementMapper zxAssetManagementMapper;
-
-    @Autowired
-    private ZxChangeMapper zxChangeMapper;
-
     @Autowired
     private ZxDiscardMapper zxDiscardMapper;
     /**

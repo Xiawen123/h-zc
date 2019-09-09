@@ -55,8 +55,6 @@ public class ZxDiscardController extends BaseController {
     @Autowired
     private ISysUserService iSysUserService;
 
-    @Autowired
-    private ISysDictDataService iSysDictDataService;
     /**
      * 跳转到 discard.html
      *
@@ -81,7 +79,7 @@ public class ZxDiscardController extends BaseController {
     public TableDataInfo list(ZxChange zxChange)
     {
         startPage();
-        //调用 zxDiscardService 的 selectZxDiscardList 方法查询报废信息列表
+        //调用 zxDiscardService 的 selectZxDiscardList 方法查询报废记录信息列表
         List<ZxChange> list = zxDiscardService.selectZxDiscardList(zxChange);
         return getDataTable(list);
     }
@@ -111,7 +109,7 @@ public class ZxDiscardController extends BaseController {
     /**
      * 根据小窗口的id查未报废的资产数据
      *
-     * （就是根据传过来的idss查询数据）
+     * （就是根据传过来的ids查询数据）
      *
      * @param zxAssetManagement
      * @return
@@ -121,27 +119,35 @@ public class ZxDiscardController extends BaseController {
     @ResponseBody
     public TableDataInfo alist(ZxAssetManagement zxAssetManagement,HttpServletRequest request)
     {
+        //判断id是否为空或为null
         if (zxAssetManagement.getIds()!=null&&!zxAssetManagement.getIds().equals("")){
             List<ZxAssetManagement> list=new LinkedList<>();
+            //获取id
             String s=zxAssetManagement.getIds();
+            //获取session
             HttpSession session=request.getSession();
+            //判断session是否为空
             if(session.getAttribute("s")==null){
-                session.setAttribute("s","0");
+                session.setAttribute("s","0");//为了保持一样的格式方便切割（0，s）
                 session.setAttribute("s",session.getAttribute("s")+","+s);
             }else{
                 session.setAttribute("s",session.getAttribute("s")+","+s);
             }
+            //获取session里的s的值
             String spl=session.getAttribute("s").toString();
             Set set = new HashSet();
+            //切割
             String[] split =spl.split(",");
+            //利用set去除重复的id
             for (int i=0;i<split.length;i++){
                 set.add(split[i]);
             }
+            //移除0和" "
             set.remove("0");
             set.remove(" ");
+            //根据id查询相应的资产，存入list
             for(Object id:set){
                 String s1 = id.toString();
-                /*System.out.println("我现在在加id呀"+id);*/
                 if(!s1.equals("")){
                     ZxAssetManagement ls = zxAssetManagementService.selectZxAssetManagementById(Long.parseLong(s1));
                     list.add(ls);
@@ -181,15 +187,19 @@ public class ZxDiscardController extends BaseController {
            System.out.println("id="+id);
            if(!s1.equals("")){
                ZxAssetManagement zxone = zxAssetManagementService.selectZxAssetManagementById(Long.parseLong(s1));
+               //资产表资产的状态
                zxone.setState(4);
+               //资产表的报废时间
                zxone.setDiscardTime(zxAssetManagement.getDiscardTime());
+               //资产表的使用人
                zxone.setExtend2(zxAssetManagement.getExtend2());
-
+               //变更表的资产id
                zxChange.setAssetsId(Long.parseLong(s1));
+               //雪花算法生成id
                long cid = SnowFlake.nextId();
-               //变更
+               //变更表的id
                zxChange.setId(cid);
-               //变更类型
+               //变更表的变更类型
                zxChange.setChangeType(4);
                //提交部门
                SysUser sysUser = iSysUserService.selectUserByLoginName(ShiroUtils.getLoginName());
@@ -197,32 +207,28 @@ public class ZxDiscardController extends BaseController {
                String deptName = sysDept.getDeptName();
                List<SysDept> sysDepts = iSysDeptService.selectDeptList(sysDept);
                // List<SysDictData> zc_department = iSysDictDataService.selectDictDataByType("zc_department");
-
                for (SysDept sysDept1:sysDepts){
                    if (deptName.equals(sysDept1.getDeptName())){
                        int d=sysDept1.getParentId().intValue();;
+                       //变更表的提交部门
                        zxChange.setSubmittedDepartment(d);
+                       //资产表的提交部门
                        zxone.setExtend1(String.valueOf(d));
                    }
                }
-               System.out.println("zxone="+zxone);
-               //使用部门
+               //变更表的使用部门
                zxChange.setUseDepartment(zxAssetManagement.getDepartment());
-               //提交人
+               //变更表的提交人
                zxChange.setSubmitOne(ShiroUtils.getLoginName());
-               //使用人
+               //变更表的使用人
                zxChange.setUsers(zxAssetManagement.getExtend2());
-               //变更时间
-               /*zxChange.setExtend1(DateString.getString(new Date(),"yyyy-MM-dd HH:mm:ss"));*/
+               //变更表的变更时间
+                    /*zxChange.setExtend1(DateString.getString(new Date(),"yyyy-MM-dd HH:mm:ss"));*/
                zxChange.setExtend1(DateString.getString(zxAssetManagement.getDiscardTime(),"yyyy-MM-dd HH:mm:ss"));
-               System.out.println("zxchange="+zxChange);
                int i = zxChangeService.insertZxChange(zxChange);
-               System.out.println("i="+i);
                i1 = zxAssetManagementService.updateZxAssetManagement(zxone);
-               System.out.println("我的状态是"+i1);
            }
        }
-       System.out.println("最终i1是"+i1);
        return toAjax(i1);
     }
 
