@@ -83,4 +83,6 @@ public interface IZxAssetManagementService
      * @return 资产信息集合
      */
     List<ZxAssetManagement> selectZxAssetManagementListById(ZxAssetManagement zxAssetManagement);
+
+     String getMaxNum(ZxAssetManagement zxAssetManagement);
 }

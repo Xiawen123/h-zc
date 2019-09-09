@@ -103,22 +103,25 @@ public class ZxAssetAddController extends BaseController
     @ResponseBody
     public AjaxResult addSave(ZxAssetManagement zxAssetManagement)
     {
+
             //添加雪花算法 表id
             zxAssetManagement.setId(SnowFlake.nextId());
             //添加资产编号
-            zxAssetManagement.setAssetNum(String.valueOf(SnowFlake.nextId()));
+            String maxNum = zxAssetManagementService.getMaxNum(zxAssetManagement);
+            String substring = maxNum.substring(8);
+            int aNum = Integer.parseInt(substring);
+            zxAssetManagement.setAssetNum("WHHP -"+zxAssetManagement.getType()+ String.format("%05d",(aNum+1)));
             //添加入库时间
             zxAssetManagement.setStorageTime(new Date());
             //添加操作人,直接获取登录账户
             zxAssetManagement.setOperator(ShiroUtils.getLoginName());
-            //添加状态为,闲置=1
+            //添加状态为,默认为闲置状态,字典键值为1
             zxAssetManagement.setState(1);
             //添加入库校区?
+
             zxAssetManagement.setWarehousingCampus(115);
             //添加所在校区
-            zxAssetManagement.setCampus(115);
-            //添加存放地点?
-            zxAssetManagement.setLocation(1);
+            zxAssetManagement.setCampus(zxAssetManagement.getWarehousingCampus());
             //添加图片url
             List<Map<String, Object>> list = FastJsonUtils.getJsonToListMap(zxAssetManagement.getPicture().toString());
             list.get(0).get("img");

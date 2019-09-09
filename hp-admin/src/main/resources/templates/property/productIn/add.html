@@ -112,8 +112,22 @@
                     </div>
                     <div id="picture">
                     </div>
-                    <div style="color:#9b9b9b;font-size:12px;margin-top:6px;">只能上传一张图片，且大小小于3M。</div>
+                    <div style="color:#9b9b9b;font-size:12px;margin-top:6px;">可以上传一张图片，且大小小于3M。</div>
                 </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">入库校区：</label>
+            <div class="col-sm-8">
+                <input id="warehousingCampus" name="warehousingCampus" class="form-control" type="text">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">存放地点：</label>
+            <div class="col-sm-8">
+                <select id="location" name="location" class="form-control m-b" th:with="type=${@dict.getType('zc_location')}">
+                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+                </select>
             </div>
         </div>
     </form>
@@ -172,7 +186,7 @@
                         btn.classList.add("tupian");
                         div.appendChild(btn)
                         div.appendChild(img);
-                        if ($(".tupian").length < 1) {
+                        if ($(".tupian").length < 3) {
                             $("#picture").append(div);
                         } else {
                             layer.msg("您上传的图片太多了！")
@@ -200,7 +214,7 @@
             $("#xianshi").attr('style', 'display:none')
             groupId = null
         }
-        //获取资产名称
+        //获取资产的参数
         var name = $("#name").val();
         var type = $("#type").val();
         var assetSpecification = $("#assetSpecification").val();
@@ -210,6 +224,8 @@
         var supplier = $("#supplier").val();
         var price = $("#price").val();
         var purchasingTime = $("#purchasingTime").val();
+        var warehousingCampus = $("#warehousingCampus").val();
+
 
         var imgs = document.getElementsByClassName("imgs");
         var b = [];
@@ -232,7 +248,9 @@
                     "supplier": supplier,
                     "price": price,
                     "purchasingTime": purchasingTime,
-                    "picture": picture
+                    "picture": picture,
+                    "warehousingCampus":warehousingCampus,
+                    "location":location
                 },
                 async: false,
                 error: function (request) {
