@@ -17,7 +17,7 @@
                             </li>
                             <li>
                                 <p>申报部门：</p>
-                                <select name="submittedDepartment" th:with="type=${@dict.getType('zc_department')}">
+                                <select name="useDepartment" th:with="type=${@dict.getType('zc_department')}">
                                     <option value="">所有</option>
                                     <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
                                 </select>
@@ -28,7 +28,7 @@
                             </li>
                             <li>
                                 <p>申报人员：</p>
-                                <input type="text" name="submitOne"/>
+                                <input type="text" name="users"/>
                             </li>
                             <li>
                                 <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
@@ -83,6 +83,11 @@
                     checkbox: true
                 },
                 {
+                    field : 'id',
+                    title : '变更记录ID',
+                    visible: false
+                },
+                {
                     field : 'assetsId',
                     title : '资产ID',
                     visible: false
@@ -125,7 +130,7 @@
                     }
                 },
                 {
-                    field : 'submittedDepartment',
+                    field : 'useDepartment',
                     title : '申报部门',
                     align: 'center',
                     formatter: function(value, row, index) {
@@ -133,7 +138,7 @@
                     }
                 },
                 {
-                    field : 'submitOne',
+                    field : 'users',
                     title : '申报人',
                 },
                 {

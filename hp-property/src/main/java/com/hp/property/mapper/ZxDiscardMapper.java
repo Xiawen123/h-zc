@@ -24,27 +24,19 @@ public interface ZxDiscardMapper {
     List<ZxAssetManagement> selectNoDiscardZxAssetList(ZxAssetManagement zxAssetManagement);
 
     /**
-     * 新增变更记录（报废的）
-     *
-     * @param zxChange
-     * @return
-     */
-    int insertZxDiscardChange(ZxChange zxChange);
-
-    /**
-     * 更改资产的状态为报废（4）
-     *
-     * @param assetsId
-     * @return
-     */
-    int updateDiscardManagement(Long assetsId);
-
-
-    /**
      * 查询所有资产信息
      *
      * @param assetsId
      * @return
      */
     ZxAssetManagement selectZxAssetManagementList(Long assetsId);
+
+
+    /**
+     * 根据变更记录id查询对应的详情
+     *
+     * @param id
+     * @return
+     */
+    ZxChange selectDiscardChangeById(Long id);
 }

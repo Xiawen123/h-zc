@@ -37,10 +37,7 @@
                 </div>
             </div>
             <button type="button" class="btn btn-primary" onclick="selectUsersToParent()">添加</button>
-            <!--<a class="btn btn-success" onclick="$.operate.addFull()" shiro:hasPermission="property:discard:insert">
-                <i class="fa fa-plus"></i> 添加
-            </a>-->
-            <button type="button" class="btn btn-danger" onclick="del(this)">删除</button>
+            <!--<button type="button" class="btn btn-danger" onclick="deleteId()">删除</button>-->
             <div class="col-sm-12 select-table table-striped">
                 <table id="bootstrap-table" data-mobile-responsive="true"></table>
             </div>
@@ -161,6 +158,29 @@
                 $.operate.save(prefix + "/add", $('#form-change-add').serialize());
             }
         }
+
+        /*function deleteId() {
+            /!*var body = layer.getChildFrame('body', index);*!/
+            var body=layui.table.cache.table;
+            console.log(body);
+            /!*if(body != "undefined" && body != "" && body != null){
+                var ids="";
+                for (var i=0;i<body.find('.selected').length;i++){
+                    var data = body.find('.selected')[i];
+                    console.log(data.children[1].innerHTML)
+                    ids = data.children[1].innerHTML+","+ids;
+                }
+                $("#ids").val(ids);
+                //判断是否为空
+                if (ids != undefined && ids != null) {
+                    getList();//根据获得的id去查询数据并显示
+                    $.table.search();
+                }
+            }else{
+                layer.msg("请选择一个资产");
+            }
+            layer.close(index);*!/
+        }*/
 
         /*function submitHandler() {
             //获取资产名称

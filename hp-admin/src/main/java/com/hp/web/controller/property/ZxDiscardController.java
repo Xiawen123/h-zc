@@ -7,13 +7,18 @@ import com.hp.common.core.page.TableDataInfo;
 import com.hp.common.enums.BusinessType;
 import com.hp.common.utils.DateString;
 import com.hp.common.utils.SnowFlake;
+import com.hp.framework.util.ShiroUtils;
 import com.hp.property.domain.ZxAssetManagement;
 import com.hp.property.domain.ZxChange;
 import com.hp.property.service.IZxAssetManagementService;
 import com.hp.property.service.IZxChangeService;
 import com.hp.property.service.IZxDiscardService;
 import com.hp.system.domain.SysDept;
+import com.hp.system.domain.SysDictData;
+import com.hp.system.domain.SysUser;
 import com.hp.system.service.ISysDeptService;
+import com.hp.system.service.ISysDictDataService;
+import com.hp.system.service.ISysUserService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -46,6 +51,12 @@ public class ZxDiscardController extends BaseController {
 
     @Autowired
     private ISysDeptService iSysDeptService;
+
+    @Autowired
+    private ISysUserService iSysUserService;
+
+    @Autowired
+    private ISysDictDataService iSysDictDataService;
     /**
      * 跳转到 discard.html
      *
@@ -171,7 +182,9 @@ public class ZxDiscardController extends BaseController {
            if(!s1.equals("")){
                ZxAssetManagement zxone = zxAssetManagementService.selectZxAssetManagementById(Long.parseLong(s1));
                zxone.setState(4);
-               System.out.println("zxone="+zxone);
+               zxone.setDiscardTime(zxAssetManagement.getDiscardTime());
+               zxone.setExtend2(zxAssetManagement.getExtend2());
+
                zxChange.setAssetsId(Long.parseLong(s1));
                long cid = SnowFlake.nextId();
                //变更
@@ -179,11 +192,29 @@ public class ZxDiscardController extends BaseController {
                //变更类型
                zxChange.setChangeType(4);
                //提交部门
-               zxChange.setSubmittedDepartment(zxAssetManagement.getDepartment());
+               SysUser sysUser = iSysUserService.selectUserByLoginName(ShiroUtils.getLoginName());
+               SysDept sysDept = iSysDeptService.selectDeptById(sysUser.getDeptId());
+               String deptName = sysDept.getDeptName();
+               List<SysDept> sysDepts = iSysDeptService.selectDeptList(sysDept);
+               // List<SysDictData> zc_department = iSysDictDataService.selectDictDataByType("zc_department");
+
+               for (SysDept sysDept1:sysDepts){
+                   if (deptName.equals(sysDept1.getDeptName())){
+                       int d=sysDept1.getParentId().intValue();;
+                       zxChange.setSubmittedDepartment(d);
+                       zxone.setExtend1(String.valueOf(d));
+                   }
+               }
+               System.out.println("zxone="+zxone);
+               //使用部门
+               zxChange.setUseDepartment(zxAssetManagement.getDepartment());
                //提交人
-               zxChange.setSubmitOne(zxAssetManagement.getExtend2());
+               zxChange.setSubmitOne(ShiroUtils.getLoginName());
+               //使用人
+               zxChange.setUsers(zxAssetManagement.getExtend2());
                //变更时间
-               zxChange.setExtend1(DateString.getString(new Date(),"yyyy-MM-dd HH:mm:ss"));
+               /*zxChange.setExtend1(DateString.getString(new Date(),"yyyy-MM-dd HH:mm:ss"));*/
+               zxChange.setExtend1(DateString.getString(zxAssetManagement.getDiscardTime(),"yyyy-MM-dd HH:mm:ss"));
                System.out.println("zxchange="+zxChange);
                int i = zxChangeService.insertZxChange(zxChange);
                System.out.println("i="+i);
@@ -211,13 +242,13 @@ public class ZxDiscardController extends BaseController {
     }
 
     /**
-     * 详情
+     * 根据变更记录id查询详情
      */
     @GetMapping("/one/{id}")
     public String one(@PathVariable("id") Long id, ModelMap mmap)
     {
-        ZxAssetManagement zxAssetManagement = zxAssetManagementService.selectZxAssetManagementById(id);
-        mmap.put("zxAssetManagement", zxAssetManagement);
+        ZxChange change = zxDiscardService.selectDiscardChangeById(id);
+        mmap.put("change", change);
         return prefix + "/one";
     }
 }

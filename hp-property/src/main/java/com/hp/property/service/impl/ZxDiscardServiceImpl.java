@@ -8,7 +8,6 @@ import com.hp.property.mapper.ZxDiscardMapper;
 import com.hp.property.service.IZxDiscardService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -46,8 +45,8 @@ public class ZxDiscardServiceImpl implements IZxDiscardService {
      * @return
      */
     @Override
-    public ZxAssetManagement selectDiscardById(Long id) {
-        return zxAssetManagementMapper.selectZxAssetManagementById(id);
+    public ZxChange selectDiscardChangeById(Long id) {
+        return zxDiscardMapper.selectDiscardChangeById(id);
     }
 
     /**
@@ -60,25 +59,4 @@ public class ZxDiscardServiceImpl implements IZxDiscardService {
     public List<ZxAssetManagement> selectZxNoDiscardList(ZxAssetManagement zxAssetManagement) {
         return zxDiscardMapper.selectNoDiscardZxAssetList(zxAssetManagement);
     }
-
-    /**
-     * 新增变更记录（报废的）
-     *
-     * @param zxChange
-     * @return
-     */
-    @Override
-    public int insertZxDiscardChange(ZxChange zxChange) {
-        Long assetsId = zxChange.getAssetsId();
-         zxDiscardMapper.updateDiscardManagement(assetsId);
-
-        return zxDiscardMapper.insertZxDiscardChange(zxChange);
-    }
-
-    @Override
-    public int updateZxDiscardAsset(ZxAssetManagement management) {
-        return 0;
-    }
-
-
 }
