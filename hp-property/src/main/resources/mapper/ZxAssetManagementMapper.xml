@@ -48,7 +48,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="brand != null  and brand != ''"> and brand = #{brand}</if>
             <if test="assetSpecification != null  and assetSpecification != ''"> and asset_specification = #{assetSpecification}</if>
             <if test="number != null "> and number = #{number}</if>
-            <if test="type != null "> and type = #{type}</if>
+            <if test="type != null and type != '' "> and type = #{type}</if>
             <if test="units != null "> and units = #{units}</if>
             <if test="supplier != null  and supplier != ''"> and supplier = #{supplier}</if>
             <if test="picture != null  and picture != ''"> and picture = #{picture}</if>

@@ -102,7 +102,7 @@
     <script th:inline="javascript">
         var editFlag = [[${@permission.hasPermi('system:management1:edit')}]];
         var removeFlag = [[${@permission.hasPermi('system:management1:remove')}]];
-        var zc_type=[[${@dict.getType('zc_type')}]];
+        var types=[[${@dict.getType('zc_type')}]];
         var zc_unit=[[${@dict.getType('zc_unit')}]];
         var zc_department=[[${@dict.getType('zc_department')}]];
         var zc_location=[[${@dict.getType('zc_location')}]];
@@ -147,7 +147,7 @@
                     field : 'type',
                     title : '资产类型',
                     formatter:function (value,row,index) {
-                        return $.table.selectDictLabel(zc_type,value);
+                        return $.table.selectDictLabel(types,value);
                     }
                 },
                 {
@@ -228,21 +228,7 @@
                 $.table.search();
             }
         }
-        function zcchange(id) {
-            var _url = prefix + "/oneChangee/"+id;
-            var options = {
-                title: $.table._option.modalName + "变更记录",
-                width: '1500px',
-                height: '1500px',
-                url: _url,
-                skin: 'layui-layer-gray',
-                btn: ['关闭'],
-                yes: function (index, layero) {
-                    layer.close(index);
-                }
-            };
-            $.modal.openOptions(options);
-        }
+
 
     </script>
 </body>
