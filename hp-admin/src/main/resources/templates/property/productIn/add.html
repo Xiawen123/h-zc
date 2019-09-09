@@ -112,7 +112,7 @@
                     </div>
                     <div id="picture">
                     </div>
-                    <div style="color:#9b9b9b;font-size:12px;margin-top:6px;">只能上传一张图片，且大小小于3M。</div>
+                    <div style="color:#9b9b9b;font-size:12px;margin-top:6px;">可以上传一张图片，且大小小于3M。</div>
                 </div>
             </div>
         </div>
@@ -172,7 +172,7 @@
                         btn.classList.add("tupian");
                         div.appendChild(btn)
                         div.appendChild(img);
-                        if ($(".tupian").length < 1) {
+                        if ($(".tupian").length < 3) {
                             $("#picture").append(div);
                         } else {
                             layer.msg("您上传的图片太多了！")
