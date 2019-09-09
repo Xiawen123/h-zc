@@ -302,7 +302,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="campus != null "> and campus = #{campus}</if>
             <if test="extend2 != null  and extend2 != ''"> and extend2 = #{extend2}</if>
         </where>
-    </select>
+</select>
 
 
 

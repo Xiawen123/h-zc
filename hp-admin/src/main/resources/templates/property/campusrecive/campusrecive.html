@@ -13,7 +13,7 @@
                         <ul>
                             <li class="select-time">
                                 <p>领用时间：</p>
-                                <input type="text" name="extend4" id="recipientsTime" placeholder="领用时间"/>
+                                <input type="text" name="extend1" id="extend1" placeholder="领用时间"/>
                             </li>
                             <li>
                                 <p>资产名称：</p>
@@ -25,11 +25,11 @@
                             </li>
                             <li>
                                 <p>领用校区：</p>
-                                <input type="text" name="campus"/>
+                                <input type="text" name="extend4"/>
                             </li>
                             <li>
                                 <p>使用人：</p>
-                                <input type="text" name="extend2"/>
+                                <input type="text" name="users"/>
                             </li>
                             <br><br>
                             <li>
@@ -73,7 +73,7 @@
                     checkbox: true
                 },
                 {
-                    field : 'recipientsTime',
+                    field : 'extend1',
                     title : '领用时间'
                 },
                 {
@@ -107,18 +107,18 @@
                     }
                 },
                 {
-                    field : 'campus', 
+                    field : 'extend4',
                     title : '校区'
                 },
                 {
-                    field : 'department', 
+                    field : 'useDepartment',
                     title : '部门',
                     formatter:function (value, row, index) {
                         return $.table.selectDictLabel(department,value);
                     }
                 },
                 {
-                    field : 'extend2',
+                    field : 'users',
                     title : '领用人员'
                 },
                 {
@@ -136,7 +136,7 @@
 
         //时间选择器
         laydate.render({
-            elem: '#recipientsTime'
+            elem: '#extend1'
             ,trigger: 'click',
             type:'date'
             ,range: true
