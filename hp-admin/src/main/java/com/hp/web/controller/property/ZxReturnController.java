@@ -9,11 +9,18 @@ import com.hp.common.enums.BusinessType;
 import com.hp.common.utils.DateString;
 import com.hp.common.utils.FastJsonUtils;
 import com.hp.common.utils.SnowFlake;
+import com.hp.framework.util.ShiroUtils;
 import com.hp.property.domain.ZxAssetManagement;
 import com.hp.property.domain.ZxChange;
 import com.hp.property.service.IZxAssetManagementService;
 import com.hp.property.service.IZxChangeService;
 import com.hp.property.service.IZxReturnService;
+import com.hp.system.domain.SysDept;
+import com.hp.system.domain.SysDictData;
+import com.hp.system.domain.SysUser;
+import com.hp.system.service.ISysDeptService;
+import com.hp.system.service.ISysDictDataService;
+import com.hp.system.service.ISysUserService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpRequest;
@@ -40,6 +47,14 @@ public class ZxReturnController extends BaseController {
     private IZxAssetManagementService zxAssetManagementService;
     @Autowired
     private IZxChangeService zxChangeService;
+    @Autowired
+    private ISysDeptService iSysDeptService;
+    @Autowired
+    private ISysDictDataService iSysDictDataService;
+
+
+    @Autowired
+    private ISysUserService iSysUserService;
     /**
      * 页面展示
      * @return
@@ -109,15 +124,40 @@ public class ZxReturnController extends BaseController {
             for(Object id:set) {
                 String s1 = id.toString();
                 if (!s1.equals("")) {
-                    System.out.println(s1);
                     ZxAssetManagement zxone = zxAssetManagementService.selectZxAssetManagementById(Long.parseLong(s1));
                     zxone.setState(1);
                     zxChange.setAssetsId(Long.parseLong(s1));
                     long l = SnowFlake.nextId();
                     zxChange.setId(l);
                     zxChange.setChangeType(5);
-                    zxChange.setUseDepartment(zxAssetManagement.getDepartment());
-                    zxChange.setUsers(zxAssetManagement.getExtend2());
+                    zxChange.setUseDepartment(zxChange.getSubmittedDepartment());
+
+                   /* SysUser sysUser = iSysUserService.selectUserByLoginName(ShiroUtils.getLoginName());
+                    String c= iSysDeptService.selectDeptById(sysUser.getDeptId()).getDeptName();
+                    List<SysDictData> zc_department = iSysDictDataService.selectDictDataByType("zc_department");
+                    for (SysDictData sysDictData:zc_department){
+                        if (c.equals(sysDictData.getDictLabel())){
+                            int d=Integer.parseInt(sysDictData.getDictValue());
+                            zxChange.setSubmittedDepartment(d);
+                        }
+                    }*/
+
+
+                    SysUser sysUser = iSysUserService.selectUserByLoginName(ShiroUtils.getLoginName());
+                    SysDept sysDept = iSysDeptService.selectDeptById(sysUser.getDeptId());
+                    String deptName = sysDept.getDeptName();
+                    List<SysDept> sysDepts = iSysDeptService.selectDeptList(sysDept);
+                    // List<SysDictData> zc_department = iSysDictDataService.selectDictDataByType("zc_department");
+
+                    for (SysDept sysDept1:sysDepts){
+                        if (deptName.equals(sysDept1.getDeptName())){
+                            int d=sysDept1.getParentId().intValue();;
+                            zxChange.setSubmittedDepartment(d);
+                        }
+                    }
+
+                    zxChange.setSubmitOne(ShiroUtils.getLoginName());
+                    zxone.setReturnTime(new Date());
                     int i = zxChangeService.insertZxChange(zxChange);
                     System.out.println(i);
                     i1 = zxAssetManagementService.updateZxAssetManagement(zxone);

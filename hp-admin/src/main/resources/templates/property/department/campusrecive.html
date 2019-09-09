@@ -2,6 +2,7 @@
 <html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
 <head>
     <th:block th:include="include :: header('资产信息列表')" />
+    <script th:src="@{/ajax/libs/laydate/laydate.js}"></script>
 </head>
 <body class="gray-bg">
      <div class="container-div">
@@ -10,10 +11,10 @@
                 <form id="formId">
                     <div class="select-list">
                         <ul>
-                            <li class="select-time">
-                                <p>领用时间：</p>
-                                <input type="text" class="time-input" id="startTime" placeholder="开始时间" name="params[beginPurchasingTime]"/>
-                            </li>
+                            <!--<li class="select-time">-->
+                                <!--<p>领用时间：</p>-->
+                                <!--<input type="text" id="startTime" name="startTime"/>-->
+                            <!--</li>-->
                             <li>
                                 <p>资产名称：</p>
                                 <input type="text" name="name"/>
@@ -55,6 +56,9 @@
     </div>
     <th:block th:include="include :: footer" />
     <script th:inline="javascript">
+        var zc_unit = [[${@dict.getType('zc_unit')}]];
+        var zc_type = [[${@dict.getType('zc_type')}]];
+        var zc_department = [[${@dict.getType('zc_department')}]];
         var editFlag = [[${@permission.hasPermi('system:management:edit')}]];
         var removeFlag = [[${@permission.hasPermi('system:management:remove')}]];
         var prefix = ctx + "property/department";
@@ -77,7 +81,10 @@
                 },
                 {
                     field : 'type',
-                    title : '资产类型'
+                    title : '资产类型',
+                    formatter: function(value, row, index) {
+                        return $.table.selectDictLabel(zc_type,value);
+                    }
                 },
                 {
                     field : 'brand', 
@@ -93,15 +100,17 @@
                 },
                 {
                     field : 'units', 
-                    title : '单位'
-                },
-                {
-                    field : 'campus', 
-                    title : '校区'
+                    title : '单位',
+                    formatter: function(value, row, index) {
+                        return $.table.selectDictLabel(zc_unit,value);
+                    }
                 },
                 {
                     field : 'department', 
-                    title : '部门'
+                    title : '部门',
+                    formatter: function(value, row, index) {
+                        return $.table.selectDictLabel(zc_department,value);
+                    }
                 },
                 {
                     field : 'extend2',
@@ -119,6 +128,12 @@
             };
             $.table.init(options);
         });
+        // $(function(){
+        //     //时间选择器
+        //     laydate.render({
+        //         elem: '#startTime',trigger: 'click',range: true
+        //     });
+        // });
     </script>
 </body>
 </html>

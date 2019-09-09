@@ -1,6 +1,4 @@
 package com.hp.common.utils;
-
-
 import java.lang.management.ManagementFactory;
 import java.lang.management.RuntimeMXBean;
 import java.net.NetworkInterface;

@@ -48,7 +48,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="brand != null  and brand != ''"> and brand = #{brand}</if>
             <if test="assetSpecification != null  and assetSpecification != ''"> and asset_specification = #{assetSpecification}</if>
             <if test="number != null "> and number = #{number}</if>
-            <if test="type != null and type != '' "> and type = #{type}</if>
+            <if test="type != null and type != ''"> and type = #{type}</if>
             <if test="units != null "> and units = #{units}</if>
             <if test="supplier != null  and supplier != ''"> and supplier = #{supplier}</if>
             <if test="picture != null  and picture != ''"> and picture = #{picture}</if>
@@ -306,4 +306,28 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
 
 
+    <!--部门领用-->
+    <select id="selectAAAStateTwo" resultMap="ZxAssetManagementResult" parameterType="ZxAssetManagement">
+        select * from `zx_asset_management`
+        where 1=1
+        and id=#{id}
+        <if test="oneTime != null and oneTime != ''"><!-- 开始时间检索 -->
+            and date_format(recipients_time,'%y%m%d') &gt;= date_format(#{oneTime},'%y%m%d')
+        </if>
+        <if test="twoTime != null and twoTime != ''"><!-- 开始时间检索 -->
+            and date_format(recipients_time,'%y%m%d') &gt;= date_format(#{twoTime},'%y%m%d')
+        </if>
+        <if test="name != null and name != ''">
+            AND `name` like concat('%',#{name},'%')
+        </if>
+        <if test="assetNum != null and assetNum != ''">
+            AND `assetNum` like concat('%',#{assetNum},'%')
+        </if>
+        <if test="extend1 != null and extend1 != ''">
+            AND `extend1` = #{extend1}
+        </if>
+        <if test="extend2 != null and extend2 != ''">
+            AND `extend2` like concat('%',#{extend2},'%')
+        </if>
+    </select>
 </mapper>

@@ -62,7 +62,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
        SELECT distinct a.id, a.name, a.asset_num, a.brand, a.asset_specification, a.number, a.type, a.units, a.supplier, a.price, a.purchasing_time, a.storage_time, a.warehousing_campus, a.state, a.operator, a.location, a.recipients_time, a.repair_time, a.transfer_time, a.discard_time, a.return_time, a.campus, a.department, a.extend1, a.extend2, a.extend3, a.extend4, a.extend5 FROM `zx_asset_management` a LEFT join `zx_change` c ON a.id = c.assets_id
     </sql>-->
     <sql id="selectZxAssetManagementVo">
-    select a.id, a.name, a.asset_num, a.brand, a.asset_specification, a.number, a.type, a.units, a.state, a.operator, a.location, a.recipients_time, a.return_time, a.campus, a.department, c.submitted_department, c.submit_one, c.change_type, c.extend1
+    select a.id, a.name, a.asset_num, a.brand, a.asset_specification, a.number, a.type, a.units, a.state, a.operator, a.location, a.recipients_time, a.return_time, a.campus, a.department, c.submitted_department, c.submit_one, c.change_type, c.extend1, c.use_department, c.users
     FROM `zx_change` c LEFT join `zx_asset_management` a ON c.assets_id= a.id
     </sql>
 
@@ -86,10 +86,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="name != null  and name != ''"> and a.name like concat('%', #{name}, '%')</if>
             <if test="assetNum != null  and assetNum != ''"> and a.asset_num = #{assetNum}</if>
             <if test="assetSpecification != null  and assetSpecification != ''"> and a.asset_specification = #{assetSpecification}</if>
-            <if test="submittedDepartment != null and submittedDepartment != ''"> and c.submitted_department = #{submittedDepartment}</if>
-            <if test="extend1 != null  and extend1 != ''">  and c.extend1 &gt;= date_format(SUBSTR(#{extend1} FROM 1 FOR 10),'%y%m%d')
-                and c.extend1 &lt;= date_format(SUBSTR(#{extend1} FROM 14 FOR 10),'%y%m%d')</if>
-            <if test="extend2 != null  and extend2 != ''"> and a.extend2 like concat('%', #{extend2}, '%')</if>
+            <if test="useDepartment != null and useDepartment != ''"> and c.use_department = #{useDepartment}</if>
+            <if test="extend1 != null  and extend1 != ''">
+              and date_format(c.extend1,'%y%m%d') &gt;= date_format(SUBSTR(#{extend1} FROM 1 FOR 10),'%y%m%d')
+                and date_format(c.extend1,'%y%m%d') &lt;= date_format(SUBSTR(#{extend1} FROM 14 FOR 10),'%y%m%d')</if>
+            <if test="users != null  and users != ''"> and c.users like concat('%', #{users}, '%')</if>
 
             <if test="extend5 != null  and extend5 != ''"> and a.extend5 = #{extend5}</if>
            and not c.change_type=1
@@ -127,7 +128,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="submitOne != null  and submitOne != ''">submit_one,</if>
             <if test="useDepartment != null ">use_department,</if>
             <if test="users != null  and users != ''">users,</if>
-            extend1,
             <if test="extend2 != null  and extend2 != ''">extend2,</if>
             <if test="extend3 != null  and extend3 != ''">extend3,</if>
             <if test="extend4 != null  and extend4 != ''">extend4,</if>
@@ -141,7 +141,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="submitOne != null  and submitOne != ''">#{submitOne},</if>
             <if test="useDepartment != null ">#{useDepartment},</if>
             <if test="users != null  and users != ''">#{users},</if>
-            sysdate(),
             <if test="extend2 != null  and extend2 != ''">#{extend2},</if>
             <if test="extend3 != null  and extend3 != ''">#{extend3},</if>
             <if test="extend4 != null  and extend4 != ''">#{extend4},</if>

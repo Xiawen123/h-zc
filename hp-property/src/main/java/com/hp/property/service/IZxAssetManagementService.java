@@ -68,6 +68,8 @@ public interface IZxAssetManagementService
      */
     List<ZxAssetManagement> findAllStateOne(ZxAssetManagement zxAssetManagement);
 
+    List<ZxAssetManagement> seleAll(ZxAssetManagement zxAssetManagement);
+
     /**
      * 根据id修改资产状态为领用
      * @param ids
