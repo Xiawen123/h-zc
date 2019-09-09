@@ -86,7 +86,7 @@ public class ZxChangeController extends BaseController
     }
 
     /**
-     * 新增保存资产信息
+     * 新增保存转移信息
      */
     @RequiresPermissions("property:transfer:add")
     @Log(title = "资产信息", businessType = BusinessType.INSERT)
@@ -121,7 +121,7 @@ public class ZxChangeController extends BaseController
     @RequiresPermissions("property:transfer:propertyList")
     @PostMapping("/propertyList")
     @ResponseBody
-    public TableDataInfo listsan(ZxAssetManagement zxAssetManagement)
+    public TableDataInfo propertyList(ZxAssetManagement zxAssetManagement)
     {
         if (zxAssetManagement.getIds()!=null&&!zxAssetManagement.getIds().equals("")){
             List<ZxAssetManagement> list=new LinkedList<>();
@@ -151,7 +151,7 @@ public class ZxChangeController extends BaseController
     @ResponseBody
     public TableDataInfo listooo(ZxAssetManagement zxAssetManagement)
     {
-        zxAssetManagement.setState(1);
+        zxAssetManagement.setState(2);
         startPage();
         List<ZxAssetManagement> list = zxAssetManagementService.selectZxAssetManagementList(zxAssetManagement);
         return getDataTable(list);
