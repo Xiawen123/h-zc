@@ -24,6 +24,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="assetSpecification"    column="asset_specification"    />
         <result property="number"    column="number"    />
         <result property="units"    column="units"    />
+
     </resultMap>
 
     <resultMap type="ZxAssetManagement" id="ZxAssetManagementResult">
@@ -91,8 +92,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
               and date_format(c.extend1,'%y%m%d') &gt;= date_format(SUBSTR(#{extend1} FROM 1 FOR 10),'%y%m%d')
                 and date_format(c.extend1,'%y%m%d') &lt;= date_format(SUBSTR(#{extend1} FROM 14 FOR 10),'%y%m%d')</if>
             <if test="users != null  and users != ''"> and c.users like concat('%', #{users}, '%')</if>
-
-            <if test="extend5 != null  and extend5 != ''"> and a.extend5 = #{extend5}</if>
+            <if test="extend5 != null  and extend5 != ''"> and a.campus = #{extend5}</if>
            and not c.change_type=1
         </where>
         ORDER BY c.extend1 desc
