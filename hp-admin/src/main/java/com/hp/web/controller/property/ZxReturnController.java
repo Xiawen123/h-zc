@@ -77,9 +77,9 @@ public class ZxReturnController extends BaseController {
     @RequiresPermissions("property:return:list")
     @PostMapping("/list")
     @ResponseBody
-    public TableDataInfo list(ZxChange zxChange){
+    public TableDataInfo list(ZxChange zxChange,String campus){
         startPage();
-        List<ZxChange> list = zxReturnService.selectZxReturnList(zxChange);
+        List<ZxChange> list = zxReturnService.selectZxReturnList(zxChange,campus);
         return getDataTable(list);
     }
 
