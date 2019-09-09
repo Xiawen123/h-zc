@@ -105,7 +105,7 @@ public class ZxAssetAddController extends BaseController
     {
             //添加雪花算法 表id
             zxAssetManagement.setId(SnowFlake.nextId());
-            //添加雪花算法资产编号
+            //添加资产编号
             zxAssetManagement.setAssetNum(String.valueOf(SnowFlake.nextId()));
             //添加入库时间
             zxAssetManagement.setStorageTime(new Date());

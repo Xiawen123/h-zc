@@ -44,7 +44,7 @@ public class ZxAssetManagement extends BaseEntity
 
     /** 资产类型 */
     @Excel(name = "资产类型")
-    private Integer type;
+    private String  type;
 
     /** 单位 */
     @Excel(name = "单位")
@@ -209,12 +209,12 @@ public class ZxAssetManagement extends BaseEntity
     {
         return number;
     }
-    public void setType(Integer type) 
+    public void setType(String type)
     {
         this.type = type;
     }
 
-    public Integer getType() 
+    public String getType()
     {
         return type;
     }
