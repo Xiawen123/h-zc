@@ -147,6 +147,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <if test="users != null   and users != ''">
             AND c.users like concat('%', #{users}, '%')
         </if>
+        <if test="extend2 != null   and extend2 != ''">
+            AND c.extend4 = #{extend4}
+        </if>
     </select>
 
     <insert id="insertZxChangeByAssert" parameterType="ZxAssetManagement">

@@ -80,9 +80,16 @@ public class ZxCampusReceiveController extends BaseController {
         // 查询变更记录表中，变动类型为领用的记录对应资产表的记录
         List<ZxAssetManagement> list =new ArrayList<>();
         for (ZxChange z:zxChanges){
+
             Long id = z.getAssetsId();
+
             zxAssetManagement.setId(id);
-            list = zxAssetManagementService.selectZxAssetManagementListById(zxAssetManagement);
+            List<ZxAssetManagement> list1 = zxAssetManagementService.selectZxAssetManagementListById(zxAssetManagement);
+            if(list1 != null){
+                ZxAssetManagement zxAssetManagement1 = list1.get(0);
+                list.add(zxAssetManagement1);
+            }
+
         }
         return getDataTable(list);
     }
@@ -102,7 +109,7 @@ public class ZxCampusReceiveController extends BaseController {
     @Log(title = "资产信息", businessType = BusinessType.INSERT)
     @PostMapping("/add")
     @ResponseBody
-    public AjaxResult addSave(ZxAssetManagement zxAssetManagement)
+    public AjaxResult addSave(ZxAssetManagement zxAssetManagement, HttpSession session)
     {
         System.out.println("zxAssetManagement:_____________" + zxAssetManagement.toString());
 
@@ -140,6 +147,7 @@ public class ZxCampusReceiveController extends BaseController {
 
                 zxChangeService.insertZxChange(zxChange);
                 i1 = zxAssetManagementService.updateZxAssetManagement(zxone);
+                session.removeAttribute("s");
             }
             return toAjax(i1);
         }
@@ -179,7 +187,7 @@ public class ZxCampusReceiveController extends BaseController {
 
 
     // 查询所有选中的闲置资产信息
-    @RequiresPermissions("property:campusrecive:list")
+    /*@RequiresPermissions("property:campusrecive:list")
     @PostMapping("/list2")
     @ResponseBody
     public TableDataInfo listsan(ZxAssetManagement zxAssetManagement)
@@ -197,21 +205,39 @@ public class ZxCampusReceiveController extends BaseController {
             List<ZxAssetManagement> list=new LinkedList<>();
             return getDataTable(list);
         }
-    }
+    }*/
 
+    // 查询所有选中的闲置资产信息
     @RequiresPermissions("property:campusrecive:list")
     @PostMapping("/list3")
     @ResponseBody
     public TableDataInfo list3(ZxAssetManagement zxAssetManagement, HttpServletRequest request)
     {
-       /* String ids = zxAssetManagement.getIds();
-        if(ids != null && !ids.equals("")){
-            LinkedList<ZxAssetManagement> list = new LinkedList<>();
+       /* LinkedList<ZxAssetManagement> list = new LinkedList<>();
+        if(zxAssetManagement.getIds() != null && !zxAssetManagement.getIds().equals("")){
+            // 获取前台传递过来的ids值
+            String ids = zxAssetManagement.getIds();
+            String[] idsStr = ids.split(",");
             HttpSession session = request.getSession();
-            String ids1 = (String) session.getAttribute("ids");
-            if(ids1 == null){
-                session.setAttribute("ids",ids1);
+            String idsSession = (String) session.getAttribute("ids");
+            HashSet<String> set = new HashSet<>();
+            if(idsSession != null && !idsSession.equals("")){
+                String idss = idsSession + "," + idsStr;
+                String[] idsStr2 = idss.split(",");
+                for(int i = 0; i < idsStr2.length; i++ ){
+                    set.add(idsStr2[i]);
+                }
+                session.setAttribute("ids",idss);
+            }else{
+                session.setAttribute("ids",ids);
             }
+            for (int j = 0; j < idsStr.length; j++){
+                ZxAssetManagement assertList = zxAssetManagementService.selectZxAssetManagementById(Long.parseLong(idsStr[j]));
+                list.add(assertList);
+            }
+            return getDataTable(list);
+        }else{
+            return getDataTable(list);
         }*/
 
 
@@ -243,7 +269,6 @@ public class ZxCampusReceiveController extends BaseController {
                     ZxAssetManagement ls = zxAssetManagementService.selectZxAssetManagementById(Long.parseLong(s1));
                     list.add(ls);
                 }
-
             }
             return getDataTable(list);
         }else {
