@@ -11,7 +11,7 @@
 		<div class="form-group">
 			<label class="col-sm-3 control-label">领用校区：</label>
 			<div class="col-sm-8">
-				<input name="campus" id="campus" class="form-control" type="text">
+				<input name="extend4" id="extend4" class="form-control" type="text">
 			</div>
 		</div>
 		<div class="form-group">
@@ -119,6 +119,7 @@
             //判断是否为空
             if (ids != undefined && ids != null) {
                 getList();
+                $.table.search();
             }
         }else{
             layer.msg("请选择要领用的资产");
@@ -130,7 +131,7 @@
 
         //获取资产名称
         var ids = $("#ids").val();
-        var campus = $("#campus").val();
+        var extend4 = $("#extend4").val();
         var department = $("#department").val();
         var extend2 = $("#extend2").val();
         var recipientsTime = $("#recipientsTime").val();
@@ -140,7 +141,7 @@
             url: prefix + "/add",
             data: {
                 "ids": ids,
-                "campus": campus,
+                "extend4": extend4,
                 "department": department,
                 "extend2": extend2,
                 "recipientsTime": recipientsTime

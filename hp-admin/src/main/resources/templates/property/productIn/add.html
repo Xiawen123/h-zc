@@ -5,6 +5,39 @@
     <th:block th:include="include :: datetimepicker-css"/>
     <script th:src="@{/ajax/libs/laydate/laydate.js}"></script>
 </head>
+<style>
+
+    .uploadImgBtn {
+        width: 106px;
+        height: 36px;
+        display: inline-block;
+        cursor: pointer;
+        position: relative;
+        background: url("https://whhp.oss-cn-hangzhou.aliyuncs.com/app/photo4.png") no-repeat;
+        -webkit-background-size: cover;
+        background-size: cover;
+    }
+
+    input[type="file"]{
+        width: 100px;
+        opacity: 0;
+        position: absolute;
+        top: 0px;
+        height: 30px;
+    }
+
+    .pic{
+        width: 100px;
+        height: 100px;
+        display: inline-block;
+
+    }
+    .pic img {
+        width: 100px;
+        height: 100px;
+    }
+
+</style>
 <body class="white-bg">
 <div class="wrapper wrapper-content animated fadeInRight ibox-content">
     <form class="form-horizontal m" id="form-productIn-add">
@@ -79,7 +112,7 @@
                     </div>
                     <div id="picture">
                     </div>
-                    <div style="color:#9b9b9b;font-size:12px;margin-top:6px;">可以上传一张图片，且大小小于3M。</div>
+                    <div style="color:#9b9b9b;font-size:12px;margin-top:6px;">只能上传一张图片，且大小小于3M。</div>
                 </div>
             </div>
         </div>
@@ -139,7 +172,7 @@
                         btn.classList.add("tupian");
                         div.appendChild(btn)
                         div.appendChild(img);
-                        if ($(".tupian").length < 3) {
+                        if ($(".tupian").length < 1) {
                             $("#picture").append(div);
                         } else {
                             layer.msg("您上传的图片太多了！")
