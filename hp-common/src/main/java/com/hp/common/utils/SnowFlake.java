@@ -45,7 +45,7 @@ public class SnowFlake {
         snowFlake = new SnowFlake();
     }
     public static synchronized long nextId(){
-        return snowFlake.getNextId();
+        return Math.abs(snowFlake.getNextId());
     }
 
     private SnowFlake() {
