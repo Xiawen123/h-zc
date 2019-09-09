@@ -88,7 +88,7 @@ public class ZxDiscardController extends BaseController {
     public TableDataInfo list(ZxChange zxChange,@Param("campus") String campus)
     {
         startPage();
-        //调用 zxDiscardService 的 selectZxDiscardList 方法查询报废记录信息列表
+        //调用    zxDiscardService 的 selectZxDiscardList 方法查询报废记录信息列表
         List<ZxChange> list = zxDiscardService.selectZxDiscardList(zxChange,campus);
         return getDataTable(list);
     }

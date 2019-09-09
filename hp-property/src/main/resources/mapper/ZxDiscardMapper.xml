@@ -70,7 +70,7 @@
         select id, assets_id, change_type, submitted_department, submit_one, use_department, users, extend1, extend2, extend3, extend4, extend5 from zx_change
     </sql>
 
-    <!--查询资产信息列表-->
+    <!--查询资产   信息列表-->
     <select id="selectZxAssetManagementList" parameterType="ZxAssetManagement" resultMap="ZxAssetManagementResult">
         <include refid="selectZxAssetManagementVo"/>
         <where>

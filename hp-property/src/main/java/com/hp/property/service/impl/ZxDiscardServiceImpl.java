@@ -34,7 +34,7 @@ public class ZxDiscardServiceImpl implements IZxDiscardService {
     }
 
     /**
-     * 根据资产id查询详情
+     * 根据  资产id查询详情
      * @param id
      * @return
      */
