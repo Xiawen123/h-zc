@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="Encoding">
+    <file url="file://$PROJECT_DIR$" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/hp-admin" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/hp-common" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/hp-framework" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/hp-generator" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/hp-property" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/hp-quartz" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/hp-system" charset="UTF-8" />
+  </component>
+</project>
