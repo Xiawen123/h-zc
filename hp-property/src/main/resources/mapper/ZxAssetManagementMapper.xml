@@ -85,6 +85,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         select count(id) from zx_asset_management
     </select>
 
+    <!--获取资产编号最大值-->
+    <select id="getMaxNum" parameterType="ZxAssetManagement" resultType="string">
+        SELECT Max(asset_num) FROM zx_asset_management WHERE type = #{type}
+    </select>
+
     <!--获取当前最大ID值-->
     <select id="getMaxId" resultMap="ZxAssetManagementResult">
         SELECT `id` FROM `zx_asset_management` WHERE `id`=(SELECT MAX(`id`) FROM `zx_asset_management`)

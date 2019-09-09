@@ -101,7 +101,7 @@
     <th:block th:include="include :: ztree-js" />
     <script th:inline="javascript">
 
-        var zc_type = [[${@dict.getType('zc_type')}]];
+        var types = [[${@dict.getType('zc_type')}]];
         var zc_location = [[${@dict.getType('zc_location')}]];
         var zc_unit = [[${@dict.getType('zc_unit')}]];
         var zc_department = [[${@dict.getType('zc_department')}]];
@@ -149,7 +149,7 @@
                         field : 'type',
                         title : '资产类型',
                         formatter: function(value, row, index) {
-                            return $.table.selectDictLabel(zc_type,value);
+                            return $.table.selectDictLabel(types,value);
                         }
                     },
                     {
