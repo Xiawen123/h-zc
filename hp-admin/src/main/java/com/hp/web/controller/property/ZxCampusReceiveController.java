@@ -71,6 +71,8 @@ public class ZxCampusReceiveController extends BaseController {
     public TableDataInfo list(ZxChange zxChange /*ZxAssetManagement zxAssetManagement*/)
     {
         startPage();
+
+
         // 查询变更表中所有变动类型为1即领用的所有记录
         List<ZxChange> list = zxChangeService.findAllChangeTypeOne(zxChange);
 
