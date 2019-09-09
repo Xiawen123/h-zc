@@ -182,7 +182,7 @@
                     <select name="extend1"  th:with="extend1=${@dict.getType('zc_department')}" disabled="disabled">
                         <option th:each="dict : ${extend1}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}" th:field="*{extend1}"></option>
                     </select>
-                    <input name="extend1" th:field="*{extend1}" class="form-control" type="text">
+                    <!--<input name="extend1" th:field="*{extend1}" class="form-control" type="text">-->
                 </div>
             </div>
             <div class="form-group">    
