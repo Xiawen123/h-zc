@@ -36,15 +36,44 @@
         <result property="extend5"    column="extend5"    />
     </resultMap>
 
+
+    <resultMap type="ZxChange" id="ZxChangeResult">
+    <result property="id"    column="id"    />
+    <result property="assetsId"    column="assets_id"    />
+    <result property="changeType"    column="change_type"    />
+    <result property="submittedDepartment"    column="submitted_department"    />
+    <result property="submitOne"    column="submit_one"    />
+    <result property="useDepartment"    column="use_department"    />
+    <result property="users"    column="users"    />
+    <result property="extend1"    column="extend1"    />
+    <result property="extend2"    column="extend2"    />
+    <result property="extend3"    column="extend3"    />
+    <result property="extend4"    column="extend4"    />
+    <result property="extend5"    column="extend5"    />
+
+    <result property="assetNum"    column="asset_num"    />
+    <result property="name"    column="name"    />
+    <result property="type"    column="type"    />
+    <result property="brand"    column="brand"    />
+    <result property="assetSpecification"    column="asset_specification"    />
+    <result property="number"    column="number"    />
+    <result property="units"    column="units"    />
+</resultMap>
+
+
+
     <sql id="selectZxAssetManagementVo">
-        select id, name, asset_num, brand, asset_specification, number, type, units, supplier, picture, price, purchasing_time, storage_time, warehousing_campus, state, operator, location, recipients_time, repair_time, transfer_time, discard_time, return_time, campus, department, extend1, extend2, extend3, extend4, extend5 from zx_asset_management
+        select id, name, asset_num, brand, asset_specification, number, type, units, supplier, picture, price, purchasing_time, storage_time, warehousing_campus, state, operator, location, recipients_time, repair_time, transfer_time, date_format(#{discard_time},'%y%m%d'), return_time, campus, department, extend1, extend2, extend3, extend4, extend5 from zx_asset_management
     </sql>
 
-    <!--查询状态为报废的资产信息列表-->
-    <select id="selectDiscardZxAssetList" parameterType="ZxAssetManagement" resultMap="ZxAssetManagementResult">
+    <sql id="selectZxChangeVo">
+        select id, assets_id, change_type, submitted_department, submit_one, use_department, users, extend1, extend2, extend3, extend4, extend5 from zx_change
+    </sql>
+
+    <!--查询资产信息列表-->
+    <select id="selectZxAssetManagementList" parameterType="ZxAssetManagement" resultMap="ZxAssetManagementResult">
         <include refid="selectZxAssetManagementVo"/>
         <where>
-            state = 4
             <if test="name != null  and name != ''"> and name like concat('%', #{name}, '%')</if>
             <if test="assetNum != null  and assetNum != ''"> and asset_num = #{assetNum}</if>
             <if test="brand != null  and brand != ''"> and brand = #{brand}</if>
@@ -58,13 +87,12 @@
             <if test="purchasingTime != null "> and purchasing_time = #{purchasingTime}</if>
             <if test="storageTime != null "> and storage_time = #{storageTime}</if>
             <if test="warehousingCampus != null "> and warehousing_campus = #{warehousingCampus}</if>
+            <if test="state != null "> and state = #{state}</if>
             <if test="operator != null  and operator != ''"> and operator = #{operator}</if>
             <if test="location != null "> and location = #{location}</if>
             <if test="recipientsTime != null "> and recipients_time = #{recipientsTime}</if>
             <if test="repairTime != null "> and repair_time = #{repairTime}</if>
             <if test="transferTime != null "> and transfer_time = #{transferTime}</if>
-            <if test="discardTime != null "> and discard_time  &gt;= SUBSTR(#{discardTime} FROM 1 FOR 18)</if>
-            <if test="discardTime != null "> and discard_time  &lt;= SUBSTR(#{discardTime} FROM 22 FOR 18))</if>
             <if test="discardTime != null "> and discard_time = #{discardTime}</if>
             <if test="returnTime != null "> and return_time = #{returnTime}</if>
             <if test="campus != null "> and campus = #{campus}</if>
@@ -76,5 +104,115 @@
             <if test="extend5 != null  and extend5 != ''"> and extend5 = #{extend5}</if>
         </where>
     </select>
+
+    <!--查询变更类型为报废（4）的变更记录-->
+    <select id="selectZxChangeList" parameterType="ZxChange" resultMap="ZxChangeResult">
+        SELECT c.*, a.asset_num, a.name, a.type, a.brand, a.asset_specification, a.number, a.units
+        FROM zx_change c
+        LEFT join zx_asset_management a ON c.assets_id= a.id
+        where c.change_type=#{changeType}
+        <if test="extend1 != null   and extend1 != ''">
+            and date_format(c.extend1,'%y%m%d') &gt;= date_format(SUBSTR(#{extend1} FROM 1 FOR 10),'%y%m%d')
+        </if>
+        <if test="extend1 != null   and extend1 != ''">
+            and date_format(c.extend1,'%y%m%d') &lt;= date_format(SUBSTR(#{extend1} FROM 14 FOR 10),'%y%m%d')
+        </if>
+        <if test="name != null   and name != ''">
+            AND a.name like concat('%', #{name}, '%')
+        </if>
+        <if test="submittedDepartment != null  and submittedDepartment != ''">
+            and c.submitted_department = #{submittedDepartment}
+        </if>
+        <if test="submitOne != null   and submitOne != ''">
+            AND c.submit_one like concat('%', #{submitOne}, '%')
+        </if>
+        ORDER BY c.extend1 DESC
+    </select>
+
+    <!--<select id="selectDiscardZxAssetList" parameterType="ZxAssetManagement" resultMap="Change_Assets">
+    SELECT a.id, a.name, a.asset_num, a.brand, a.asset_specification, a.number, a.type, a.units, a.supplier, a.price, a.purchasing_time, a.storage_time, a.warehousing_campus, a.state, a.operator, a.location, a.recipients_time, a.repair_time, a.transfer_time, a.discard_time, a.return_time, a.campus, a.department, a.extend1, a.extend2, a.extend3, a.extend4, a.extend5
+    FROM zx_change c
+    LEFT join zx_asset_management a ON c.assets_id= a.id
+    where c.change_type=4
+    ORDER BY c.`extend1`
+    </select>-->
+    <!--查询未报废的资产信息-->
+    <select id="selectNoDiscardZxAssetList" parameterType="ZxAssetManagement" resultMap="ZxAssetManagementResult">
+        <!--<include refid="selectZxAssetManagementVo"/>-->
+        select * from zx_asset_management
+        <where>
+            not state = #{state}
+        </where>
+    </select>
+
+
+    <insert id="insertZxDiscardChange" parameterType="ZxChange">
+        insert into zx_change
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null ">id,</if>
+            <if test="assetsId != null ">assets_id,</if>
+            <if test="changeType != null ">change_type,</if>
+            <if test="submittedDepartment != null ">submitted_department,</if>
+            <if test="submitOne != null  and submitOne != ''">submit_one,</if>
+            <if test="useDepartment != null ">use_department,</if>
+            <if test="users != null  and users != ''">users,</if>
+            <if test="extend1 != null  and extend1 != ''">extend1,</if>
+            <if test="extend2 != null  and extend2 != ''">extend2,</if>
+            <if test="extend3 != null  and extend3 != ''">extend3,</if>
+            <if test="extend4 != null  and extend4 != ''">extend4,</if>
+            <if test="extend5 != null  and extend5 != ''">extend5,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null ">#{id},</if>
+            <if test="assetsId != null ">#{assetsId},</if>
+            <if test="changeType != null ">#{changeType},</if>
+            <if test="submittedDepartment != null ">#{submittedDepartment},</if>
+            <if test="submitOne != null  and submitOne != ''">#{submitOne},</if>
+            <if test="useDepartment != null ">#{useDepartment},</if>
+            <if test="users != null  and users != ''">#{users},</if>
+            <if test="extend1 != null  and extend1 != ''">#{extend1},</if>
+            <if test="extend2 != null  and extend2 != ''">#{extend2},</if>
+            <if test="extend3 != null  and extend3 != ''">#{extend3},</if>
+            <if test="extend4 != null  and extend4 != ''">#{extend4},</if>
+            <if test="extend5 != null  and extend5 != ''">#{extend5},</if>
+        </trim>
+    </insert>
+
+    <!--更改资产的状态为报废（4）-->
+    <update id="updateDiscardManagement" parameterType="ZxAssetManagement">
+        update zx_asset_management
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="name != null  and name != ''">name = #{name},</if>
+            <!--<if test="assetNum != null  and assetNum != ''">asset_num = #{assetNum},</if>-->
+            <if test="brand != null  and brand != ''">brand = #{brand},</if>
+            <if test="assetSpecification != null  and assetSpecification != ''">asset_specification = #{assetSpecification},</if>
+            <if test="number != null ">number = #{number},</if>
+            <if test="type != null ">type = #{type},</if>
+            <if test="units != null ">units = #{units},</if>
+            <if test="supplier != null  and supplier != ''">supplier = #{supplier},</if>
+            <if test="picture != null  and picture != ''">picture = #{picture},</if>
+            <if test="price != null ">price = #{price},</if>
+            <if test="purchasingTime != null ">purchasing_time = #{purchasingTime},</if>
+            <if test="storageTime != null ">storage_time = #{storageTime},</if>
+            <if test="warehousingCampus != null ">warehousing_campus = #{warehousingCampus},</if>
+            <if test="state != null ">state = #{state},</if>
+            <if test="operator != null  and operator != ''">operator = #{operator},</if>
+            <if test="location != null ">location = #{location},</if>
+            <if test="recipientsTime != null ">recipients_time = #{recipientsTime},</if>
+            <if test="repairTime != null ">repair_time = #{repairTime},</if>
+            <if test="transferTime != null ">transfer_time = #{transferTime},</if>
+            <if test="discardTime != null ">discard_time = #{discardTime},</if>
+            <if test="returnTime != null ">return_time = #{returnTime},</if>
+            <if test="campus != null ">campus = #{campus},</if>
+            <if test="department != null ">department = #{department},</if>
+            <if test="extend1 != null  and extend1 != ''">extend1 = #{extend1},</if>
+            <if test="extend2 != null  and extend2 != ''">extend2 = #{extend2},</if>
+            <if test="extend3 != null  and extend3 != ''">extend3 = #{extend3},</if>
+            <if test="extend4 != null  and extend4 != ''">extend4 = #{extend4},</if>
+            <if test="extend5 != null  and extend5 != ''">extend5 = #{extend5},</if>
+        </trim>
+        where asset_num = #{assetNum}
+    </update>
+
 
 </mapper>

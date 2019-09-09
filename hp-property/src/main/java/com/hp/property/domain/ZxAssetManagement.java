@@ -449,7 +449,6 @@ public class ZxAssetManagement extends BaseEntity
             .append("extend3", getExtend3())
             .append("extend4", getExtend4())
             .append("extend5", getExtend5())
-            .append("ids",getIds())
             .toString();
     }
 }
