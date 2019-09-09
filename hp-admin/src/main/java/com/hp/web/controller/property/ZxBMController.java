@@ -85,23 +85,25 @@ public class ZxBMController extends BaseController {
     @ResponseBody
     public AjaxResult addSave(ZxAssetManagement zxAssetManagement,HttpSession httpSession)
     {
-        String ids = zxAssetManagement.getIds();
+        String ids = (String) httpSession.getAttribute("ids");
         int i1=0;
         if (ids!=null&&!ids.equals("")){
             String[] split = ids.split(",");
             ZxChange zxChange=new ZxChange();
             for (int i=0;i<split.length;i++){
-                ZxAssetManagement zxone = zxAssetManagementService.selectZxAssetManagementById(Long.parseLong(split[i]));
-                zxone.setState(2);
-                zxChange.setAssetsId(Long.parseLong(split[i]));
-                long l = SnowFlake.nextId();
-                zxChange.setId(l);
-                zxChange.setChangeType(1);
-                zxChange.setUseDepartment(zxAssetManagement.getDepartment());
-                zxChange.setUsers(zxAssetManagement.getExtend2());
-                zxChange.setExtend1(DateString.getString(new Date(),"yyyy-MM-dd HH:mm:ss"));
-                zxChangeService.insertZxChange(zxChange);
-                i1 = zxAssetManagementService.updateZxAssetManagement(zxone);
+               if (split[i]!=null&&!split[i].equals("")){
+                   ZxAssetManagement zxone = zxAssetManagementService.selectZxAssetManagementById(Long.parseLong(split[i]));
+                   zxone.setState(2);
+                   zxChange.setAssetsId(Long.parseLong(split[i]));
+                   long l = SnowFlake.nextId();
+                   zxChange.setId(l);
+                   zxChange.setChangeType(1);
+                   zxChange.setUseDepartment(zxAssetManagement.getDepartment());
+                   zxChange.setUsers(zxAssetManagement.getExtend2());
+                   zxChange.setExtend1(DateString.getString(new Date(),"yyyy-MM-dd HH:mm:ss"));
+                   zxChangeService.insertZxChange(zxChange);
+                   i1 = zxAssetManagementService.updateZxAssetManagement(zxone);
+               }
             }
             httpSession.setAttribute("ids",null);
             return toAjax(i1);
