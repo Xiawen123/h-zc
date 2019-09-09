@@ -19,6 +19,7 @@ import com.hp.system.domain.SysUser;
 import com.hp.system.service.ISysDeptService;
 import com.hp.system.service.ISysDictDataService;
 import com.hp.system.service.ISysUserService;
+import org.apache.ibatis.annotations.Param;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -76,11 +77,19 @@ public class ZxDiscardController extends BaseController {
     @RequiresPermissions("property:discard:list")
     @PostMapping("/list")
     @ResponseBody
-    public TableDataInfo list(ZxChange zxChange)
+    /*public TableDataInfo list(ZxChange zxChange)
     {
         startPage();
         //调用 zxDiscardService 的 selectZxDiscardList 方法查询报废记录信息列表
         List<ZxChange> list = zxDiscardService.selectZxDiscardList(zxChange);
+        return getDataTable(list);
+    }*/
+
+    public TableDataInfo list(ZxChange zxChange,@Param("campus") String campus)
+    {
+        startPage();
+        //调用 zxDiscardService 的 selectZxDiscardList 方法查询报废记录信息列表
+        List<ZxChange> list = zxDiscardService.selectZxDiscardList(zxChange,campus);
         return getDataTable(list);
     }
 

@@ -126,6 +126,9 @@
         <if test="users != null   and users != ''">
             AND c.users like concat('%', #{users}, '%')
         </if>
+        <if test="extend5 != null   and extend5 != ''">
+            AND a.campus like concat('%', #{extend5}, '%')
+        </if>
         ORDER BY c.extend1 DESC
     </select>
 
