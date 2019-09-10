@@ -130,7 +130,7 @@ public class ZxReturnController extends BaseController {
                     long l = SnowFlake.nextId();
                     zxChange.setId(l);
                     zxChange.setChangeType(5);
-                    zxChange.setUseDepartment(zxChange.getSubmittedDepartment());
+                    zxChange.setUseDepartment(zxChange.getUseDepartment());
 
                    /* SysUser sysUser = iSysUserService.selectUserByLoginName(ShiroUtils.getLoginName());
                     String c= iSysDeptService.selectDeptById(sysUser.getDeptId()).getDeptName();
