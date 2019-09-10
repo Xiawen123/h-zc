@@ -73,7 +73,7 @@ public class ZxAssetManagementControllersXG extends BaseController
                 if (a.equals(b)) {
                     String c=sysDept1.getDeptName();
                     zxAssetManagement1.setExtend5(c);}
-                }
+            }
             }
         }
 
