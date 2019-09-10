@@ -77,9 +77,9 @@ public class ZxReturnController extends BaseController {
     @RequiresPermissions("property:return:list")
     @PostMapping("/list")
     @ResponseBody
-    public TableDataInfo list(ZxChange zxChange){
+    public TableDataInfo list(ZxChange zxChange,String campus){
         startPage();
-        List<ZxChange> list = zxReturnService.selectZxReturnList(zxChange);
+        List<ZxChange> list = zxReturnService.selectZxReturnList(zxChange,campus);
         return getDataTable(list);
     }
 
@@ -130,7 +130,7 @@ public class ZxReturnController extends BaseController {
                     long l = SnowFlake.nextId();
                     zxChange.setId(l);
                     zxChange.setChangeType(5);
-                    zxChange.setUseDepartment(zxChange.getSubmittedDepartment());
+                    zxChange.setUseDepartment(zxChange.getUseDepartment());
 
                    /* SysUser sysUser = iSysUserService.selectUserByLoginName(ShiroUtils.getLoginName());
                     String c= iSysDeptService.selectDeptById(sysUser.getDeptId()).getDeptName();

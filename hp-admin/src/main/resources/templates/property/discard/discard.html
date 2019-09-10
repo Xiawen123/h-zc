@@ -3,13 +3,36 @@
 <head>
     <th:block th:include="include :: header('资产报废')" />
     <script th:src="@{/ajax/libs/laydate/laydate.js}"></script>
+    <th:block th:include="include :: layout-latest-css" />
+    <th:block th:include="include :: ztree-css" />
 </head>
 <body class="gray-bg">
+<div class="ui-layout-west">
+    <div class="box box-main">
+        <div class="box-header">
+            <div class="box-title">
+                <i class="fa icon-grid"></i> 组织机构
+            </div>
+            <div class="box-tools pull-right">
+                <a type="button" class="btn btn-box-tool" href="#" onclick="dept()" title="管理部门"><i class="fa fa-edit"></i></a>
+                <button type="button" class="btn btn-box-tool" id="btnExpand" title="展开" style="display:none;"><i class="fa fa-chevron-up"></i></button>
+                <button type="button" class="btn btn-box-tool" id="btnCollapse" title="折叠"><i class="fa fa-chevron-down"></i></button>
+                <button type="button" class="btn btn-box-tool" id="btnRefresh" title="刷新部门"><i class="fa fa-refresh"></i></button>
+            </div>
+        </div>
+        <div class="ui-layout-content">
+            <div id="tree" class="ztree"></div>
+        </div>
+    </div>
+</div>
 
-     <div class="container-div">
+<div class="ui-layout-center">
+    <div class="container-div">
         <div class="row">
             <div class="col-sm-12 search-collapse">
                 <form id="formId">
+                    <input type="hidden" id="deptId" name="campus">
+                    <input type="hidden" id="parentId" name="parentId">
                     <div class="select-list">
                         <ul>
                             <li>
@@ -18,7 +41,7 @@
                             </li>
                             <li>
                                 <p>申报部门：</p>
-                                <select name="submittedDepartment" th:with="type=${@dict.getType('zc_department')}">
+                                <select name="useDepartment" th:with="type=${@dict.getType('zc_department')}">
                                     <option value="">所有</option>
                                     <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
                                 </select>
@@ -29,7 +52,7 @@
                             </li>
                             <li>
                                 <p>申报人员：</p>
-                                <input type="text" name="submitOne"/>
+                                <input type="text" name="users"/>
                             </li>
                             <li>
                                 <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
@@ -37,6 +60,7 @@
                             </li>
                         </ul>
                     </div>
+
                 </form>
             </div>
 
@@ -44,7 +68,7 @@
                 <a class="btn btn-success" onclick="$.operate.addFull()" shiro:hasPermission="property:discard:add">
                     <i class="fa fa-plus"></i> 添加
                 </a>
-                <!--<a class="btn btn-primary single disabled" onclick="$.operate.edit()" shiro:hasPermission="property:discard:edit">
+                <!--<a clas    s="btn btn-primary single disabled" onclick="$.operate.edit()" shiro:hasPermission="property:discard:edit">
                     <i class="fa fa-edit"></i> 修改
                 </a>
                 <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()" shiro:hasPermission="property:discard:remove">
@@ -59,7 +83,10 @@
             </div>
         </div>
     </div>
+</div>
     <th:block th:include="include :: footer" />
+<th:block th:include="include :: layout-latest-js" />
+<th:block th:include="include :: ztree-js" />
     <script th:inline="javascript">
         var editFlag = [[${@permission.hasPermi('property:discard:edit')}]];
         var removeFlag = [[${@permission.hasPermi('property:discard:remove')}]];
@@ -68,10 +95,17 @@
         var unit = [[${@dict.getType('zc_unit')}]];
         var datas = [[${@dict.getType('zc_department')}]];
         var prefix = ctx + "property/discard";
-
-
-
         $(function() {
+            var panehHidden = false;
+            if ($(this).width() < 769) {
+                panehHidden = true;
+            }
+            $('body').layout({ initClosed: panehHidden, west__size: 185 });
+            queryList();
+            queryDeptTree();
+        });
+
+        function queryList() {
             var options = {
                 url: prefix + "/list",
                 createUrl: prefix + "/add",
@@ -82,6 +116,11 @@
                 modalName: "资产报废",
                 columns: [{
                     checkbox: true
+                },
+                {
+                    field : 'id',
+                    title : '变更记录ID',
+                    visible: false
                 },
                 {
                     field : 'assetsId',
@@ -126,7 +165,7 @@
                     }
                 },
                 {
-                    field : 'submittedDepartment',
+                    field : 'useDepartment',
                     title : '申报部门',
                     align: 'center',
                     formatter: function(value, row, index) {
@@ -134,7 +173,7 @@
                     }
                 },
                 {
-                    field : 'submitOne',
+                    field : 'users',
                     title : '申报人',
                 },
                 {
@@ -150,7 +189,24 @@
                 }]
             };
             $.table.init(options);
-        });
+        };
+
+        function queryDeptTree()
+        {
+            var url = ctx + "system/dept/treeData";
+            var options = {
+                url: url,
+                expandLevel: 2,
+                onClick : zOnClick
+            };
+            $.tree.init(options);
+
+            function zOnClick(event, treeId, treeNode) {
+                $("#deptId").val(treeNode.id);
+                $("#parentId").val(treeNode.pId);
+                $.table.search();
+            }
+        }
 
         $(function(){
             //时间选择器

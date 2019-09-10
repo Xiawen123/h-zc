@@ -13,7 +13,7 @@
             <div class="form-group">    
                 <label class="col-sm-3 control-label">退还部门：</label>
                 <div class="col-sm-8">
-                    <select name="submittedDepartment" class="form-control m-b" th:with="dept=${@dict.getType('zc_department')}">
+                    <select name="useDepartment" class="form-control m-b" th:with="dept=${@dict.getType('zc_department')}">
                         <option th:each="dict : ${dept}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
                         </select>
                 </div>
