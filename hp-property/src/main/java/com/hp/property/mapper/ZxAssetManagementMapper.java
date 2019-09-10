@@ -45,11 +45,13 @@ public interface ZxAssetManagementMapper extends BaseMapper<ZxAssetManagement>
      * @return
      */
     public int allZxAssetManagement();
+
     /**
-     * 获取数据库中id最大值
+     *查看对应资产类型的资产编号最大值
+     * @param type
      * @return
      */
-    public ZxAssetManagement getMaxId();
+    public String getMaxNum(ZxAssetManagement zxAssetManagement);
     /**
      * 修改资产信息
      * 
