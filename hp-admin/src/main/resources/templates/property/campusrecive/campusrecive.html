@@ -2,14 +2,14 @@
 <html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
 <head>
     <th:block th:include="include :: header('资产信息列表')" />
-    <!--<th:block th:include="include :: layout-latest-css" />
-    <th:block th:include="include :: ztree-css" />-->
+    <th:block th:include="include :: layout-latest-css" />
+    <th:block th:include="include :: ztree-css" />
     <script th:src="@{/ajax/libs/laydate/laydate.js}"></script>
 
 </head>
 <body class="gray-bg">
 
-    <!--<div class="ui-layout-west">
+    <div class="ui-layout-west">
         <div class="box box-main">
             <div class="box-header">
                 <div class="box-title">
@@ -26,51 +26,54 @@
                 <div id="tree" class="ztree"></div>
             </div>
         </div>
-    </div>-->
+    </div>
+    <div class="ui-layout-center">
+        <div class="container-div">
+            <div class="row">
+                <div class="col-sm-12 search-collapse">
+                    <form id="formId">
+                        <input type="hidden" id="deptId" name="campus">
+                        <input type="hidden" id="parentId" name="parentId">
+                        <div class="select-list">
+                            <ul>
+                                <li class="select-time">
+                                    <p>领用时间：</p>
+                                    <input type="text" name="extend1" id="extend1" placeholder="领用时间"/>
+                                </li>
+                                <li>
+                                    <p>资产名称：</p>
+                                    <input type="text" name="name"/>
+                                </li>
+                                <li>
+                                    <p>资产编号：</p>
+                                    <input type="text" name="assetNum"/>
+                                </li>
+                                <li>
+                                    <p>领用校区：</p>
+                                    <input type="text" name="extend4"/>
+                                </li>
+                                <li>
+                                    <p>使用人：</p>
+                                    <input type="text" name="users"/>
+                                </li>
+                                <br><br>
+                                <li>
+                                    <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+                                    <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </form>
+                </div>
 
-     <div class="container-div">
-        <div class="row">
-            <div class="col-sm-12 search-collapse">
-                <form id="formId">
-                    <div class="select-list">
-                        <ul>
-                            <li class="select-time">
-                                <p>领用时间：</p>
-                                <input type="text" name="extend1" id="extend1" placeholder="领用时间"/>
-                            </li>
-                            <li>
-                                <p>资产名称：</p>
-                                <input type="text" name="name"/>
-                            </li>
-                            <li>
-                                <p>资产编号：</p>
-                                <input type="text" name="assetNum"/>
-                            </li>
-                            <li>
-                                <p>领用校区：</p>
-                                <input type="text" name="extend4"/>
-                            </li>
-                            <li>
-                                <p>使用人：</p>
-                                <input type="text" name="users"/>
-                            </li>
-                            <br><br>
-                            <li>
-                                <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
-                                <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
-                            </li>
-                        </ul>
-                    </div>
-                </form>
-            </div>
-
-            <div class="btn-group-sm" id="toolbar" role="group">
-                <a class="btn btn-success" onclick="$.operate.addFull()" shiro:hasPermission="property:campusrecive:add">
-                    <i class="fa fa-plus"></i> 领用登记
-                </a>
-            </div>
-            <div class="col-sm-12 select-table table-striped">
-                <table id="bootstrap-table" data-mobile-responsive="true"></table>
+                <div class="btn-group-sm" id="toolbar" role="group">
+                    <a class="btn btn-success" onclick="$.operate.addFull()" shiro:hasPermission="property:campusrecive:add">
+                        <i class="fa fa-plus"></i> 领用登记
+                    </a>
+                </div>
+                <div class="col-sm-12 select-table table-striped">
+                    <table id="bootstrap-table" data-mobile-responsive="true"></table>
+                </div>
             </div>
         </div>
     </div>
@@ -85,7 +88,7 @@
         var department=[[${@dict.getType('zc_department')}]];
         var unit=[[${@dict.getType('zc_unit')}]];
 
-        /*$(function() {
+        $(function() {
             var panehHidden = false;
             if ($(this).width() < 769) {
                 panehHidden = true;
@@ -93,9 +96,9 @@
             $('body').layout({ initClosed: panehHidden, west__size: 185 });
             queryList();
             queryDeptTree();
-        });*/
+        });
 
-        $(function() {
+        function queryList(){
             var options = {
                 url: prefix + "/list",
                 createUrl: prefix + "/add",
@@ -167,11 +170,11 @@
                 }]
             };
             $.table.init(options);
-        });
+        };
 
-        /*function queryDeptTree()
+        function queryDeptTree()
         {
-            var url = ctx + "system/campusrecive/treeData";
+            var url = ctx + "system/dept/treeData";
             var options = {
                 url: url,
                 expandLevel: 2,
@@ -185,14 +188,13 @@
                 $.table.search();
             }
         }
-*/
+
         //时间选择器
         laydate.render({
             elem: '#extend1'
             ,trigger: 'click',
             type:'date'
             ,range: true
-
         });
     </script>
 </body>

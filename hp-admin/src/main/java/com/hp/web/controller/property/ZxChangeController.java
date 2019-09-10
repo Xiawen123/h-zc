@@ -16,6 +16,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpSession;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
@@ -86,29 +89,26 @@ public class ZxChangeController extends BaseController
     }
 
     /**
-     * 新增保存资产信息
+     * 新增保存转移信息
      */
     @RequiresPermissions("property:transfer:add")
     @Log(title = "资产信息", businessType = BusinessType.INSERT)
     @PostMapping("/add")
     @ResponseBody
-    public AjaxResult addSave(ZxAssetManagement zxAssetManagement)
+    public AjaxResult addSave(ZxChange zxChange)
     {
 
-        String ids = zxAssetManagement.getIds();
+        String ids = zxChange.getIds();
         int i1=0;
         if (ids!=null&&!ids.equals("")){
             String[] split = ids.split(",");
-            ZxChange zxChange=new ZxChange();
+            //ZxChange zxChange1=new ZxChange();
             for (int i=0;i<split.length;i++){
                 ZxAssetManagement zxone = zxAssetManagementService.selectZxAssetManagementById(Long.parseLong(split[i]));
-                zxone.setState(2);
+                zxone.setLocation(Integer.parseInt(zxChange.getExtend3()));
                 zxChange.setAssetsId(Long.parseLong(split[i]));
-                long l = SnowFlake.nextId();
-                zxChange.setId(l);
+                zxChange.setId(SnowFlake.nextId());
                 zxChange.setChangeType(2);
-                zxChange.setUseDepartment(zxAssetManagement.getDepartment());
-                zxChange.setUsers(zxAssetManagement.getExtend2());
                 zxChange.setExtend1(DateString.getString(new Date(),"yyyy-MM-dd HH:mm:ss"));
                 zxChangeService.insertZxChange(zxChange);
                 i1 = zxAssetManagementService.updateZxAssetManagement(zxone);
@@ -118,18 +118,35 @@ public class ZxChangeController extends BaseController
         return toAjax(zxChangeService.insertZxChange(null));
     }
 
-    @RequiresPermissions("property:transfer:propertyList")
+    @RequiresPermissions("property:department:propertyList")
     @PostMapping("/propertyList")
     @ResponseBody
-    public TableDataInfo listsan(ZxAssetManagement zxAssetManagement)
+    public TableDataInfo propertyList(ZxAssetManagement zxAssetManagement, HttpSession httpSession)
     {
         if (zxAssetManagement.getIds()!=null&&!zxAssetManagement.getIds().equals("")){
             List<ZxAssetManagement> list=new LinkedList<>();
             String s=zxAssetManagement.getIds();
             String[] split = s.split(",");
+            String ids = (String)httpSession.getAttribute("ids");
+            if (ids!=null&&!ids.equals("")){
+                String s1 = ids + s;
+                String[] split1 = s1.split(",");
+                List<String> list1=new ArrayList<>();
+                for (int i=0;i<split1.length;i++){
+           //如果集合里面没有相同的元素才往里存
+                    if(!list1.contains(split1[i])){
+                        list1.add(split1[i]);
+                    }
+                }
+                split = list1.toArray(new String[1]);
+            }else {
+                httpSession.setAttribute("ids",s);
+            }
             for (int i=0;i<split.length;i++){
-                ZxAssetManagement ls = zxAssetManagementService.selectZxAssetManagementById(Long.parseLong(split[i]));
-                list.add(ls);
+                if (split[i]!=null&&!split[i].equals("")) {
+                    ZxAssetManagement ls = zxAssetManagementService.selectZxAssetManagementById(Long.parseLong(split[i]));
+                    list.add(ls);
+                }
             }
             return getDataTable(list);
         }else {
@@ -151,7 +168,7 @@ public class ZxChangeController extends BaseController
     @ResponseBody
     public TableDataInfo listooo(ZxAssetManagement zxAssetManagement)
     {
-        zxAssetManagement.setState(1);
+        zxAssetManagement.setState(2);
         startPage();
         List<ZxAssetManagement> list = zxAssetManagementService.selectZxAssetManagementList(zxAssetManagement);
         return getDataTable(list);

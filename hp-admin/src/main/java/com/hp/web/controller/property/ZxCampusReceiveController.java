@@ -68,11 +68,11 @@ public class ZxCampusReceiveController extends BaseController {
     @RequiresPermissions("property:campusrecive:list")
     @PostMapping("/list")
     @ResponseBody
-    public TableDataInfo list(ZxChange zxChange /*ZxAssetManagement zxAssetManagement*/)
+    public TableDataInfo list(ZxChange zxChange,String campus)
     {
         startPage();
         // 查询变更表中所有变动类型为1即领用的所有记录
-        List<ZxChange> list = zxChangeService.findAllChangeTypeOne(zxChange);
+        List<ZxChange> list = zxChangeService.findAllChangeTypeOne(zxChange,campus);
         return getDataTable(list);
     }
 
