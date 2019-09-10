@@ -68,6 +68,8 @@ public interface IZxAssetManagementService
      */
     List<ZxAssetManagement> findAllStateOne(ZxAssetManagement zxAssetManagement);
 
+    List<ZxAssetManagement> seleAll(ZxAssetManagement zxAssetManagement);
+
     /**
      * 根据id修改资产状态为领用
      * @param ids
@@ -81,4 +83,6 @@ public interface IZxAssetManagementService
      * @return 资产信息集合
      */
     List<ZxAssetManagement> selectZxAssetManagementListById(ZxAssetManagement zxAssetManagement);
+
+     String getMaxNum(ZxAssetManagement zxAssetManagement);
 }

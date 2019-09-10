@@ -83,6 +83,16 @@ public class ZxChange extends BaseEntity
     private Integer number;
     //单位
     private String  units;
+    //编号字符串
+    private String ids;
+
+    public String getIds() {
+        return ids;
+    }
+
+    public void setIds(String ids) {
+        this.ids = ids;
+    }
 
     public String getAssetNum() {
         return assetNum;

@@ -18,6 +18,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.LinkedList;
@@ -54,11 +55,14 @@ public class ZxBMController extends BaseController {
         zxChange.setChangeType(1);
         List<ZxChange> zxChanges = zxChangeService.selectZxChangeList(zxChange);
         startPage();
-        List<ZxAssetManagement> list =new ArrayList<>();
+        List<ZxAssetManagement> list =new LinkedList<>();
         for (ZxChange z:zxChanges){
             Long id = z.getAssetsId();
-            ZxAssetManagement zxAssetManagement1 = zxAssetManagementService.selectZxAssetManagementById(id);
-            list.add(zxAssetManagement1);
+            zxAssetManagement.setId(id);
+            List<ZxAssetManagement> list1 = zxAssetManagementService.seleAll(zxAssetManagement);
+            if (list1!=null&&list1.size()!=0) {
+                list.add(list1.get(0));
+            }
         }
         return getDataTable(list);
     }
@@ -79,28 +83,32 @@ public class ZxBMController extends BaseController {
     @Log(title = "资产信息", businessType = BusinessType.INSERT)
     @PostMapping("/add")
     @ResponseBody
-    public AjaxResult addSave(ZxAssetManagement zxAssetManagement)
+    public AjaxResult addSave(ZxAssetManagement zxAssetManagement,HttpSession httpSession)
     {
-        String ids = zxAssetManagement.getIds();
+        String ids = (String) httpSession.getAttribute("ids");
         int i1=0;
         if (ids!=null&&!ids.equals("")){
             String[] split = ids.split(",");
             ZxChange zxChange=new ZxChange();
             for (int i=0;i<split.length;i++){
-                ZxAssetManagement zxone = zxAssetManagementService.selectZxAssetManagementById(Long.parseLong(split[i]));
-                zxone.setState(2);
-                zxChange.setAssetsId(Long.parseLong(split[i]));
-                long l = SnowFlake.nextId();
-                zxChange.setId(l);
-                zxChange.setChangeType(1);
-                zxChange.setUseDepartment(zxAssetManagement.getDepartment());
-                zxChange.setUsers(zxAssetManagement.getExtend2());
-                zxChange.setExtend1(DateString.getString(new Date(),"yyyy-MM-dd HH:mm:ss"));
-                zxChangeService.insertZxChange(zxChange);
-                i1 = zxAssetManagementService.updateZxAssetManagement(zxone);
+               if (split[i]!=null&&!split[i].equals("")){
+                   ZxAssetManagement zxone = zxAssetManagementService.selectZxAssetManagementById(Long.parseLong(split[i]));
+                   zxone.setState(2);
+                   zxChange.setAssetsId(Long.parseLong(split[i]));
+                   long l = SnowFlake.nextId();
+                   zxChange.setId(l);
+                   zxChange.setChangeType(1);
+                   zxChange.setUseDepartment(zxAssetManagement.getDepartment());
+                   zxChange.setUsers(zxAssetManagement.getExtend2());
+                   zxChange.setExtend1(DateString.getString(new Date(),"yyyy-MM-dd HH:mm:ss"));
+                   zxChangeService.insertZxChange(zxChange);
+                   i1 = zxAssetManagementService.updateZxAssetManagement(zxone);
+               }
             }
+            httpSession.setAttribute("ids",null);
             return toAjax(i1);
         }
+        httpSession.setAttribute("ids",null);
         return toAjax(zxChangeService.insertZxChange(null));
     }
 
@@ -159,15 +167,32 @@ public class ZxBMController extends BaseController {
     @RequiresPermissions("property:department:listsan")
     @PostMapping("/listsan")
     @ResponseBody
-    public TableDataInfo listsan(ZxAssetManagement zxAssetManagement)
+    public TableDataInfo listsan(ZxAssetManagement zxAssetManagement, HttpSession httpSession)
     {
        if (zxAssetManagement.getIds()!=null&&!zxAssetManagement.getIds().equals("")){
            List<ZxAssetManagement> list=new LinkedList<>();
            String s=zxAssetManagement.getIds();
            String[] split = s.split(",");
+           String ids = (String)httpSession.getAttribute("ids");
+           if (ids!=null&&!ids.equals("")){
+               String s1 = ids + s;
+               String[] split1 = s1.split(",");
+               List<String> list1=new ArrayList<>();
+               for (int i=0;i<split1.length;i++){
+//如果集合里面没有相同的元素才往里存
+                   if(!list1.contains(split1[i])){
+                       list1.add(split1[i]);
+                   }
+               }
+               split = list1.toArray(new String[1]);
+           }else {
+               httpSession.setAttribute("ids",s);
+           }
            for (int i=0;i<split.length;i++){
-               ZxAssetManagement ls = zxAssetManagementService.selectZxAssetManagementById(Long.parseLong(split[i]));
-               list.add(ls);
+               if (split[i]!=null&&!split[i].equals("")) {
+                   ZxAssetManagement ls = zxAssetManagementService.selectZxAssetManagementById(Long.parseLong(split[i]));
+                   list.add(ls);
+               }
            }
            return getDataTable(list);
        }else {

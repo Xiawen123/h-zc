@@ -5,6 +5,7 @@ import com.hp.common.core.controller.BaseController;
 import com.hp.common.core.domain.AjaxResult;
 import com.hp.common.core.page.TableDataInfo;
 import com.hp.common.enums.BusinessType;
+import com.hp.common.utils.FastJsonUtils;
 import com.hp.common.utils.SnowFlake;
 import com.hp.common.utils.poi.ExcelUtil;
 import com.hp.framework.util.ShiroUtils;
@@ -18,15 +19,21 @@ import com.hp.system.domain.SysUser;
 import com.hp.system.service.ISysDeptService;
 import com.hp.system.service.ISysDictDataService;
 import com.hp.system.service.ISysUserService;
+import com.hp.web.controller.system.cloud.CloudStorageService;
+import com.hp.web.controller.system.cloud.OSSFactory;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 import java.text.SimpleDateFormat;
+import java.util.Base64;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequestMapping("/property/management1")
@@ -121,14 +128,18 @@ public class ZxAssetManagementControllersXG extends BaseController
     public String edit(@PathVariable("id") Long id, ModelMap mmap) {
 
         ZxAssetManagement zxAssetManagement = zxAssetManagementService.selectZxAssetManagementById(id);
-        SysDept sysDept = new SysDept();
-        List<SysDept> sysDepts = iSysDeptService.selectDeptList(sysDept);
-        //循环存入校区名，存入备用字段5
-        for (SysDept sysDept1:sysDepts) {
-            if (zxAssetManagement.getCampus().equals(sysDept.getDeptId())) {
-                zxAssetManagement.setCampus(Integer.parseInt("sysDept.getDeptName()"));
-            }
+
+        if (zxAssetManagement.getCampus()!=null) {
+            int z1=zxAssetManagement.getCampus();
+            SysDept s= iSysDeptService.selectDeptById(new Long((long)z1));
+            zxAssetManagement.setExtend5(s.getDeptName());
         }
+        if (zxAssetManagement.getWarehousingCampus()!=null) {
+            int z1=zxAssetManagement.getWarehousingCampus();
+            SysDept s= iSysDeptService.selectDeptById(new Long((long)z1));
+            zxAssetManagement.setExtend4(s.getDeptName());
+        }
+
 
         mmap.put("zxAssetManagement", zxAssetManagement);
         return prefix + "/edit";
@@ -141,13 +152,13 @@ public class ZxAssetManagementControllersXG extends BaseController
     @Log(title = "资产信息", businessType = BusinessType.UPDATE)
     @PostMapping("/edit")
     @ResponseBody
-    public AjaxResult editSave(ZxAssetManagement zxAssetManagement,ZxChange zxChange)
-    {
-        //在变更表中存值
+    public AjaxResult editSave(ZxAssetManagement zxAssetManagement) {
         ZxAssetManagement zxAssetManagement1 = zxAssetManagementService.selectZxAssetManagementById(zxAssetManagement.getId());
+
+        ZxChange zxChange = new ZxChange();
         //在变更表中生成ID（雪花算法）
         zxChange.setId(SnowFlake.nextId());
-        //在变更表中存入资产编号
+        //在变更表中存入资产ID
         zxChange.setAssetsId(new Long(zxAssetManagement1.getId()));
         //在变更表中存入变更类型
         zxChange.setChangeType(5);
@@ -169,16 +180,20 @@ public class ZxAssetManagementControllersXG extends BaseController
 
         //在变更表中存入提交人所属部门
         SysUser sysUser = iSysUserService.selectUserByLoginName(ShiroUtils.getLoginName());
-        String c= iSysDeptService.selectDeptById(sysUser.getDeptId()).getDeptName();
-        List<SysDictData> zc_department = iSysDictDataService.selectDictDataByType("zc_department");
-        for (SysDictData sysDictData:zc_department){
-            if (c.equals(sysDictData.getDictLabel())){
-                int d=Integer.parseInt(sysDictData.getDictValue());
+        SysDept sysDept = iSysDeptService.selectDeptById(sysUser.getDeptId());
+        String deptName = sysDept.getDeptName();
+        List<SysDept> sysDepts = iSysDeptService.selectDeptList(sysDept);
+        // List<SysDictData> zc_department = iSysDictDataService.selectDictDataByType("zc_department");
+
+        for (SysDept sysDept1:sysDepts){
+            if (deptName.equals(sysDept1.getDeptName())){
+                int d=sysDept1.getParentId().intValue();;
                 zxChange.setSubmittedDepartment(d);
             }
         }
         //添加变更表操作
         zxChangeService.insertZxChange(zxChange);
+
         //修改操作
         return toAjax(zxAssetManagementService.updateZxAssetManagement(zxAssetManagement));
     }

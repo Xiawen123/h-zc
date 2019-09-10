@@ -54,6 +54,8 @@ public class ZxAssetManagementServiceImpl implements IZxAssetManagementService {
         return zxAssetManagementMapper.insertZxAssetManagement(zxAssetManagement);
     }
 
+
+
     /**
      * 修改资产信息
      *
@@ -94,6 +96,11 @@ public class ZxAssetManagementServiceImpl implements IZxAssetManagementService {
     }
 
     @Override
+    public List<ZxAssetManagement> seleAll(ZxAssetManagement zxAssetManagement) {
+        return zxAssetManagementMapper.selectAAAStateTwo(zxAssetManagement);
+    }
+
+    @Override
     public Integer modifyZxAssertManagement(String ids) {
         return zxAssetManagementMapper.updateZxAssertManagement(Convert.toStrArray(ids));
     }
@@ -102,5 +109,11 @@ public class ZxAssetManagementServiceImpl implements IZxAssetManagementService {
     @Override
     public List<ZxAssetManagement> selectZxAssetManagementListById(ZxAssetManagement zxAssetManagement) {
         return zxAssetManagementMapper.selectZxAssetManagementListById(zxAssetManagement);
+    }
+
+    @Override
+    public String getMaxNum(ZxAssetManagement zxAssetManagement) {
+
+        return zxAssetManagementMapper.getMaxNum(zxAssetManagement);
     }
 }
