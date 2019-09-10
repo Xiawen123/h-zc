@@ -85,6 +85,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         select count(id) from zx_asset_management
     </select>
 
+    <!--获取资产编号最大值-->
+    <select id="getMaxNum" parameterType="ZxAssetManagement" resultType="string">
+        SELECT Max(asset_num) FROM zx_asset_management WHERE type = #{type}
+    </select>
+
     <!--获取当前最大ID值-->
     <select id="getMaxId" resultMap="ZxAssetManagementResult">
         SELECT `id` FROM `zx_asset_management` WHERE `id`=(SELECT MAX(`id`) FROM `zx_asset_management`)
@@ -302,7 +307,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="campus != null "> and campus = #{campus}</if>
             <if test="extend2 != null  and extend2 != ''"> and extend2 = #{extend2}</if>
         </where>
-    </select>
+</select>
 
 
 
@@ -328,6 +333,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </if>
         <if test="extend2 != null and extend2 != ''">
             AND `extend2` like concat('%',#{extend2},'%')
+        </if>
+        <if test="campus != null and campus != ''">
+            AND `campus` like concat('%',#{campus},'%')
         </if>
     </select>
 </mapper>

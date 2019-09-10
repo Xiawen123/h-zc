@@ -68,29 +68,11 @@ public class ZxCampusReceiveController extends BaseController {
     @RequiresPermissions("property:campusrecive:list")
     @PostMapping("/list")
     @ResponseBody
-    public TableDataInfo list(ZxAssetManagement zxAssetManagement)
+    public TableDataInfo list(ZxChange zxChange,String campus)
     {
-        System.out.println("领用时间查询: " + zxAssetManagement.getExtend4());
-        // 查询变更表中所有变动类型为1即领用的所有记录
-        ZxChange zxChange=new ZxChange();
-        zxChange.setChangeType(1);
-        List<ZxChange> zxChanges = zxChangeService.selectZxChangeList(zxChange);
-
         startPage();
-        // 查询变更记录表中，变动类型为领用的记录对应资产表的记录
-        List<ZxAssetManagement> list =new ArrayList<>();
-        for (ZxChange z:zxChanges){
-
-            Long id = z.getAssetsId();
-
-            zxAssetManagement.setId(id);
-            List<ZxAssetManagement> list1 = zxAssetManagementService.selectZxAssetManagementListById(zxAssetManagement);
-            if(list1 != null){
-                ZxAssetManagement zxAssetManagement1 = list1.get(0);
-                list.add(zxAssetManagement1);
-            }
-
-        }
+        // 查询变更表中所有变动类型为1即领用的所有记录
+        List<ZxChange> list = zxChangeService.findAllChangeTypeOne(zxChange,campus);
         return getDataTable(list);
     }
 
@@ -187,27 +169,6 @@ public class ZxCampusReceiveController extends BaseController {
 
 
     // 查询所有选中的闲置资产信息
-    /*@RequiresPermissions("property:campusrecive:list")
-    @PostMapping("/list2")
-    @ResponseBody
-    public TableDataInfo listsan(ZxAssetManagement zxAssetManagement)
-    {
-        if (zxAssetManagement.getIds()!=null&&!zxAssetManagement.getIds().equals("")){
-            List<ZxAssetManagement> list=new LinkedList<>();
-            String s=zxAssetManagement.getIds();
-            String[] split = s.split(",");
-            for (int i=0;i<split.length;i++){
-                ZxAssetManagement ls = zxAssetManagementService.selectZxAssetManagementById(Long.parseLong(split[i]));
-                list.add(ls);
-            }
-            return getDataTable(list);
-        }else {
-            List<ZxAssetManagement> list=new LinkedList<>();
-            return getDataTable(list);
-        }
-    }*/
-
-    // 查询所有选中的闲置资产信息
     @RequiresPermissions("property:campusrecive:list")
     @PostMapping("/list3")
     @ResponseBody
@@ -240,8 +201,6 @@ public class ZxCampusReceiveController extends BaseController {
             return getDataTable(list);
         }*/
 
-
-
         if (zxAssetManagement.getIds()!=null&&!zxAssetManagement.getIds().equals("")){
             List<ZxAssetManagement> list=new LinkedList<>();
             String s=zxAssetManagement.getIds();
@@ -266,7 +225,8 @@ public class ZxCampusReceiveController extends BaseController {
                 System.out.println("s1*****************:" + s1);
                 System.out.println("id********************:" + id);
                 if(!s1.equals("")){
-                    ZxAssetManagement ls = zxAssetManagementService.selectZxAssetManagementById(Long.parseLong(s1));
+                    long idam = Long.parseLong(s1);
+                    ZxAssetManagement ls = zxAssetManagementService.selectZxAssetManagementById(idam);
                     list.add(ls);
                 }
             }

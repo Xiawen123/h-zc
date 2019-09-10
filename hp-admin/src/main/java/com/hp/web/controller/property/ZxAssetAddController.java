@@ -61,11 +61,18 @@ public class ZxAssetAddController extends BaseController
     {
         startPage();
         List<ZxAssetManagement> list = zxAssetManagementService.selectZxAssetManagementList(zxAssetManagement);
-        for (ZxAssetManagement z:list){
-            if (z.getCampus()!=null) {
-                int z1=z.getCampus();
-                SysDept s= iSysDeptService.selectDeptById(new Long((long)z1));
-                z.setExtend5(s.getDeptName());
+        SysDept sysDept = new SysDept();
+        List<SysDept> sysDepts = iSysDeptService.selectDeptList(sysDept);
+        //循环存入校区名，存入备用字段5
+        for (ZxAssetManagement zxAssetManagement1:list){
+            for (SysDept sysDept1:sysDepts) {
+                if (zxAssetManagement1.getWarehousingCampus()!=null){
+                    String a=zxAssetManagement1.getWarehousingCampus().toString();
+                    String b=sysDept1.getDeptId().toString();
+                    if (a.equals(b)) {
+                        String c=sysDept1.getDeptName();
+                        zxAssetManagement1.setExtend5(c);}
+                }
             }
         }
         return getDataTable(list);
@@ -103,22 +110,22 @@ public class ZxAssetAddController extends BaseController
     @ResponseBody
     public AjaxResult addSave(ZxAssetManagement zxAssetManagement)
     {
+
             //添加雪花算法 表id
             zxAssetManagement.setId(SnowFlake.nextId());
             //添加资产编号
-            zxAssetManagement.setAssetNum(String.valueOf(SnowFlake.nextId()));
-            //添加入库时间
+            String maxNum = zxAssetManagementService.getMaxNum(zxAssetManagement);
+            String substring = maxNum.substring(8);
+            int aNum = Integer.parseInt(substring);
+            zxAssetManagement.setAssetNum("WHHP -"+zxAssetManagement.getType()+ String.format("%05d",(aNum+1)));
+            //添加入库时间,获取系统现在时间
             zxAssetManagement.setStorageTime(new Date());
             //添加操作人,直接获取登录账户
             zxAssetManagement.setOperator(ShiroUtils.getLoginName());
-            //添加状态为,闲置=1
+            //添加状态,默认为闲置状态,字典键值为1
             zxAssetManagement.setState(1);
-            //添加入库校区?
-            zxAssetManagement.setWarehousingCampus(115);
             //添加所在校区
-            zxAssetManagement.setCampus(115);
-            //添加存放地点?
-            zxAssetManagement.setLocation(1);
+            zxAssetManagement.setCampus(zxAssetManagement.getWarehousingCampus());
             //添加图片url
             List<Map<String, Object>> list = FastJsonUtils.getJsonToListMap(zxAssetManagement.getPicture().toString());
             list.get(0).get("img");

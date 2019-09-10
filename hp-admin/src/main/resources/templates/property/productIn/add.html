@@ -116,6 +116,28 @@
                 </div>
             </div>
         </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">入库校区：</label>
+            <div class="col-sm-8">
+                <select class="form-control m-b" id="warehousingCampus" name="warehousingCampus">
+                    <option value="115">鲁广春和电信校区</option>
+                    <option value="116">财税校区</option>
+                    <option value="122">徐东校区</option>
+                    <option value="124">地大校区</option>
+                    <option value="125">教学总部</option>
+                    <option value="126">品质保障部</option>
+                    <option value="127">光谷校区</option>
+                </select>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">存放地点：</label>
+            <div class="col-sm-8">
+                <select id="location" name="location" class="form-control m-b" th:with="type=${@dict.getType('zc_location')}">
+                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+                </select>
+            </div>
+        </div>
     </form>
 </div>
 <th:block th:include="include :: footer"/>
@@ -200,7 +222,7 @@
             $("#xianshi").attr('style', 'display:none')
             groupId = null
         }
-        //获取资产名称
+        //获取资产的参数
         var name = $("#name").val();
         var type = $("#type").val();
         var assetSpecification = $("#assetSpecification").val();
@@ -210,6 +232,8 @@
         var supplier = $("#supplier").val();
         var price = $("#price").val();
         var purchasingTime = $("#purchasingTime").val();
+        var warehousingCampus = $("#warehousingCampus").val();
+        var location = $("#location").val();
 
         var imgs = document.getElementsByClassName("imgs");
         var b = [];
@@ -232,7 +256,9 @@
                     "supplier": supplier,
                     "price": price,
                     "purchasingTime": purchasingTime,
-                    "picture": picture
+                    "picture": picture,
+                    "warehousingCampus":warehousingCampus,
+                    "location":location
                 },
                 async: false,
                 error: function (request) {
