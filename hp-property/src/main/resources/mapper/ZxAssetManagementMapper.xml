@@ -329,5 +329,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <if test="extend2 != null and extend2 != ''">
             AND `extend2` like concat('%',#{extend2},'%')
         </if>
+        <if test="campus != null and campus != ''">
+            AND `campus` like concat('%',#{campus},'%')
+        </if>
     </select>
 </mapper>
