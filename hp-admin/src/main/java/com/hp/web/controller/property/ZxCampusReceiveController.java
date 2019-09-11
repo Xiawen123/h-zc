@@ -12,6 +12,7 @@ import com.hp.property.domain.ZxAssetManagement;
 import com.hp.property.domain.ZxChange;
 import com.hp.property.service.IZxAssetManagementService;
 import com.hp.property.service.impl.ZxChangeServiceImpl;
+import com.hp.system.domain.SysDept;
 import com.hp.system.domain.SysDictData;
 import com.hp.system.domain.SysUser;
 import com.hp.system.service.ISysDeptService;
@@ -73,6 +74,21 @@ public class ZxCampusReceiveController extends BaseController {
         startPage();
         // 查询变更表中所有变动类型为1即领用的所有记录
         List<ZxChange> list = zxChangeService.findAllChangeTypeOne(zxChange,campus);
+
+        SysDept sysDept = new SysDept();
+        List<SysDept> sysDepts = iSysDeptService.selectDeptList(sysDept);
+        //循环存入校区名，存入备用字段extend5
+        for (ZxChange zxChange1:list){
+            for (SysDept sysDept1:sysDepts) {
+                if (zxChange1.getExtend4()!=null){
+                    String a=zxChange1.getExtend4().toString();
+                    String b=sysDept1.getDeptId().toString();
+                    if (a.equals(b)) {
+                        String c=sysDept1.getDeptName();
+                        zxChange1.setExtend5(c);}
+                }
+            }
+        }
         return getDataTable(list);
     }
 
