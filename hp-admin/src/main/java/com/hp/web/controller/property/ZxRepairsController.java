@@ -11,6 +11,7 @@ import com.hp.property.domain.ZxAssetManagement;
 import com.hp.property.domain.ZxChange;
 import com.hp.property.service.IZxAssetManagementService;
 import com.hp.property.service.IZxChangeService;
+import com.hp.property.service.IZxRepairsService;
 import com.hp.property.service.IZxReturnService;
 import com.hp.system.domain.SysDept;
 import com.hp.system.domain.SysUser;
@@ -25,6 +26,8 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
@@ -35,7 +38,7 @@ import java.util.*;
 public class ZxRepairsController extends BaseController {
     private String prefix = "property/repairs";
     @Autowired
-    private IZxReturnService zxReturnService;
+    private IZxRepairsService zxRepairsService;
     @Autowired
     private IZxAssetManagementService zxAssetManagementService;
     @Autowired
@@ -70,9 +73,9 @@ public class ZxRepairsController extends BaseController {
     @RequiresPermissions("property:repairs:list")
     @PostMapping("/list")
     @ResponseBody
-    public TableDataInfo list(ZxChange zxChange2,ZxAssetManagement zxAssetManagement){
+    public TableDataInfo list(ZxAssetManagement zxAssetManagement){
         startPage();
-        List<ZxAssetManagement> list = zxReturnService.selectManagementList(zxChange2,zxAssetManagement);
+        List<ZxAssetManagement> list = zxRepairsService.selectZxAssetManagementList(zxAssetManagement);
         SysDept sysDept = new SysDept();
         List<SysDept> sysDepts = iSysDeptService.selectDeptList(sysDept);
         //循环存入校区名，存入备用字段5
@@ -87,15 +90,20 @@ public class ZxRepairsController extends BaseController {
                 }
             }
             Long id = zxAssetManagement1.getId();
-           List<ZxChange> zxChanges= zxReturnService.selectZxChangeById(id);
-           for(ZxChange zxChange:zxChanges){
-               if(zxChange.getExtend1()!=null){ zxAssetManagement1.setExtend1(zxChange.getExtend1());}
-               if(zxChange.getUseDepartment()!=null){
-                   zxAssetManagement1.setExtend2(zxChange.getUseDepartment().toString());
+            List<ZxChange> zxChanges= zxRepairsService.selectZxChangeByAssetId(id);
+            for(ZxChange zxChange:zxChanges){
+               if(zxChange.getExtend1()!=null){
+                  zxAssetManagement1.setExtend4(zxChange.getExtend1());
                }
-               if(zxChange.getUsers()!=null){ zxAssetManagement1.setExtend3(zxChange.getUsers());}
+               if(zxChange.getUseDepartment()!=null){
+                   zxAssetManagement1.setExtend1(zxChange.getUseDepartment().toString());
 
-           }
+               }
+               if(zxChange.getUsers()!=null){
+                   zxAssetManagement1.setExtend2(zxChange.getUsers());
+               }
+
+            }
         }
 
         return getDataTable(list);
