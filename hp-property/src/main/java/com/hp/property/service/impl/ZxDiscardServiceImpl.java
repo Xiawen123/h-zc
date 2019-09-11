@@ -6,9 +6,12 @@ import com.hp.property.mapper.ZxAssetManagementMapper;
 import com.hp.property.mapper.ZxChangeMapper;
 import com.hp.property.mapper.ZxDiscardMapper;
 import com.hp.property.service.IZxDiscardService;
+import com.hp.system.domain.SysDept;
+import com.hp.system.mapper.SysDeptMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
 import java.util.List;
 
 /**
@@ -18,6 +21,11 @@ import java.util.List;
 public class ZxDiscardServiceImpl implements IZxDiscardService {
     @Autowired
     private ZxDiscardMapper zxDiscardMapper;
+
+    @Autowired
+    private SysDeptMapper deptMapper;
+    @Resource
+    private ZxAssetManagementMapper zxAssetManagementMapper;
     /**
      * 查询报废的变更记录信息列表
      *
@@ -25,11 +33,21 @@ public class ZxDiscardServiceImpl implements IZxDiscardService {
      * @return
      */
     @Override
-    public List<ZxChange> selectZxDiscardList(ZxChange zxChange,String campus) {
+    public List<ZxChange> selectZxDiscardList(ZxChange zxChange/*,String campus*/) {
+
         zxChange.setChangeType(4);
-        zxChange.setExtend5(campus);
-        System.out.println(zxChange.toString());
+        /*zxChange.setExtend5(campus);*/
         List<ZxChange> changes = zxDiscardMapper.selectZxChangeList(zxChange);
+        for (ZxChange change:changes){
+            ZxAssetManagement zxAssetManagement = zxAssetManagementMapper.selectZxAssetManagementById(change.getAssetsId());
+            System.out.println(zxAssetManagement.getWarehousingCampus());
+            if (zxAssetManagement.getWarehousingCampus()!=null) {
+                int z1=zxAssetManagement.getWarehousingCampus();
+                SysDept s= deptMapper.selectDeptById(new Long((long)z1));
+                change.setExtend5(s.getDeptName());
+            }
+        }
+        System.out.println(changes);
         return changes;
     }
 
