@@ -16,4 +16,7 @@ import java.util.List;
 public interface ZxRepairsMapper
 {
 
+    List<ZxAssetManagement> selectZxAssetManagementList(ZxAssetManagement zxAssetManagement);
+
+    List<ZxChange> selectZxChangeByAssetId(Long id);
 }

@@ -35,11 +35,11 @@
                     <div class="select-list">
                         <ul>
                             <li>
-                                <p>转移日期：</p>
-                                <input type="text" name="extend1" id="returnTime"/>
+                                <p>报修日期：</p>
+                                <input type="text" name="extend4" id="repairsTime"/>
                             </li>
                             <li>
-                                <p>退还物品：</p>
+                                <p>报修物品：</p>
                                 <input type="text" name="name"/>
                             </li>
                             <li>
@@ -47,15 +47,15 @@
                                 <input type="text" name="assetNum"/>
                             </li>
                             <li>
-                                <p>退还部门：</p>
-                                <select name="useDepartment" th:with="type=${@dict.getType('zc_department')}">
+                                <p>报修部门：</p>
+                                <select name="extend1" th:with="type=${@dict.getType('zc_department')}">
                                     <option value="">请选择部门</option>
                                     <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
                                 </select>
                             </li>
                             <li>
-                                <p>退还人员：</p>
-                                <input type="text" name="users"/>
+                                <p>报修人员：</p>
+                                <input type="text" name="extend2"/>
                             </li>
                             <li>
                                 <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
@@ -67,8 +67,8 @@
             </div>
 
             <div class="btn-group-sm" id="toolbar" role="group">
-                <a class="btn btn-success" onclick="$.operate.addFull()" shiro:hasPermission="property:return:add">
-                    <i class="fa fa-plus"></i> 退还登记
+                <a class="btn btn-success" onclick="$.operate.addFull()" shiro:hasPermission="property:repairs:add">
+                    <i class="fa fa-plus"></i> 资产报修
                 </a>
                <!-- <a class="btn btn-primary single disabled" onclick="$.operate.edit()" shiro:hasPermission="system:management:edit">
                     <i class="fa fa-edit"></i> 修改
@@ -91,13 +91,14 @@
      <th:block th:include="include :: ztree-js" />
     <script th:inline="javascript">
 
-       var selectFlag = [[${@permission.hasPermi('property:return:select')}]];
+       var selectFlag = [[${@permission.hasPermi('property:repairs:select')}]];
        /* var removeFlag = [[${@permission.hasPermi('system:management:remove')}]];*/
         var prefix = ctx + "property/repairs";
         var type=[[${@dict.getType('zc_type')}]]
        var dept=[[${@dict.getType('zc_department')}]]
        var unit=[[${@dict.getType('zc_unit')}]]
        var campus=[[${@dict.getType('zc_unit')}]]
+       var state=[[${@dict.getType('zc_state')}]]
 
         $(function() {
             var panehHidden = false;
@@ -116,7 +117,7 @@
                 /*removeUrl: prefix + "/remove",
                 exportUrl: prefix + "/export",*/
                 detailUrl: prefix+"/select/{id}",
-                modalName: "退还登记",
+                modalName: "资产报修",
                 columns: [{
                     checkbox: true
                 },
@@ -126,7 +127,7 @@
                         visible: false
                     },
                     {
-                        field : 'extend1',
+                        field : 'extend4',
                         title : '创建时间'
                     },
                     {
@@ -164,15 +165,22 @@
                         }
                     },
                     {
-                        field : 'extend2',
+                        field : 'extend1',
                         title : '退还部门',
                         formatter:function (value, row, index) {
                             return $.table.selectDictLabel(dept,value);
                         }
                     },
                     {
-                        field : 'extend3',
+                        field : 'extend2',
                         title : '退还人员'
+                    },
+                    {
+                        field : 'state',
+                        title : '状态',
+                        formatter:function (value, row, index) {
+                            return $.table.selectDictLabel(state,value);
+                        }
                     },
                     {
                         field: 'extend5',
@@ -187,7 +195,7 @@
                         formatter: function(value, row, index) {
                             var actions = [];
                             actions.push('<a class="btn btn-info btn-xs ' + selectFlag + '" href="javascript:void(0)" onclick="$.operate.detail(\'' + row.id + '\')"><i class="fa fa-list-ul"></i>查看</a> ');
-                            /* actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.id + '\')"><i class="fa fa-remove"></i>删除</a>');*/
+                            actions.push('<a class="btn btn-danger btn-xs" href="javascript:void(0)" onclick="xgstate('+row.id+')"><i class="fa fa-remove"></i>更改状态</a>');
                             return actions.join('');
                         }
                     }]
@@ -214,7 +222,7 @@
      <script type="text/javascript">
          //时间选择器
          laydate.render({
-             elem: '#returnTime'
+             elem: '#repairsTime'
              ,trigger: 'click',
              type:'date'
              ,range: true

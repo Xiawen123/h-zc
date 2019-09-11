@@ -70,4 +70,30 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         select * from zx_change
     </sql>
 
+
+<!--查询所有报修资产信息-->
+    <select id="selectZxAssetManagementList" parameterType="ZxAssetManagement" resultMap="ZxAssetManagementResult">
+        <include refid="selectZxAssetManagementVo"/>
+        <where>
+            <if test="name != null  and name != ''"> and a.name like concat('%', #{name}, '%')</if>
+            <if test="assetNum != null  and assetNum != ''"> and a.asset_num = #{assetNum}</if>
+            <if test="extend1 != null and extend1 != ''"> and c.use_department = #{extend1}</if>
+            <if test="extend4 != null  and extend4 != ''">
+                and date_format(c.extend1,'%y%m%d') &gt;= date_format(SUBSTR(#{extend4} FROM 1 FOR 10),'%y%m%d')
+                and date_format(c.extend1,'%y%m%d') &lt;= date_format(SUBSTR(#{extend4} FROM 14 FOR 10),'%y%m%d')</if>
+            <if test="extend2 != null  and extend2 != ''"> and c.users like concat('%', #{extend2}, '%')</if>
+            <if test="extend5 != null  and extend5 != ''"> and a.campus = #{extend5}</if>
+            and  c.change_type=3
+        </where>
+        ORDER BY c.extend1 desc
+    </select>
+
+
+
+<!--根据资产id查询变更记录-->
+    <select id="selectZxChangeByAssetId" parameterType="Long" resultMap="ZxChangeResult">
+        <include refid="selectZxChangeVo"/>
+        where assets_id = #{id}
+    </select>
+
 </mapper>
