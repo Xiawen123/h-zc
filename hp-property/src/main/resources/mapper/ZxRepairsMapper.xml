@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hp.property.mapper.ZxRepairsMapper">
+    
+    <resultMap type="ZxChange" id="ZxChangeResult">
+        <result property="id"    column="id"    />
+        <result property="assetsId"    column="assets_id"    />
+        <result property="changeType"    column="change_type"    />
+        <result property="submittedDepartment"    column="submitted_department"    />
+        <result property="submitOne"    column="submit_one"    />
+        <result property="useDepartment"    column="use_department"    />
+        <result property="users"    column="users"    />
+        <result property="extend1"    column="extend1"    />
+        <result property="extend2"    column="extend2"    />
+        <result property="extend3"    column="extend3"    />
+        <result property="extend4"    column="extend4"    />
+        <result property="extend5"    column="extend5"    />
+        <result property="assetNum"    column="asset_num"    />
+        <result property="name"    column="name"    />
+        <result property="type"    column="type"    />
+        <result property="brand"    column="brand"    />
+        <result property="assetSpecification"    column="asset_specification"    />
+        <result property="number"    column="number"    />
+        <result property="units"    column="units"    />
+
+    </resultMap>
+
+    <resultMap type="ZxAssetManagement" id="ZxAssetManagementResult">
+        <result property="id"    column="id"    />
+        <result property="name"    column="name"    />
+        <result property="assetNum"    column="asset_num"    />
+        <result property="brand"    column="brand"    />
+        <result property="assetSpecification"    column="asset_specification"    />
+        <result property="number"    column="number"    />
+        <result property="type"    column="type"    />
+        <result property="units"    column="units"    />
+        <result property="supplier"    column="supplier"    />
+        <result property="picture"    column="picture"    />
+        <result property="price"    column="price"    />
+        <result property="purchasingTime"    column="purchasing_time"    />
+        <result property="storageTime"    column="storage_time"    />
+        <result property="warehousingCampus"    column="warehousing_campus"    />
+        <result property="state"    column="state"    />
+        <result property="operator"    column="operator"    />
+        <result property="location"    column="location"    />
+        <result property="recipientsTime"    column="recipients_time"    />
+        <result property="repairTime"    column="repair_time"    />
+        <result property="transferTime"    column="transfer_time"    />
+        <result property="discardTime"    column="discard_time"    />
+        <result property="returnTime"    column="return_time"    />
+        <result property="campus"    column="campus"    />
+        <result property="department"    column="department"    />
+        <result property="extend1"    column="extend1"    />
+        <result property="extend2"    column="extend2"    />
+        <result property="extend3"    column="extend3"    />
+        <result property="extend4"    column="extend4"    />
+        <result property="extend5"    column="extend5"    />
+    </resultMap>
+
+    <sql id="selectZxAssetManagementVo">
+    select a.id, a.name, a.asset_num, a.brand, a.asset_specification, a.number, a.type, a.units, a.state, a.warehousing_campus, a.operator, a.location, a.recipients_time, a.return_time, a.campus, a.department, c.submitted_department, c.submit_one, c.change_type, c.extend1, c.use_department, c.users
+    FROM `zx_change` c LEFT join `zx_asset_management` a ON c.assets_id= a.id  LEFT JOIN `sys_dept` d
+        ON c.extend4 = d.dept_id
+    </sql>
+
+
+    <sql id="selectZxChangeVo">
+        select * from zx_change
+    </sql>
+
+</mapper>
