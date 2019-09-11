@@ -18,10 +18,14 @@ public interface IZxReturnService
 
     ZxAssetManagement selectZxAssetManagementById(Long id);
 
-    List<ZxAssetManagement> selectZxAssetManagementList(ZxAssetManagement zxAssetManagement);
+    /*List<ZxAssetManagement> selectZxAssetManagementList(ZxAssetManagement zxAssetManagement);*/
 
 
     int insertManagementAndChange(ZxChange zxChange, Long[] Ids);
 
-/*    List<ZxAssetManagement> selectZxAssetManagementsById(String ids);*/
+    List<ZxChange> selectZxChangeById(Long id);
+
+    List<ZxAssetManagement> selectManagementList(ZxChange zxChange2, ZxAssetManagement zxAssetManagement);
+
+    /*    List<ZxAssetManagement> selectZxAssetManagementsById(String ids);*/
 }

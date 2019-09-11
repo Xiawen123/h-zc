@@ -77,11 +77,53 @@ public class ZxReturnController extends BaseController {
     @RequiresPermissions("property:return:list")
     @PostMapping("/list")
     @ResponseBody
-    public TableDataInfo list(ZxChange zxChange,String campus){
+    public TableDataInfo list(ZxChange zxChange2,ZxAssetManagement zxAssetManagement){
         startPage();
-        List<ZxChange> list = zxReturnService.selectZxReturnList(zxChange,campus);
+        List<ZxAssetManagement> list = zxReturnService.selectManagementList(zxChange2,zxAssetManagement);
+        SysDept sysDept = new SysDept();
+        List<SysDept> sysDepts = iSysDeptService.selectDeptList(sysDept);
+        //循环存入校区名，存入备用字段5
+        for (ZxAssetManagement zxAssetManagement1:list){
+            for (SysDept sysDept1:sysDepts) {
+                if (zxAssetManagement1.getWarehousingCampus()!=null){
+                    String a=zxAssetManagement1.getWarehousingCampus().toString();
+                    String b=sysDept1.getDeptId().toString();
+                    if (a.equals(b)) {
+                        String c=sysDept1.getDeptName();
+                        zxAssetManagement1.setExtend5(c);}
+                }
+            }
+            Long id = zxAssetManagement1.getId();
+           List<ZxChange> zxChanges= zxReturnService.selectZxChangeById(id);
+           for(ZxChange zxChange:zxChanges){
+               if(zxChange.getExtend1()!=null){ zxAssetManagement1.setExtend1(zxChange.getExtend1());}
+               if(zxChange.getUseDepartment()!=null){
+                   zxAssetManagement1.setExtend2(zxChange.getUseDepartment().toString());
+               }
+               if(zxChange.getUsers()!=null){ zxAssetManagement1.setExtend3(zxChange.getUsers());}
+
+           }
+        }
+
         return getDataTable(list);
     }
+
+    /**
+    * SysDept sysDept = new SysDept();
+     *         List<SysDept> sysDepts = iSysDeptService.selectDeptList(sysDept);
+     *         //循环存入校区名，存入备用字段5
+     *         for (ZxAssetManagement zxAssetManagement1:list){
+     *             for (SysDept sysDept1:sysDepts) {
+     *                 if (zxAssetManagement1.getWarehousingCampus()!=null){
+     *                 String a=zxAssetManagement1.getWarehousingCampus().toString();
+     *                 String b=sysDept1.getDeptId().toString();
+     *                 if (a.equals(b)) {
+     *                     String c=sysDept1.getDeptName();
+     *                     zxAssetManagement1.setExtend5(c);}
+     *                 }
+     *             }
+     *         }
+     */
 
     /**
      * 新增页面展示
@@ -199,7 +241,7 @@ public class ZxReturnController extends BaseController {
     public TableDataInfo listss(ZxAssetManagement zxAssetManagement)
     {
         startPage();
-        List<ZxAssetManagement> list = zxReturnService.selectZxAssetManagementList(zxAssetManagement);
+        List<ZxAssetManagement> list = zxAssetManagementService.selectZxAssetManagementList(zxAssetManagement);
         return getDataTable(list);
     }
 
@@ -241,5 +283,39 @@ public class ZxReturnController extends BaseController {
             return getDataTable(list);
         }
     }
+
+    /**
+     * 删除
+     * @param ids
+     * @return
+     */
+    @RequiresPermissions("property:return:remove")
+    @Log(title = "删除", businessType = BusinessType.DELETE)
+    @PostMapping("/remove")
+    @ResponseBody
+    public AjaxResult remove(String id,HttpServletRequest request) {
+        if(!id.equals("")&&id!=null){
+            System.out.println(id);
+            String spl=request.getSession().getAttribute("s").toString();
+            String[] split =spl.split(",");
+            String sst="";
+            for (int i=0;i<split.length;i++){
+              if(split[i].equals(id)){
+                  split[i]=split[i].replace(id,"");
+              }
+              sst=sst+","+split[i];
+
+            }
+
+            System.out.println(sst);
+            request.getSession().setAttribute("s",sst);
+            return toAjax(1);
+        }else{
+            return toAjax(0);
+        }
+
+    }
+
+
 
 }

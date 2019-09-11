@@ -52,17 +52,38 @@
 
     <script th:inline="javascript">
 
+        var removeFlag = [[${@permission.hasPermi('property:return:remove')}]];
         var selectFlag = [[${@permission.hasPermi('property:return:select')}]];
         /* var removeFlag = [[${@permission.hasPermi('system:management:remove')}]];*/
         var prefix = ctx + "property/return";
         var type=[[${@dict.getType('zc_type')}]]
         var dept=[[${@dict.getType('zc_department')}]]
         var unit=[[${@dict.getType('zc_unit')}]]
-var id="";
 
-        function del(data) {
-            data.parentNode.parentNode.remove();
-          /* id= data.parentNode.children.namedItem("id");*/
+
+
+        function del(id) {
+         /*   var ids = document.getElementById("id");*/
+            $.ajax({
+                cache : true,
+                type : "POST",
+                url : prefix + "/remove",
+                data : {
+                    "id": id
+                },
+                async : false,
+                error : function(request) {
+                    $.modal.alertError("系统错误");
+                },
+                success : function(data) {
+
+                    $.modal.alertError("操作成功！");
+
+                }
+            })
+
+          /* ids.parentNode.parentNode.remove();*/
+
         }
 
         $("#form-return-add").validate({
@@ -132,6 +153,7 @@ var id="";
             var options = {
                  url: prefix + "/lists",
                 createUrl: prefix + "/adds",
+                removeUrl: prefix + "/remove",
                 /*updateUrl: prefix + "/select/{id}",*/
                 /*removeUrl: prefix + "/remove",
                 exportUrl: prefix + "/export",*/
@@ -187,16 +209,17 @@ var id="";
                     {
                         field: 'number',
                         title: '数量'
-                    }
-                   /* {
+                    },
+
+                    {
                         title: '操作',
                         align: 'center',
                         formatter: function (value, row, index) {
                             var actions = [];
-                            actions.push('<a class="btn btn-danger btn-xs" href="javascript:void(0)" onclick="del(this)"><i class="fa fa-remove"></i>删除</a>');
+                            actions.push('<a id="a" class="btn btn-danger btn-xs" href="#" onclick="del(\'' + row.id + '\')"><i class="fa fa-remove"></i>删除</a>');
                             return actions.join('');
                         }
-                    }*/
+                    }
                 ]
             };
             $.table.init(options);
@@ -239,7 +262,9 @@ var id="";
         //时间选择器
         laydate.render({
             elem: '#returnTime'
+            ,type:'datetime'
             ,trigger: 'click'
+
         });
     </script>
 </body>

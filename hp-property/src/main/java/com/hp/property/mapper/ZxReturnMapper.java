@@ -29,5 +29,7 @@ public interface ZxReturnMapper
 
     int insertChange(ZxChange zxChange);
 
-   /* List<ZxAssetManagement> selectZxAssetManagementsByIds(Long[] ids);*/
+    List<ZxAssetManagement> selectManagementList(ZxAssetManagement zxAssetManagement);
+
+    /* List<ZxAssetManagement> selectZxAssetManagementsByIds(Long[] ids);*/
 }

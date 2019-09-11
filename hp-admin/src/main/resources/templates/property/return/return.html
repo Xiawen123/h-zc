@@ -11,7 +11,7 @@
     <div class="box box-main">
         <div class="box-header">
             <div class="box-title">
-                <i class="fa icon-grid"></i> 组织机构
+                <i class="fa icon-grid"></i> 校区
             </div>
             <div class="box-tools pull-right">
                 <a type="button" class="btn btn-box-tool" href="#" onclick="dept()" title="管理部门"><i class="fa fa-edit"></i></a>
@@ -97,6 +97,7 @@
         var type=[[${@dict.getType('zc_type')}]]
        var dept=[[${@dict.getType('zc_department')}]]
        var unit=[[${@dict.getType('zc_unit')}]]
+       var campus=[[${@dict.getType('zc_unit')}]]
 
         $(function() {
             var panehHidden = false;
@@ -126,7 +127,7 @@
                     },
                     {
                         field : 'extend1',
-                        title : '退还时间'
+                        title : '创建时间'
                     },
                     {
                         field : 'assetNum',
@@ -163,15 +164,22 @@
                         }
                     },
                     {
-                        field : 'useDepartment',
+                        field : 'extend2',
                         title : '退还部门',
                         formatter:function (value, row, index) {
                             return $.table.selectDictLabel(dept,value);
                         }
                     },
                     {
-                        field : 'users',
+                        field : 'extend3',
                         title : '退还人员'
+                    },
+                    {
+                        field: 'extend5',
+                        title: '校区',
+           /* formatter:function (value, row, index) {
+                return $.table.selectDictLabel(dept,value);
+            }*/
                     },
                     {
                         title: '详情',

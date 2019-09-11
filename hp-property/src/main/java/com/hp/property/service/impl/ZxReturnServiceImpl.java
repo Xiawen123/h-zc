@@ -65,10 +65,10 @@ public class ZxReturnServiceImpl implements IZxReturnService
         return zxReturnMapper.selectZxAssetManagementById(id);
     }
 
-    @Override
+    /*@Override
     public List<ZxAssetManagement> selectZxAssetManagementList(ZxAssetManagement zxAssetManagement) {
-        return zxReturnMapper.selectZxAssetManagementsList(zxAssetManagement);
-    }
+        return zxReturnMapper.selectZxAssetManagementList(zxAssetManagement);
+    }*/
 
     @Override
     public int insertManagementAndChange(ZxChange zxChange,Long[] Ids) {
@@ -88,6 +88,22 @@ public class ZxReturnServiceImpl implements IZxReturnService
         }
         return 1;
 
+    }
+
+    @Override
+    public List<ZxChange> selectZxChangeById(Long id) {
+
+        return zxReturnMapper.selectZxChangeByAssetsId(id);
+    }
+
+    @Override
+    public List<ZxAssetManagement> selectManagementList(ZxChange zxChange, ZxAssetManagement zxAssetManagement) {
+        if(zxChange!=null){
+            if(zxChange.getExtend1()!=null){ zxAssetManagement.setExtend1(zxChange.getExtend1());}
+            if(zxChange.getUseDepartment()!=null){  zxAssetManagement.setExtend2(zxChange.getUseDepartment().toString());}
+            if(zxChange.getUsers()!=null){  zxAssetManagement.setExtend3(zxChange.getUsers());}
+        }
+        return zxReturnMapper.selectManagementList(zxAssetManagement);
     }
 
    /* @Override
