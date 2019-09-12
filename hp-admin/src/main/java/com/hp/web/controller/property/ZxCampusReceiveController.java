@@ -58,8 +58,11 @@ public class ZxCampusReceiveController extends BaseController {
     // 跳转到校区领用主页面
     @RequiresPermissions("property:campusrecive:view")
     @GetMapping()
-    public String management()
+    public String management(ModelMap mmap)
     {
+        SysDept sysDept = new SysDept();
+        List<SysDept> sysDepts = iSysDeptService.selectDeptList(sysDept);
+        mmap.put("school",sysDepts);
         return prefix + "/campusrecive";
     }
 
@@ -77,6 +80,7 @@ public class ZxCampusReceiveController extends BaseController {
 
         SysDept sysDept = new SysDept();
         List<SysDept> sysDepts = iSysDeptService.selectDeptList(sysDept);
+
         //循环存入校区名，存入备用字段extend5
         for (ZxChange zxChange1:list){
             for (SysDept sysDept1:sysDepts) {
@@ -89,8 +93,10 @@ public class ZxCampusReceiveController extends BaseController {
                 }
             }
         }
+
         return getDataTable(list);
     }
+
 
     /**
      * 新增资产信息
