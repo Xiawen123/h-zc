@@ -60,7 +60,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 
     <sql id="selectZxAssetManagementVo">
-    select a.id, a.name, a.asset_num, a.brand, a.asset_specification, a.number, a.type, a.units, a.state, a.warehousing_campus, a.operator, a.location, a.recipients_time, a.return_time, a.campus, a.department, c.submitted_department, c.submit_one, c.change_type, c.extend1, c.use_department, c.users
+    select a.id, a.name, a.asset_num, a.brand, a.asset_specification, a.number, a.type, a.units, a.state, a.warehousing_campus, a.operator, a.location, a.recipients_time, a.return_time, a.campus, a.department, a.extend3, c.submitted_department, c.submit_one, c.change_type, c.extend1, c.use_department, c.users
     FROM `zx_change` c LEFT join `zx_asset_management` a ON c.assets_id= a.id  LEFT JOIN `sys_dept` d
         ON c.extend4 = d.dept_id
     </sql>
@@ -95,5 +95,23 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <include refid="selectZxChangeVo"/>
         where assets_id = #{id}
     </select>
+
+    <!--根据资产id查询资产信息-->
+
+
+    <select id="selectZxAssetManagementById" parameterType="ZxAssetManagement" resultMap="ZxAssetManagementResult">
+     select id, name, asset_num, brand, asset_specification, number, type, units, supplier, picture, price, purchasing_time, storage_time, warehousing_campus, state, operator, location, recipients_time, repair_time, transfer_time, discard_time, return_time, campus, department, extend1, extend2, extend3, extend4, extend5 from zx_asset_management
+    where id=#{id}
+    </select>
+
+
+
+    <update id="updateExtend3" parameterType="ZxAssetManagement">
+        update zx_asset_management
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="extend3 != null  and extend3 != ''">extend3 = #{extend3},</if>
+        </trim>
+        where id = #{id}
+    </update>
 
 </mapper>

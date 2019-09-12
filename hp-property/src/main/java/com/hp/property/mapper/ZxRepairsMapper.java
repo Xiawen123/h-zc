@@ -19,4 +19,8 @@ public interface ZxRepairsMapper
     List<ZxAssetManagement> selectZxAssetManagementList(ZxAssetManagement zxAssetManagement);
 
     List<ZxChange> selectZxChangeByAssetId(Long id);
+
+    ZxAssetManagement selectZxAssetManagementById(Long id);
+
+    int updateExtend3(ZxAssetManagement zxAssetManagement);
 }

@@ -17,4 +17,8 @@ public interface IZxRepairsService
     List<ZxAssetManagement> selectZxAssetManagementList(ZxAssetManagement zxAssetManagement);
 
     List<ZxChange> selectZxChangeByAssetId(Long id);
+
+    ZxAssetManagement selectZxAssetManagementById(Long id);
+
+    int updateExtend3(ZxAssetManagement assetManagement);
 }

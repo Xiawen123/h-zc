@@ -109,4 +109,54 @@ public class ZxRepairsController extends BaseController {
         return getDataTable(list);
     }
 
+    /**
+     * 资产报修详情页
+     */
+    @GetMapping("/select/{id}")
+    public String select(@PathVariable("id") Long id, ModelMap mmap)
+    {
+        ZxAssetManagement zxAssetManagement = zxRepairsService.selectZxAssetManagementById(id);
+        mmap.put("zxAssetManagement", zxAssetManagement);
+        return prefix + "/select";
+    }
+
+    /**
+     * 更改状态
+     */
+    @RequiresPermissions("property:repairs:remove")
+    @Log(title = "更改状态", businessType = BusinessType.DELETE)
+    @PostMapping("/xgstate")
+    @ResponseBody
+    public AjaxResult remove(Long id) {
+        ZxAssetManagement management = zxRepairsService.selectZxAssetManagementById(id);
+        String extend3 = management.getExtend3();
+        int i;
+        if(extend3.equals("1")){
+            management.setExtend3("0");
+           i= zxRepairsService.updateExtend3(management);
+        }else if(extend3.equals("0")){
+            management.setExtend3("1");
+           i=zxRepairsService.updateExtend3(management);
+        }else{
+            i=0;
+        }
+
+        return toAjax(i);
+    }
+
+
+    /**
+     * 新增页面展示
+     * @return
+     */
+
+    @RequiresPermissions("property:repairs:add")
+    @GetMapping("/add")
+    public String add()
+    {
+
+        return prefix + "/add";
+    }
+
+
 }
