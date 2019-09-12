@@ -16,10 +16,12 @@ public interface IZxReturnService
 
     List<ZxChange> selectZxReturnList(ZxChange zxChange,String campus);
 
+    /**
+     * 通过id查询详情
+     * @param id
+     * @return
+     */
     ZxAssetManagement selectZxAssetManagementById(Long id);
-
-    /*List<ZxAssetManagement> selectZxAssetManagementList(ZxAssetManagement zxAssetManagement);*/
-
 
     int insertManagementAndChange(ZxChange zxChange, Long[] Ids);
 
@@ -27,5 +29,16 @@ public interface IZxReturnService
 
     List<ZxAssetManagement> selectManagementList(ZxChange zxChange2, ZxAssetManagement zxAssetManagement);
 
-    /*    List<ZxAssetManagement> selectZxAssetManagementsById(String ids);*/
+    /**
+     * 查询退还信息
+     * @param zxChange
+     * @return
+     */
+    List<ZxChange> selectReturnList(ZxChange zxChange);
+
+    /**
+     * 查询在用状态列表
+     * @return
+     */
+    public List<ZxAssetManagement> selectAssetManagementList();
 }

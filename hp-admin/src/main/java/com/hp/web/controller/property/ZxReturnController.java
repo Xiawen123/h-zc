@@ -49,12 +49,7 @@ public class ZxReturnController extends BaseController {
     private IZxChangeService zxChangeService;
     @Autowired
     private ISysDeptService iSysDeptService;
-    @Autowired
-    private ISysDictDataService iSysDictDataService;
 
-
-    @Autowired
-    private ISysUserService iSysUserService;
     /**
      * 页面展示
      * @return
@@ -63,67 +58,22 @@ public class ZxReturnController extends BaseController {
     @GetMapping()
     public String returns()
     {
-
-
         return prefix + "/return";
     }
 
     /**
-     * 数据展示
-     * @param zxAssetManagement
+     * 数据展示(查询退还列表)
+     * @param
      * @return
      */
-
     @RequiresPermissions("property:return:list")
     @PostMapping("/list")
     @ResponseBody
-    public TableDataInfo list(ZxChange zxChange2,ZxAssetManagement zxAssetManagement){
+    public TableDataInfo list(ZxChange zxChange){
         startPage();
-        List<ZxAssetManagement> list = zxReturnService.selectManagementList(zxChange2,zxAssetManagement);
-        SysDept sysDept = new SysDept();
-        List<SysDept> sysDepts = iSysDeptService.selectDeptList(sysDept);
-        //循环存入校区名，存入备用字段5
-        for (ZxAssetManagement zxAssetManagement1:list){
-            for (SysDept sysDept1:sysDepts) {
-                if (zxAssetManagement1.getWarehousingCampus()!=null){
-                    String a=zxAssetManagement1.getWarehousingCampus().toString();
-                    String b=sysDept1.getDeptId().toString();
-                    if (a.equals(b)) {
-                        String c=sysDept1.getDeptName();
-                        zxAssetManagement1.setExtend5(c);}
-                }
-            }
-            Long id = zxAssetManagement1.getId();
-           List<ZxChange> zxChanges= zxReturnService.selectZxChangeById(id);
-           for(ZxChange zxChange:zxChanges){
-               if(zxChange.getExtend1()!=null){ zxAssetManagement1.setExtend1(zxChange.getExtend1());}
-               if(zxChange.getUseDepartment()!=null){
-                   zxAssetManagement1.setExtend2(zxChange.getUseDepartment().toString());
-               }
-               if(zxChange.getUsers()!=null){ zxAssetManagement1.setExtend3(zxChange.getUsers());}
-
-           }
-        }
-
+        List<ZxChange> list = zxReturnService.selectReturnList(zxChange);
         return getDataTable(list);
     }
-
-    /**
-    * SysDept sysDept = new SysDept();
-     *         List<SysDept> sysDepts = iSysDeptService.selectDeptList(sysDept);
-     *         //循环存入校区名，存入备用字段5
-     *         for (ZxAssetManagement zxAssetManagement1:list){
-     *             for (SysDept sysDept1:sysDepts) {
-     *                 if (zxAssetManagement1.getWarehousingCampus()!=null){
-     *                 String a=zxAssetManagement1.getWarehousingCampus().toString();
-     *                 String b=sysDept1.getDeptId().toString();
-     *                 if (a.equals(b)) {
-     *                     String c=sysDept1.getDeptName();
-     *                     zxAssetManagement1.setExtend5(c);}
-     *                 }
-     *             }
-     *         }
-     */
 
     /**
      * 新增页面展示
@@ -137,78 +87,49 @@ public class ZxReturnController extends BaseController {
         if(request.getSession().getAttribute("s")!=null){
             request.getSession().removeAttribute("s");
         }
-
         return prefix + "/add";
     }
 
     /**
      * 新增退还信息
      */
-
     @RequiresPermissions("property:return:add")
     @Log(title = "退还登记", businessType = BusinessType.INSERT)
     @PostMapping("/add")
     @ResponseBody
     public AjaxResult addSave(ZxChange zxChange,ZxAssetManagement zxAssetManagement,HttpServletRequest request)
     {
-
-        String ids =  request.getSession().getAttribute("s").toString();
-        Date returnTime = zxAssetManagement.getReturnTime();
+        //String ids =  request.getSession().getAttribute("s").toString();  //列表id
+        String ids = zxAssetManagement.getIds();
         int i1=0;
-        if (ids!=null&&!ids.equals("")){
-            Set set = new HashSet();
+        if (ids != null && !ids.equals("")){
+            ZxAssetManagement zxone = null;
             String[] split = ids.split(",");
-            for (int i=0;i<split.length;i++){
-                set.add(split[i]);
-            }
-            set.remove("0");
-            set.remove(" ");
-            for(Object id:set) {
-                String s1 = id.toString();
+            for (int i=0; i<split.length; i++){
+                String s1 = split[i].toString();  //获取单个id
                 if (!s1.equals("")) {
-                    ZxAssetManagement zxone = zxAssetManagementService.selectZxAssetManagementById(Long.parseLong(s1));
-                    zxone.setState(1);
-                    zxChange.setAssetsId(Long.parseLong(s1));
+                    zxone = new ZxAssetManagement();  //创建ZxAssetManagement表对象（用于传参）
+                    zxone.setId(Long.parseLong(s1));  //单个id
+                    zxone.setState(1);  //状态（1：闲置，2：在用，3：报废）
+
                     long l = SnowFlake.nextId();
                     zxChange.setId(l);
-                    zxChange.setChangeType(5);
-                    zxChange.setUseDepartment(zxChange.getUseDepartment());
+                    zxChange.setAssetsId(Long.parseLong(s1));
+                    zxChange.setChangeType(7);  //7：退还
+                    zxChange.setUseDepartment(zxChange.getUseDepartment());  //退还部门
 
-                   /* SysUser sysUser = iSysUserService.selectUserByLoginName(ShiroUtils.getLoginName());
-                    String c= iSysDeptService.selectDeptById(sysUser.getDeptId()).getDeptName();
-                    List<SysDictData> zc_department = iSysDictDataService.selectDictDataByType("zc_department");
-                    for (SysDictData sysDictData:zc_department){
-                        if (c.equals(sysDictData.getDictLabel())){
-                            int d=Integer.parseInt(sysDictData.getDictValue());
-                            zxChange.setSubmittedDepartment(d);
-                        }
-                    }*/
+                    SysUser sysUser = ShiroUtils.getSysUser();  //获取用户信息
+                    Long schoolId = sysUser.getDeptId();  //获取部门编号（校区）
+                    zxChange.setExtend5(schoolId);
+                    SimpleDateFormat time = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                    zxChange.setExtend1(time.format(new Date()));  //创建时间
 
-
-                    SysUser sysUser = iSysUserService.selectUserByLoginName(ShiroUtils.getLoginName());
-                    SysDept sysDept = iSysDeptService.selectDeptById(sysUser.getDeptId());
-                    String deptName = sysDept.getDeptName();
-                    List<SysDept> sysDepts = iSysDeptService.selectDeptList(sysDept);
-                    // List<SysDictData> zc_department = iSysDictDataService.selectDictDataByType("zc_department");
-
-                    for (SysDept sysDept1:sysDepts){
-                        if (deptName.equals(sysDept1.getDeptName())){
-                            int d=sysDept1.getParentId().intValue();;
-                            zxChange.setSubmittedDepartment(d);
-                        }
-                    }
-
-                    zxChange.setSubmitOne(ShiroUtils.getLoginName());
-                    zxone.setReturnTime(new Date());
-                    int i = zxChangeService.insertZxChange(zxChange);
-                    System.out.println(i);
-                    i1 = zxAssetManagementService.updateZxAssetManagement(zxone);
-                    System.out.println(i1);
+                    int result = zxChangeService.insertZxChange(zxChange);  //插入退还新的记录
+                    i1 = zxAssetManagementService.updateZxAssetManagement(zxone);  //更改退还后物品状态
                 }
             }
             return toAjax(i1);
         }else{
-
             return toAjax(zxChangeService.insertZxChange(null));
         }
     }
@@ -217,8 +138,6 @@ public class ZxReturnController extends BaseController {
     @GetMapping("/adds")
     public String adds()
     {
-
-
         return prefix + "/adds";
     }
 
@@ -235,13 +154,17 @@ public class ZxReturnController extends BaseController {
     }
 
 
+    /**
+     * 获取在用状态的列表(弹框)
+     * @return
+     */
     @RequiresPermissions("property:return:list")
     @PostMapping("/listss")
     @ResponseBody
-    public TableDataInfo listss(ZxAssetManagement zxAssetManagement)
+    public TableDataInfo listss()
     {
         startPage();
-        List<ZxAssetManagement> list = zxAssetManagementService.selectZxAssetManagementList(zxAssetManagement);
+        List<ZxAssetManagement> list = zxReturnService.selectAssetManagementList();
         return getDataTable(list);
     }
 
@@ -249,38 +172,72 @@ public class ZxReturnController extends BaseController {
     @RequiresPermissions("property:return:list")
     @PostMapping("/lists")
     @ResponseBody
-    public TableDataInfo lists(ZxAssetManagement zxAssetManagement, HttpServletRequest request)
-    {
-        if (zxAssetManagement.getIds()!=null&&!zxAssetManagement.getIds().equals("")){
-            List<ZxAssetManagement> list=new LinkedList<>();
-            String s=zxAssetManagement.getIds();
-            HttpSession session=request.getSession();
-            if(session.getAttribute("s")==null){
-                session.setAttribute("s","0");
-                session.setAttribute("s",session.getAttribute("s")+","+s);
-            }else{
-                session.setAttribute("s",session.getAttribute("s")+","+s);
-            }
-            String spl=session.getAttribute("s").toString();
-            Set set = new HashSet();
-            String[] split =spl.split(",");
-            for (int i=0;i<split.length;i++){
-                set.add(split[i]);
-            }
-            set.remove("0");
-            set.remove(" ");
-            for(Object id:set){
-                String s1 = id.toString();
-                if(!s1.equals("")){
-                    ZxAssetManagement ls = zxAssetManagementService.selectZxAssetManagementById(Long.parseLong(s1));
-                    list.add(ls);
-                }
+    public TableDataInfo lists(ZxAssetManagement zxAssetManagement, HttpServletRequest request) {
+        int num = zxAssetManagement.getNum(); //获取num（用于删除做判断：num=0删除状态,num=-1正常添加状态）
+        if(num == 0){
+            request.getSession().removeAttribute("s");//清空session信息
 
+            if (zxAssetManagement.getIds() != null && !zxAssetManagement.getIds().equals("")){
+                List<ZxAssetManagement> list = new LinkedList<>();
+                String s = zxAssetManagement.getIds(); //获取ids
+                HttpSession session = request.getSession();
+                if(session.getAttribute("s") == null){
+                    session.setAttribute("s","0");
+                    session.setAttribute("s",session.getAttribute("s")+","+s);
+                }else{
+                    session.setAttribute("s",session.getAttribute("s")+","+s);
+                }
+                String spl = session.getAttribute("s").toString();
+                Set set = new HashSet();
+                String[] split = spl.split(",");
+                for (int i=0; i<split.length; i++){
+                    set.add(split[i]);
+                }
+                set.remove("0");
+                set.remove(" ");
+                for(Object id:set){
+                    String s1 = id.toString();
+                    if(!s1.equals("")){
+                        ZxAssetManagement ls = zxAssetManagementService.selectZxAssetManagementById(Long.parseLong(s1));
+                        list.add(ls);
+                    }
+                }
+                return getDataTable(list);
+            }else {
+                List<ZxAssetManagement> list = new LinkedList<>();
+                return getDataTable(list);
             }
-            return getDataTable(list);
         }else {
-            List<ZxAssetManagement> list=new LinkedList<>();
-            return getDataTable(list);
+            if (zxAssetManagement.getIds() != null && !zxAssetManagement.getIds().equals("")){
+                List<ZxAssetManagement> list = new LinkedList<>();
+                String s = zxAssetManagement.getIds();
+                HttpSession session = request.getSession();
+                if(session.getAttribute("s") == null){
+                    session.setAttribute("s","0");
+                    session.setAttribute("s",session.getAttribute("s")+","+s);
+                }else{
+                    session.setAttribute("s",session.getAttribute("s")+","+s);
+                }
+                String spl = session.getAttribute("s").toString();
+                Set set = new HashSet();
+                String[] split = spl.split(",");
+                for (int i=0; i<split.length; i++){
+                    set.add(split[i]);
+                }
+                set.remove("0");
+                set.remove(" ");
+                for(Object id:set){
+                    String s1 = id.toString();
+                    if(!s1.equals("")){
+                        ZxAssetManagement ls = zxAssetManagementService.selectZxAssetManagementById(Long.parseLong(s1));
+                        list.add(ls);
+                    }
+                }
+                return getDataTable(list);
+            }else {
+                List<ZxAssetManagement> list = new LinkedList<>();
+                return getDataTable(list);
+            }
         }
     }
 
@@ -288,7 +245,7 @@ public class ZxReturnController extends BaseController {
      * 删除
      * @param ids
      * @return
-     */
+     *//*
     @RequiresPermissions("property:return:remove")
     @Log(title = "删除", businessType = BusinessType.DELETE)
     @PostMapping("/remove")
@@ -315,7 +272,5 @@ public class ZxReturnController extends BaseController {
         }
 
     }
-
-
-
+*/
 }

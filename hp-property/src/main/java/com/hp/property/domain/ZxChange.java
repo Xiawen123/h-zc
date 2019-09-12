@@ -6,6 +6,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import javax.persistence.Id;
+import java.util.Date;
 
 /**
  * 资产变更对象 zx_change
@@ -45,26 +46,17 @@ public class ZxChange extends BaseEntity
     @Excel(name = "使用人")
     private String users;
 
-    /** $column.columnComment */
-    @Excel(name = "")
+    /** 创建时间 */
     private String extend1;
-
-    /** $column.columnComment */
-    @Excel(name = "")
+    /** 接收人员 */
     private String extend2;
-
-    /** $column.columnComment */
-    @Excel(name = "")
+    /** 存放地点 */
     private String extend3;
-
-    /** $column.columnComment */
-    @Excel(name = "")
+    /** 使用校区 */
     private String extend4;
-
-    /** $column.columnComment */
-    @Excel(name = "")
-    private String extend5;
-
+    /** 校区编号 */
+    private Long extend5;
+    /** 存储退还时间，报废时间等共用字段 */
     private String startTime;
     private String oneTime;
     private String twoTime;
@@ -85,6 +77,28 @@ public class ZxChange extends BaseEntity
     private String  units;
     //编号字符串
     private String ids;
+
+    /** 时间 */
+    private String shareTime;
+
+    /** 校区 */
+    private String deptName;
+
+    public String getDeptName() {
+        return deptName;
+    }
+
+    public void setDeptName(String deptName) {
+        this.deptName = deptName;
+    }
+
+    public String getShareTime() {
+        return shareTime;
+    }
+
+    public void setShareTime(String shareTime) {
+        this.shareTime = shareTime;
+    }
 
     public String getIds() {
         return ids;
@@ -279,12 +293,12 @@ public class ZxChange extends BaseEntity
     {
         return extend4;
     }
-    public void setExtend5(String extend5) 
+    public void setExtend5(Long extend5)
     {
         this.extend5 = extend5;
     }
 
-    public String getExtend5() 
+    public Long getExtend5()
     {
         return extend5;
     }

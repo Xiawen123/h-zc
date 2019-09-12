@@ -85,7 +85,8 @@ public class ZxCampusReceiveController extends BaseController {
                     String b=sysDept1.getDeptId().toString();
                     if (a.equals(b)) {
                         String c=sysDept1.getDeptName();
-                        zxChange1.setExtend5(c);}
+                        //zxChange1.setExtend5(c);
+                    }
                 }
             }
         }

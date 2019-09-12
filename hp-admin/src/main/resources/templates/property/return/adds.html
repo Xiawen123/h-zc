@@ -16,38 +16,23 @@
     <th:block th:include="include :: footer" />
     <th:block th:include="include :: datetimepicker-js" />
     <script th:inline="javascript">
-
-       /* var selectFlag = [[${@permission.hasPermi('property:return:select')}]];*/
-        /* var removeFlag = [[${@permission.hasPermi('system:management:remove')}]];*/
         var prefix = ctx + "property/return";
-        var type=[[${@dict.getType('zc_type')}]]
-        var dept=[[${@dict.getType('zc_department')}]]
-        var unit=[[${@dict.getType('zc_unit')}]]
-       var state=[[${@dict.getType('zc_state')}]]
+        var type=[[${@dict.getType('zc_type')}]];
+        var dept=[[${@dict.getType('zc_department')}]];
+        var unit=[[${@dict.getType('zc_unit')}]];
+        var state=[[${@dict.getType('zc_state')}]];
 
-       $("#form-return-adds").validate({
-           focusCleanup: true
-       });
-
-      /* function submitHandler() {
-           if ($.validate.form()) {
-               $.operate.save(prefix + "/addss", $('#form-return-adds').serialize());
-           }
-       }*/
+        $("#form-return-adds").validate({
+            focusCleanup: true
+        });
 
         $(function() {
             var options = {
                 url: prefix + "/listss",
-               /* createUrl: prefix + "/add",*/
-                /*updateUrl: prefix + "/select/{id}",*/
-                /*removeUrl: prefix + "/remove",
-                exportUrl: prefix + "/export",*/
-                /*detailUrl: prefix+"/select/{id}",*/
                 modalName: "退还登记",
                 columns: [{
-                    title: "选择",
-                    checkbox: true
-                },
+                        checkbox: true
+                    },
                     {
                         field : 'id',
                         title : '资产ID'
@@ -94,8 +79,7 @@
                     {
                         field: 'number',
                         title: '数量'
-                    }
-                    ]
+                    }]
 
             };
             $.table.init(options);
@@ -110,7 +94,7 @@
            // 父页面的方法
            // parent.selectUsers();
            // 父页面的变量
-           parent.$('#ids').val(rows.join());
+           //parent.$('#ids').val(rows.join());
        }
     </script>
 </body>

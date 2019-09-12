@@ -134,6 +134,16 @@ public class ZxAssetManagement extends BaseEntity
     @Excel(name = "")
     private String extend5;
 
+    /** 用于删除时做判断 */
+    private Integer num;
+
+    public Integer getNum() {
+        return num;
+    }
+
+    public void setNum(Integer num) {
+        this.num = num;
+    }
 
     private ZxChange zxChange;
 
@@ -142,6 +152,78 @@ public class ZxAssetManagement extends BaseEntity
     private String startTime;
     private String oneTime;
     private String twoTime;
+
+    /** 共用时间 */
+    private String shareTime;
+
+    public String getShareTime() {
+        return shareTime;
+    }
+
+    public void setShareTime(String shareTime) {
+        this.shareTime = shareTime;
+    }
+
+    /** 部门编号 */
+    private Long useDepartment;
+    /** 退还（使用）人 */
+    private String users;
+    /** 校区名称 */
+    private String deptName;
+    /** 部门名称 */
+    private String departmentName;
+    /** 状态名称 */
+    private String status;
+    /** 入库校区名称 */
+    private String branch;
+
+    public String getBranch() {
+        return branch;
+    }
+
+    public void setBranch(String branch) {
+        this.branch = branch;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public String getDepartmentName() {
+        return departmentName;
+    }
+
+    public void setDepartmentName(String departmentName) {
+        this.departmentName = departmentName;
+    }
+
+    public Long getUseDepartment() {
+        return useDepartment;
+    }
+
+    public void setUseDepartment(Long useDepartment) {
+        this.useDepartment = useDepartment;
+    }
+
+    public String getUsers() {
+        return users;
+    }
+
+    public void setUsers(String users) {
+        this.users = users;
+    }
+
+    public String getDeptName() {
+        return deptName;
+    }
+
+    public void setDeptName(String deptName) {
+        this.deptName = deptName;
+    }
 
     public String getStartTime() {
         return startTime;
