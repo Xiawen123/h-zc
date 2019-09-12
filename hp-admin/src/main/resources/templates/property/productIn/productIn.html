@@ -11,7 +11,7 @@
     <div class="box box-main">
         <div class="box-header">
             <div class="box-title">
-                <i class="fa icon-grid"></i> 组织机构
+                <i class="fa icon-grid"></i> 校区
             </div>
             <div class="box-tools pull-right">
                 <a type="button" class="btn btn-box-tool" href="#" onclick="dept()" title="管理部门"><i class="fa fa-edit"></i></a>
@@ -30,6 +30,8 @@
         <div class="row">
             <div class="col-sm-12 search-collapse">
                 <form id="formId">
+                    <input type="hidden" id="deptId" name="warehousingCampus">
+                    <input type="hidden" id="parentId" name="parentId">
                     <div class="select-list">
                         <ul>
                             <li>
@@ -54,9 +56,9 @@
                             </li>
                             <li>
                                 <p>入库校区：</p>
-                                <select name="extend1" class="form-control m-b" th:with="type=${@dict.getType('zc_department')}">
-                                    <option value="">所有</option>
-                                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+                                <select id="warehousingCampus" name="warehousingCampus" type="text">
+                                    <option th:each="obj,eStat:${school}" th:value="${obj.deptId}"
+                                            th:text="${obj.deptName}"></option>
                                 </select>
                             </li>
                             <li>
@@ -65,8 +67,6 @@
                             </li>
                         </ul>
                     </div>
-                    <input type="hidden" id="deptId" name="warehousingCampus">
-                    <input type="hidden" id="parentId" name="parentId">
                 </form>
             </div>
             <div class="btn-group-sm" id="toolbar" role="group">
