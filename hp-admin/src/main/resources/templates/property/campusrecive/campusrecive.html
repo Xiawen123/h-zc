@@ -13,7 +13,7 @@
         <div class="box box-main">
             <div class="box-header">
                 <div class="box-title">
-                    <i class="fa icon-grid"></i> 组织机构
+                    <i class="fa icon-grid"></i> 校区
                 </div>
                 <div class="box-tools pull-right">
                     <a type="button" class="btn btn-box-tool" href="#" onclick="dept()" title="管理部门"><i class="fa fa-edit"></i></a>
@@ -50,7 +50,10 @@
                                 </li>
                                 <li>
                                     <p>领用校区：</p>
-                                    <input type="text" name="extend4"/>
+                                    <select id="extend4" name="extend4" type="text">
+                                        <option th:each="obj,eStat:${school}" th:value="${obj.deptId}"
+                                                 th:text="${obj.deptName}"></option>
+                                    </select>
                                 </li>
                                 <li>
                                     <p>使用人：</p>
@@ -196,6 +199,7 @@
             type:'date'
             ,range: true
         });
+
     </script>
 </body>
 </html>
