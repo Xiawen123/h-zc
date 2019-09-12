@@ -47,8 +47,11 @@ public class ZxAssetAddController extends BaseController
     private ISysDeptService iSysDeptService;
     @RequiresPermissions("property:productIn:view")
     @GetMapping()
-    public String management()
+    public String management(ModelMap mmap)
     {
+        SysDept sysDept = new SysDept();
+        List<SysDept> sysDepts = iSysDeptService.selectDeptList(sysDept);
+        mmap.put("school",sysDepts);
         return prefix + "/productIn";
     }
     /**
@@ -115,9 +118,13 @@ public class ZxAssetAddController extends BaseController
             zxAssetManagement.setId(SnowFlake.nextId());
             //添加资产编号
             String maxNum = zxAssetManagementService.getMaxNum(zxAssetManagement);
-            String substring = maxNum.substring(8);
-            int aNum = Integer.parseInt(substring);
-            zxAssetManagement.setAssetNum("WHHP -"+zxAssetManagement.getType()+ String.format("%05d",(aNum+1)));
+            if(maxNum != null && !maxNum.equals("")){
+                String substring = maxNum.substring(8);
+                int aNum = Integer.parseInt(substring);
+                zxAssetManagement.setAssetNum("WHHP -"+zxAssetManagement.getType()+ String.format("%05d",(aNum+1)));
+            }else{
+                zxAssetManagement.setAssetNum("WHHP -"+zxAssetManagement.getType()+ String.format("%05d",(1)));
+            }
             //添加入库时间,获取系统现在时间
             zxAssetManagement.setStorageTime(new Date());
             //添加操作人,直接获取登录账户

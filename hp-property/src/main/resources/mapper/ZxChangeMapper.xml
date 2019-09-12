@@ -174,7 +174,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             </if>
             <if test="name != null  and name != ''"> and a.name like concat("%", #{name}, "%")</if>
             <if test="assetNum != null  and assetNum != ''"> and a.asset_num like concat("%",#{assetNum},"%")</if>
-            <if test="extend4 != null and extend4 != '' "> and c.extend4 = #{extend4}</if>
+            <if test="extend4 != null and extend4 != 100 "> and c.extend4 = #{extend4}</if>
             <if test="users != null  and users != ''"> and c.users like concat("%",#{users},"%")</if>
             <if test="extend5 != null and extend5 != '' "> and a.campus = #{extend5}</if>
         </where>

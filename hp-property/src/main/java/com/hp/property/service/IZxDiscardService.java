@@ -16,7 +16,7 @@ public interface IZxDiscardService {
      * @param zxChange
      * @return
      */
-    List<ZxChange> selectZxDiscardList(ZxChange zxChange,String campus);
+    List<ZxChange> selectZxDiscardList(ZxChange zxChange/*,String campus*/);
 
     /**
      * 根据   变更记录id查询详情
