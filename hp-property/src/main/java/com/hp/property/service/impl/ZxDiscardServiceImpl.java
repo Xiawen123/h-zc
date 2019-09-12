@@ -39,12 +39,14 @@ public class ZxDiscardServiceImpl implements IZxDiscardService {
         /*zxChange.setExtend5(campus);*/
         List<ZxChange> changes = zxDiscardMapper.selectZxChangeList(zxChange);
         for (ZxChange change:changes){
-            ZxAssetManagement zxAssetManagement = zxAssetManagementMapper.selectZxAssetManagementById(change.getAssetsId());
-            System.out.println(zxAssetManagement.getWarehousingCampus());
-            if (zxAssetManagement.getWarehousingCampus()!=null) {
-                int z1=zxAssetManagement.getWarehousingCampus();
-                SysDept s= deptMapper.selectDeptById(new Long((long)z1));
-                change.setExtend5(s.getDeptName());
+            if(change.getAssetsId()!=null){
+                ZxAssetManagement zxAssetManagement = zxAssetManagementMapper.selectZxAssetManagementById(change.getAssetsId());
+                System.out.println(zxAssetManagement.getWarehousingCampus());
+                if (zxAssetManagement.getWarehousingCampus()!=null) {
+                    int z1=zxAssetManagement.getWarehousingCampus();
+                    SysDept s= deptMapper.selectDeptById(new Long((long)z1));
+                    change.setExtend5(s.getDeptName());
+                }
             }
         }
         System.out.println(changes);
