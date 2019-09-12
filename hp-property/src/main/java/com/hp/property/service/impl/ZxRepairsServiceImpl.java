@@ -48,4 +48,14 @@ public class ZxRepairsServiceImpl implements IZxRepairsService
     public List<ZxChange> selectZxChangeByAssetId(Long id) {
         return zxRepairsMapper.selectZxChangeByAssetId(id);
     }
+
+    @Override
+    public ZxAssetManagement selectZxAssetManagementById(Long id) {
+        return zxRepairsMapper.selectZxAssetManagementById(id);
+    }
+
+    @Override
+    public int updateExtend3(ZxAssetManagement zxAssetManagement) {
+        return zxRepairsMapper.updateExtend3(zxAssetManagement);
+    }
 }
