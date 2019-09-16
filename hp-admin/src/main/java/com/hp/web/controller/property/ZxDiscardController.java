@@ -78,10 +78,10 @@ public class ZxDiscardController extends BaseController {
     @RequiresPermissions("property:discard:list")
     @PostMapping("/list")
     @ResponseBody
-    public TableDataInfo list(ZxChange zxChange/*,@Param("campus") String campus*/) {
+    public TableDataInfo list(ZxChange zxChange) {
         startPage();
         //调用    zxDiscardService 的 selectZxDiscardList 方法查询报废记录信息列表
-        List<ZxChange> list = zxDiscardService.selectZxDiscardList(zxChange/*,campus*/);
+        List<ZxChange> list = zxDiscardService.selectZxDiscardList(zxChange);
         return getDataTable(list);
     }
 
