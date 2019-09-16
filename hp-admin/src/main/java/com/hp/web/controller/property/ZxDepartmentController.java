@@ -1,5 +1,8 @@
 package com.hp.web.controller.property;
 
+/**
+ * 部门领用控制层
+ */
 import com.hp.common.annotation.Log;
 import com.hp.common.core.controller.BaseController;
 import com.hp.common.core.domain.AjaxResult;
@@ -11,6 +14,7 @@ import com.hp.property.domain.ZxAssetManagement;
 import com.hp.property.domain.ZxChange;
 import com.hp.property.service.IZxAssetManagementService;
 import com.hp.property.service.IZxChangeService;
+import com.hp.system.domain.SysDept;
 import com.hp.system.service.ISysDeptService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,58 +30,52 @@ import java.util.List;
 
 @Controller
 @RequestMapping("/property/department")
-public class ZxBMController extends BaseController {
-    private String prefix="/property/department";
-    @Autowired(required = false)
+public class ZxDepartmentController extends BaseController {
+
+    private String prefix="property/department";
+
+    @Autowired
     private IZxAssetManagementService zxAssetManagementService;
-    @Autowired(required = false)
+
+    @Autowired
     private IZxChangeService zxChangeService;
-    @Autowired(required = false)
-    private ISysDeptService iSysDeptService;
+
+    @Autowired
+    private ISysDeptService deptService;
+
     @RequiresPermissions("property:department:view")
     @GetMapping()
     public String department(){
-        return prefix+"/campusrecive";
+        return prefix+"/department";
     }
-/**
- * 部门修改首页
- */
 
     /**
-     * 查询资产信息列表
+     * 查询部门领用列表
      */
     @RequiresPermissions("property:department:list")
     @PostMapping("/list")
     @ResponseBody
-    public TableDataInfo list(ZxAssetManagement zxAssetManagement)
+    public TableDataInfo list(ZxChange zxChange)
     {
-        ZxChange zxChange=new ZxChange();
-        zxChange.setChangeType(1);
-        List<ZxChange> zxChanges = zxChangeService.selectZxChangeList(zxChange);
         startPage();
-        List<ZxAssetManagement> list =new LinkedList<>();
-        for (ZxChange z:zxChanges){
-            Long id = z.getAssetsId();
-            zxAssetManagement.setId(id);
-            List<ZxAssetManagement> list1 = zxAssetManagementService.seleAll(zxAssetManagement);
-            if (list1!=null&&list1.size()!=0) {
-                list.add(list1.get(0));
-            }
-        }
+        List<ZxChange> list = zxChangeService.selectDeptReceiveList(zxChange);
         return getDataTable(list);
     }
 
     /**
-     * 新增资产信息
+     * 新增部门领用
      */
     @GetMapping("/add")
-    public String add()
+    public String add(ModelMap mmap)
     {
-        return prefix + "/addone";
+        SysDept dept = new SysDept();
+        List<SysDept> deptList = deptService.selectDeptList(dept);
+        mmap.put("deptList", deptList);
+        return prefix + "/add";
     }
 
     /**
-     * 新增保存资产信息
+     * 新增保存部门领用
      */
     @RequiresPermissions("property:department:add")
     @Log(title = "资产信息", businessType = BusinessType.INSERT)
@@ -113,7 +111,7 @@ public class ZxBMController extends BaseController {
     }
 
     /**
-     * 修改资产信息
+     * 部门领用详情
      */
     @GetMapping("/detail/{id}")
     public String edit(@PathVariable("id") Long id, ModelMap mmap)
@@ -122,46 +120,27 @@ public class ZxBMController extends BaseController {
         mmap.put("zxAssetManagement", zxAssetManagement);
         return prefix + "/detail";
     }
-    /**
-     * 添加资产信息
-     */
-    @GetMapping("/zcdd")
-    public String zcdd(){
-        return prefix+"/zcdd";
-    }
 
-    @PostMapping("/xuan")
-    @ResponseBody
-    public AjaxResult xuan(String ids){
-        try {
-            return toAjax(0);
-        } catch (Exception e) {
-            return error(e.getMessage());
-        }
+    /**
+     * 弹框列表（调用页面）
+     */
+    @GetMapping("/assetList")
+    public String assetList(){
+        return prefix+"/list";
     }
 
     /**
-     * 打开小窗口页面
-     *
-     * @return
+     * 资产列表查询
      */
-    @GetMapping("/parent")
-    public String parent()
-    {
-        return prefix + "/zcdd";
-    }
-    /**
-     * 资产详情
-     */
-    @RequiresPermissions("property:department:listooo")
+    @RequiresPermissions("property:department:list")
     @PostMapping("/listooo")
     @ResponseBody
     public TableDataInfo listooo(ZxAssetManagement zxAssetManagement)
     {
-            zxAssetManagement.setState(1);
-            startPage();
-            List<ZxAssetManagement> list = zxAssetManagementService.selectZxAssetManagementList(zxAssetManagement);
-            return getDataTable(list);
+        zxAssetManagement.setState(1);
+        startPage();
+        List<ZxAssetManagement> list = zxAssetManagementService.selectZxAssetManagementList(zxAssetManagement);
+        return getDataTable(list);
     }
 
     @RequiresPermissions("property:department:listsan")
@@ -169,17 +148,17 @@ public class ZxBMController extends BaseController {
     @ResponseBody
     public TableDataInfo listsan(ZxAssetManagement zxAssetManagement, HttpSession httpSession)
     {
-       if (zxAssetManagement.getIds()!=null&&!zxAssetManagement.getIds().equals("")){
-           List<ZxAssetManagement> list=new LinkedList<>();
-           String s=zxAssetManagement.getIds();
+       if (zxAssetManagement.getIds() != null && !zxAssetManagement.getIds().equals("")){
+           List<ZxAssetManagement> list = new LinkedList<>();
+           String s = zxAssetManagement.getIds();
            String[] split = s.split(",");
            String ids = (String)httpSession.getAttribute("ids");
-           if (ids!=null&&!ids.equals("")){
+           if (ids != null && !ids.equals("")){
                String s1 = ids + s;
                String[] split1 = s1.split(",");
                List<String> list1=new ArrayList<>();
                for (int i=0;i<split1.length;i++){
-//如果集合里面没有相同的元素才往里存
+               //如果集合里面没有相同的元素才往里存
                    if(!list1.contains(split1[i])){
                        list1.add(split1[i]);
                    }
@@ -189,7 +168,7 @@ public class ZxBMController extends BaseController {
                httpSession.setAttribute("ids",s);
            }
            for (int i=0;i<split.length;i++){
-               if (split[i]!=null&&!split[i].equals("")) {
+               if (split[i] != null && !split[i].equals("")) {
                    ZxAssetManagement ls = zxAssetManagementService.selectZxAssetManagementById(Long.parseLong(split[i]));
                    list.add(ls);
                }
@@ -200,7 +179,5 @@ public class ZxBMController extends BaseController {
            return getDataTable(list);
        }
     }
-
-
-    }
+}
 

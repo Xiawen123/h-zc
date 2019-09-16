@@ -25,6 +25,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="number"    column="number"    />
         <result property="units"    column="units"    />
         <result property="shareTime"  column="share_time"   />
+        <result property="deptName"     column="dept_name"  />
     </resultMap>
 
     <sql id="selectZxChangeVo">
@@ -174,11 +175,34 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             </if>
             <if test="name != null  and name != ''"> and a.name like concat("%", #{name}, "%")</if>
             <if test="assetNum != null  and assetNum != ''"> and a.asset_num like concat("%",#{assetNum},"%")</if>
-            <if test="extend4 != null and extend4 != 100 "> and c.extend4 = #{extend4}</if>
+            <if test="extend4 != null and extend4 != 100 and extend4 != ''"> and c.extend4 = #{extend4}</if>
             <if test="users != null  and users != ''"> and c.users like concat("%",#{users},"%")</if>
-            <if test="extend5 != null and extend5 != '' "> and a.campus = #{extend5}</if>
         </where>
         ORDER BY c.extend1 DESC
+    </select>
+
+    <!-- 查询部门领用列表 -->
+    <select id="selectDeptReceiveList" parameterType="ZxChange" resultMap="ZxChangeResult">
+        select c.*,am.`name`,am.asset_num,am.type,am.brand,am.asset_specification,am.number,am.units,d.dept_name
+        from zx_change c
+        left join zx_asset_management am on c.assets_id = am.id
+        left join sys_dept d on c.extend3 = d.dept_id
+        <where>
+            c.change_type = 6
+            <if test="name != null  and name != ''"> and am.name like concat('%', #{name}, '%')</if>
+            <if test="assetNum != null  and assetNum != ''"> and am.asset_num like concat('%', #{assetNum}, '%')</if>
+            <if test="useDepartment != null "> and c.use_department = #{useDepartment}</if>
+            <if test="users != null  and users != ''"> and c.users like concat('%', #{users}, '%')</if>
+            <if test="params.beginTime != null and params.beginTime != ''"><!-- 开始时间检索 -->
+                and c.share_time &gt;= #{params.beginTime}
+            </if>
+            <if test="params.endTime != null and params.endTime != ''"><!-- 结束时间检索 -->
+                and c.share_time &lt;= #{params.endTime}
+            </if>
+            <if test="extend5 != null and extend5 != ''"> and c.extend5 = #{extend5}</if>
+            <if test="extend3 != null and extend3 != ''"> and c.extend3 = #{extend3}</if>
+        </where>
+        ORDER BY c.extend1 desc
     </select>
 
 </mapper>

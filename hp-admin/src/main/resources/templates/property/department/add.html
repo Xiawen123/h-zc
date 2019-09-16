@@ -1,27 +1,17 @@
 <!DOCTYPE HTML>
 <html  lang="zh" xmlns:th="http://www.thymeleaf.org">
 <meta charset="utf-8">
-<head th:include="include :: header('添加校区领用登记')"></head>
+<head th:include="include :: header('添加领用登记')"></head>
 <body class="white-bg">
     <div class="wrapper wrapper-content animated fadeInRight ibox-content">
         <form class="form-horizontal m" id="form-campusrecive-add">
+			<input type="hidden" id="ids" name="ids" />
+			<input type="hidden" id="num" name="num" /><!-- 用于删除传参 -->
 
-			<div class="form-group">
-				<label class="col-sm-3 control-label">资源：</label>
-				<div class="col-sm-8">
-					<input type="text" id="ids" name="ids" value="" >
-				</div>
-			</div>
-			<div class="form-group">
-				<label class="col-sm-3 control-label">领用校区：</label>
-				<div class="col-sm-8">
-					<input name="campus"  id="campus" class="form-control" type="text">
-				</div>
-			</div>
 			<div class="form-group">
 				<label class="col-sm-3 control-label">领用部门：</label>
 				<div class="col-sm-8">
-					<select name="department" id="department" class="form-control m-b" th:with="type=${@dict.getType('zc_department')}">
+					<select name="useDepartment" id="useDepartment" class="form-control m-b" th:with="type=${@dict.getType('zc_department')}">
 						<option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
 					</select>
 				</div>
@@ -29,15 +19,29 @@
 			<div class="form-group">
 				<label class="col-sm-3 control-label">领用人员：</label>
 				<div class="col-sm-8">
-					<input name="extend2" id="extend2" class="form-control" type="text">
+					<input name="users" id="users" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-3 control-label">存放地点：</label>
+				<div class="col-sm-8">
+					<!--<input name="extend3"  id="extend3" class="form-control" type="text">-->
+					<select id="extend3" name="extend3" class="form-control" type="text">
+						<option th:each="obj,eStat:${deptList}" th:value="${obj.deptId}"
+								th:text="${obj.deptName}"></option>
+					</select>
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-3 control-label">使用人员：</label>
+				<div class="col-sm-8">
+					<input name="extend2"  id="extend2" class="form-control" type="text">
 				</div>
 			</div>
 			<div class="form-group">
 				<label class="col-sm-3 control-label">领用时间：</label>
 				<div class="col-sm-8">
-					<div class="input-group date">
-						<input type="date" name="recipientsTime" id="recipientsTime" class="form-control">
-					</div>
+					<input name="shareTime" class="form-control" type="text" id="shareTime">
 				</div>
 			</div>
 
@@ -46,7 +50,9 @@
 				<button type="button" class="btn btn-info" onclick="selectUsersToParent()">选择</button>
 				<p id="userids"> </p>
 			</div>
-
+			<a class="btn btn-danger multiple disabled" onclick="del()">
+				<i class="fa fa-remove"></i> 删除
+			</a>
 			<div class="col-sm-12 select-table table-striped">
 				<table id="bootstrap-table" data-mobile-responsive="true"></table>
 			</div>
@@ -54,18 +60,42 @@
 	</div>
     <div th:include="include::footer"></div>
     <script type="text/javascript">
-
 		var prefix = ctx + "property/department";
 
+        //删除
+        function del() {
+            //1.获取选中的行
+            var rows = $.common.isEmpty($.table._option.uniqueId) ? $.table.selectFirstColumns() : $.table.selectColumns($.table._option.uniqueId);
+            if (rows.length == 0) {
+                $.modal.alertWarning("请至少选择一条记录");
+                return;
+            }
+            //2.删除选中的行（可多量删除）
+            $('#bootstrap-table').bootstrapTable('remove', {
+                field:'id',
+                values:rows
+            });
+            //3.获取页面上存在的列表的数据id
+            var allTableData = $('#bootstrap-table').bootstrapTable('getData');
+            var ids = "";
+            for(var i=0; i<allTableData.length; i++){
+                ids = allTableData[i].id +","+ids;
+            }
+
+            //4.赋值
+            $("#ids").val(ids);
+            $("#num").val(0);
+
+            //5.判断是否为空(并且调用方法)
+            if (ids != undefined && ids != null) {
+                getList();
+                $.table.search();
+            }
+        }
 
 		function getList() {
             var options = {
                 url: prefix + "/listsan",
-                createUrl: prefix + "/add",
-                updateUrl: prefix + "/edit/{id}",
-                removeUrl: prefix + "/remove",
-                exportUrl: prefix + "/export",
-                xuanUrl:prefix+"/xuan",
                 modalName: "闲置资产",
                 search: false,
                 showExport: true,
@@ -74,7 +104,7 @@
                 },
                     {
                         field : 'id',
-                        title : '资产id',
+                        title : '资产id'
                     },
                     {
                         field : 'name',
@@ -97,14 +127,13 @@
             $.table.init(options);
         }
         function selectUsersToParent(){
-			var url = prefix + "/parent";
+			var url = prefix + "/assetList";
 			var options = {
 				title: '选择用户',
 				url: url,
 				callBack: doSubmit
 			};
 			$.modal.openOptions(options);
-            //$.modal.open("选择用户", prefix + "/parent");
         }
         function doSubmit(index, layero){
             var body = layer.getChildFrame('body', index);
@@ -112,10 +141,12 @@
                 var ids="";
                 for (var i=0;i<body.find('.selected').length;i++){
                     var data = body.find('.selected')[i];
-                    console.log(data.children[1].innerHTML)
                      ids = data.children[1].innerHTML+","+ids;
                 }
+                //赋值
                 $("#ids").val(ids);
+                $("#num").val(-1);
+
                 //判断是否为空
                 if (ids != undefined && ids != null) {
                     getList();
@@ -128,23 +159,26 @@
         }
 
         function submitHandler() {
-
             //获取资产名称
             var ids = $("#ids").val();
-            var campus = $("#campus").val();
-            var department = $("#department").val();
-            var extend2 = $("#extend2").val();
-            var recipientsTime = $("#recipientsTime").val();
+            var num = $("#num").val();
+            var useDepartment = $("#useDepartment").val();  //领用部门
+            var users = $("#users").val();    //领用人员
+            var extend3 = $("#extend3").val();   //存放地点
+            var extend2 = $("#extend2").val();  //使用人员
+			var shareTime = $("#shareTime").val();   //领用时间
             $.ajax({
                 cache: true,
                 type: "POST",
                 url: prefix + "/add",
                 data: {
                     "ids": ids,
-                    "campus": campus,
-                    "department": department,
+					"num":num,
+                    "useDepartment": useDepartment,
+                    "users": users,
+                    "extend3": extend3,
                     "extend2": extend2,
-                    "recipientsTime": recipientsTime
+                    "shareTime": shareTime
                 },
                 async: false,
                 error: function (request) {
@@ -154,11 +188,13 @@
                     $.operate.successCallback(data);
                 }
             })
-
-
-
         }
 
+        //时间选择器（默认情况下是：yyyy-MM-dd,type:'datetime'是：yyyy-MM-dd HH:mm:ss）
+        laydate.render({
+            elem: '#shareTime'
+            ,trigger: 'click'
+        });
 	</script>
 </body>
 </html>

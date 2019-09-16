@@ -99,14 +99,20 @@ public class ZxReturnController extends BaseController {
     @ResponseBody
     public AjaxResult addSave(ZxChange zxChange,ZxAssetManagement zxAssetManagement,HttpServletRequest request)
     {
-        //String ids =  request.getSession().getAttribute("s").toString();  //列表id
-        String ids = zxAssetManagement.getIds();
+        String ids =  request.getSession().getAttribute("s").toString();  //列表id
+        //String ids = zxAssetManagement.getIds();
         int i1=0;
         if (ids != null && !ids.equals("")){
             ZxAssetManagement zxone = null;
+            Set set = new HashSet();
             String[] split = ids.split(",");
             for (int i=0; i<split.length; i++){
-                String s1 = split[i].toString();  //获取单个id
+                set.add(split[i]);
+            }
+            set.remove("0");
+            set.remove("");
+            for(Object id:set){
+                String s1 = id.toString();  //获取单个id
                 if (!s1.equals("")) {
                     zxone = new ZxAssetManagement();  //创建ZxAssetManagement表对象（用于传参）
                     zxone.setId(Long.parseLong(s1));  //单个id
@@ -194,7 +200,7 @@ public class ZxReturnController extends BaseController {
                     set.add(split[i]);
                 }
                 set.remove("0");
-                set.remove(" ");
+                set.remove("");
                 for(Object id:set){
                     String s1 = id.toString();
                     if(!s1.equals("")){
