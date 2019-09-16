@@ -39,18 +39,24 @@ import java.util.Map;
 public class ZxAssetAddController extends BaseController
 {
     private String prefix = "property/productIn";
+
     @Autowired
     private IZxAssetManagementService zxAssetManagementService;
     @Autowired
     private IZxChangeService zxChangeService;
     @Autowired
     private ISysDeptService iSysDeptService;
+
+    /**
+     * 打开资产信息列表页
+     */
     @RequiresPermissions("property:productIn:view")
     @GetMapping()
     public String management()
     {
         return prefix + "/productIn";
     }
+
     /**
      * 查询资产信息列表
      */
@@ -63,8 +69,8 @@ public class ZxAssetAddController extends BaseController
         List<ZxAssetManagement> list = zxAssetManagementService.selectZxAssetManagementList(zxAssetManagement);
         for (ZxAssetManagement z:list){
             if (z.getCampus()!=null) {
-                int z1=z.getCampus();
-                SysDept s= iSysDeptService.selectDeptById(new Long((long)z1));
+                Integer z1=z.getCampus();
+                SysDept s= iSysDeptService.selectDeptById(z1.longValue());
                 z.setExtend5(s.getDeptName());
             }
         }
@@ -88,11 +94,7 @@ public class ZxAssetAddController extends BaseController
      * 新增资产信息
      */
     @GetMapping("/add")
-    public String add()
-    {
-
-        return prefix + "/add";
-    }
+    public String add() {return prefix + "/add"; }
 
     /**
      * 新增保存资产信息
@@ -103,14 +105,13 @@ public class ZxAssetAddController extends BaseController
     @ResponseBody
     public AjaxResult addSave(ZxAssetManagement zxAssetManagement)
     {
-
             //添加雪花算法 表id
             zxAssetManagement.setId(SnowFlake.nextId());
             //添加资产编号
             String maxNum = zxAssetManagementService.getMaxNum(zxAssetManagement);
             String substring = maxNum.substring(8);
             int aNum = Integer.parseInt(substring);
-            zxAssetManagement.setAssetNum("WHHP -"+zxAssetManagement.getType()+ String.format("%05d",(aNum+1)));
+            zxAssetManagement.setAssetNum("WHHP-"+zxAssetManagement.getType()+ String.format("%05d",(aNum+1)));
             //添加入库时间
             zxAssetManagement.setStorageTime(new Date());
             //添加操作人,直接获取登录账户
@@ -118,13 +119,11 @@ public class ZxAssetAddController extends BaseController
             //添加状态为,默认为闲置状态,字典键值为1
             zxAssetManagement.setState(1);
             //添加入库校区?
-
             zxAssetManagement.setWarehousingCampus(115);
             //添加所在校区
             zxAssetManagement.setCampus(zxAssetManagement.getWarehousingCampus());
             //添加图片url
-            List<Map<String, Object>> list = FastJsonUtils.getJsonToListMap(zxAssetManagement.getPicture().toString());
-            list.get(0).get("img");
+            List<Map<String, Object>> list = FastJsonUtils.getJsonToListMap(zxAssetManagement.getPicture());
             for (int i = 0; i < list.size(); i++) {
                 String a=list.get(i).get("img").toString();
                 String suffix = a.substring(a.indexOf("/")+1,a.indexOf(";"));
