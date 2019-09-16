@@ -131,15 +131,21 @@ public class ZxCampusReceiveController extends BaseController {
 
                 zxChange.setAssetsId(Long.parseLong(split[i]));
                 long l = SnowFlake.nextId();
+                // 在变更表中存入资产id
                 zxChange.setId(l);
+                // 在变更表中存入变动类型为领用
                 zxChange.setChangeType(1);
+                // 在变更表中存入使用部门
                 zxChange.setUseDepartment(zxAssetManagement.getDepartment());
+                // 在变更表中存入使用人
                 zxChange.setUsers(zxAssetManagement.getExtend2());
+                // 在变更表中存入创建时间
                 zxChange.setExtend1(DateString.getString(new Date(),"yyyy-MM-dd HH:mm:ss"));
-                zxChange.setShareTime(zxChange.getShareTime());
-                //在变更表中存入提交人
+                // 在变更表中存入领用时间
+                zxChange.setShareTime(DateString.getString(zxAssetManagement.getRecipientsTime(),"yyyy-MM-dd"));
+                // 在变更表中存入提交人
                 zxChange.setSubmitOne(ShiroUtils.getLoginName());
-                //在变更表中存入提交人所属部门
+                // 在变更表中存入提交人所属部门
                 SysUser sysUser = iSysUserService.selectUserByLoginName(ShiroUtils.getLoginName());
                 String c= iSysDeptService.selectDeptById(sysUser.getDeptId()).getDeptName();
                 List<SysDictData> zc_department = iSysDictDataService.selectDictDataByType("zc_department");
