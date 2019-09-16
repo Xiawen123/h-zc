@@ -72,20 +72,21 @@ public class ZxCampusReceiveController extends BaseController {
     @RequiresPermissions("property:campusrecive:list")
     @PostMapping("/list")
     @ResponseBody
-    public TableDataInfo list(ZxChange zxChange,String campus)
+    public TableDataInfo list(ZxChange zxChange)
     {
+        System.out.println("extend4*******************:" + zxChange.getExtend4());
         startPage();
         // 查询变更表中所有变动类型为1即领用的所有记录
-        List<ZxChange> list = zxChangeService.findAllChangeTypeOne(zxChange,campus);
+        List<ZxChange> list = zxChangeService.findAllChangeTypeOne(zxChange);
 
         SysDept sysDept = new SysDept();
         List<SysDept> sysDepts = iSysDeptService.selectDeptList(sysDept);
 
-        //循环存入校区名，存入备用字段extend5
+        //循环存入校区名，存入备用字段extend4
         for (ZxChange zxChange1:list){
             for (SysDept sysDept1:sysDepts) {
                 if (zxChange1.getExtend4()!=null){
-                    String a=zxChange1.getExtend4().toString();
+                    String a=zxChange1.getExtend4();
                     String b=sysDept1.getDeptId().toString();
                     if (a.equals(b)) {
                         String c=sysDept1.getDeptName();

@@ -81,5 +81,5 @@ public interface IZxChangeService
      * @param zxChange
      * @return
      */
-    List<ZxChange> findAllChangeTypeOne(ZxChange zxChange,String campus);
+    List<ZxChange> findAllChangeTypeOne(ZxChange zxChange);
 }
