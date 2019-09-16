@@ -39,21 +39,24 @@ import java.util.Map;
 public class ZxAssetAddController extends BaseController
 {
     private String prefix = "property/productIn";
+
     @Autowired
     private IZxAssetManagementService zxAssetManagementService;
     @Autowired
     private IZxChangeService zxChangeService;
     @Autowired
     private ISysDeptService iSysDeptService;
+
+    /**
+     * 打开资产信息列表页
+     */
     @RequiresPermissions("property:productIn:view")
     @GetMapping()
-    public String management(ModelMap mmap)
+    public String management()
     {
-        SysDept sysDept = new SysDept();
-        List<SysDept> sysDepts = iSysDeptService.selectDeptList(sysDept);
-        mmap.put("school",sysDepts);
         return prefix + "/productIn";
     }
+
     /**
      * 查询资产信息列表
      */
@@ -64,18 +67,11 @@ public class ZxAssetAddController extends BaseController
     {
         startPage();
         List<ZxAssetManagement> list = zxAssetManagementService.selectZxAssetManagementList(zxAssetManagement);
-        SysDept sysDept = new SysDept();
-        List<SysDept> sysDepts = iSysDeptService.selectDeptList(sysDept);
-        //循环存入校区名，存入备用字段5
-        for (ZxAssetManagement zxAssetManagement1:list){
-            for (SysDept sysDept1:sysDepts) {
-                if (zxAssetManagement1.getWarehousingCampus()!=null){
-                    String a=zxAssetManagement1.getWarehousingCampus().toString();
-                    String b=sysDept1.getDeptId().toString();
-                    if (a.equals(b)) {
-                        String c=sysDept1.getDeptName();
-                        zxAssetManagement1.setExtend5(c);}
-                }
+        for (ZxAssetManagement z:list){
+            if (z.getCampus()!=null) {
+                Integer z1=z.getCampus();
+                SysDept s= iSysDeptService.selectDeptById(z1.longValue());
+                z.setExtend5(s.getDeptName());
             }
         }
         return getDataTable(list);
@@ -98,11 +94,7 @@ public class ZxAssetAddController extends BaseController
      * 新增资产信息
      */
     @GetMapping("/add")
-    public String add()
-    {
-
-        return prefix + "/add";
-    }
+    public String add() {return prefix + "/add"; }
 
     /**
      * 新增保存资产信息
@@ -113,29 +105,25 @@ public class ZxAssetAddController extends BaseController
     @ResponseBody
     public AjaxResult addSave(ZxAssetManagement zxAssetManagement)
     {
-
             //添加雪花算法 表id
             zxAssetManagement.setId(SnowFlake.nextId());
             //添加资产编号
             String maxNum = zxAssetManagementService.getMaxNum(zxAssetManagement);
-            if(maxNum != null && !maxNum.equals("")){
-                String substring = maxNum.substring(8);
-                int aNum = Integer.parseInt(substring);
-                zxAssetManagement.setAssetNum("WHHP -"+zxAssetManagement.getType()+ String.format("%05d",(aNum+1)));
-            }else{
-                zxAssetManagement.setAssetNum("WHHP -"+zxAssetManagement.getType()+ String.format("%05d",(1)));
-            }
-            //添加入库时间,获取系统现在时间
+            String substring = maxNum.substring(8);
+            int aNum = Integer.parseInt(substring);
+            zxAssetManagement.setAssetNum("WHHP-"+zxAssetManagement.getType()+ String.format("%05d",(aNum+1)));
+            //添加入库时间
             zxAssetManagement.setStorageTime(new Date());
             //添加操作人,直接获取登录账户
             zxAssetManagement.setOperator(ShiroUtils.getLoginName());
-            //添加状态,默认为闲置状态,字典键值为1
+            //添加状态为,默认为闲置状态,字典键值为1
             zxAssetManagement.setState(1);
+            //添加入库校区?
+            zxAssetManagement.setWarehousingCampus(115);
             //添加所在校区
             zxAssetManagement.setCampus(zxAssetManagement.getWarehousingCampus());
             //添加图片url
-            List<Map<String, Object>> list = FastJsonUtils.getJsonToListMap(zxAssetManagement.getPicture().toString());
-            list.get(0).get("img");
+            List<Map<String, Object>> list = FastJsonUtils.getJsonToListMap(zxAssetManagement.getPicture());
             for (int i = 0; i < list.size(); i++) {
                 String a=list.get(i).get("img").toString();
                 String suffix = a.substring(a.indexOf("/")+1,a.indexOf(";"));

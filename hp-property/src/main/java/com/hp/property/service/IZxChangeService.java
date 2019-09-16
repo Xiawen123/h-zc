@@ -89,4 +89,5 @@ public interface IZxChangeService
      * @return
      */
     List<ZxChange> selectDeptReceiveList(ZxChange zxChange);
+    List<ZxChange> findAllChangeTypeOne(ZxChange zxChange);
 }

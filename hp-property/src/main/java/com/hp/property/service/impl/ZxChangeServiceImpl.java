@@ -128,8 +128,7 @@ public class ZxChangeServiceImpl implements IZxChangeService
      * @return
      */
     @Override
-    public List<ZxChange> findAllChangeTypeOne(ZxChange zxChange,String campus) {
-        //zxChange.setExtend5(campus);
+    public List<ZxChange> findAllChangeTypeOne(ZxChange zxChange) {
         return zxChangeMapper.selectAllChangeTypeOne(zxChange);
     }
 
