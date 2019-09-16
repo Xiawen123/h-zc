@@ -1,20 +1,16 @@
 package com.hp.property.service.impl;
 
-import com.hp.common.utils.SnowFlake;
 import com.hp.property.domain.ZxAssetManagement;
 import com.hp.property.domain.ZxChange;
-import com.hp.property.mapper.ZxAssetManagementMapper;
-import com.hp.property.mapper.ZxChangeMapper;
 import com.hp.property.mapper.ZxRepairsMapper;
-import com.hp.property.mapper.ZxReturnMapper;
 import com.hp.property.service.IZxRepairsService;
-import com.hp.property.service.IZxReturnService;
+import com.hp.system.mapper.SysDictDataMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 资产报修Service业务层处理
@@ -29,20 +25,9 @@ public class ZxRepairsServiceImpl implements IZxRepairsService
     @Autowired
     private ZxRepairsMapper zxRepairsMapper;
 
-    @Override
-    public List<ZxAssetManagement> selectZxAssetManagementList(ZxAssetManagement zxAssetManagement) {
-       /* ZxChange zxChange = new ZxChange();
-        Date repairTime = zxAssetManagement.getRepairTime();
-        SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        String repairs = sdf.format(repairTime);
-        String useDepartMent = zxAssetManagement.getExtend1();
-        String users = zxAssetManagement.getExtend2();
-        zxChange.setExtend1(repairs);
-        zxChange.setUseDepartment(Integer.valueOf(useDepartMent));
-        zxChange.setUsers(users);
-        List<ZxChange> zxChanges = zxChangeMapper.selectZxChangeList(zxChange);*/
-        return zxRepairsMapper.selectZxAssetManagementList(zxAssetManagement);
-    }
+    @Autowired
+    private SysDictDataMapper sysDictDataMapper;
+
 
     @Override
     public List<ZxChange> selectZxChangeByAssetId(Long id) {
@@ -51,11 +36,47 @@ public class ZxRepairsServiceImpl implements IZxRepairsService
 
     @Override
     public ZxAssetManagement selectZxAssetManagementById(Long id) {
-        return zxRepairsMapper.selectZxAssetManagementById(id);
+        ZxAssetManagement management = zxRepairsMapper.selectZxAssetManagementById(id);
+        System.out.println(management);
+        Long dept= management.getUseDepartment();
+        String department = "";
+        if(!"".equals(dept) && dept != null){
+            department = sysDictDataMapper.selectDictLabel("zc_department",dept.toString());
+        }
+        management.setDepartmentName(department);
+        Integer state = management.getState();
+        String status = "";
+        if(!"".equals(state) && state != null){
+            status = sysDictDataMapper.selectDictLabel("zc_state",state.toString());
+        }
+        management.setStatus(status);
+        return management;
     }
 
     @Override
     public int updateExtend3(ZxAssetManagement zxAssetManagement) {
         return zxRepairsMapper.updateExtend3(zxAssetManagement);
+    }
+
+    @Override
+    public List<ZxChange> selectRepairsList(ZxChange zxChange) {
+
+        String shareTime = zxChange.getShareTime();  //获取范围时间
+        Map<String,Object> param = new HashMap<>();
+        if(shareTime != null && !shareTime.equals("") && shareTime.length() != 0){
+            String[] shareTimeArray = shareTime.split(" ~ ");
+            for(int i=0;i<shareTimeArray.length;i++){
+                System.out.println(shareTimeArray[i]);
+            }
+            param.put("beginTime",shareTimeArray[0]);
+            param.put("endTime",shareTimeArray[1]);
+        }
+        zxChange.setParams(param);
+        return zxRepairsMapper.selectRepairsList(zxChange);
+    }
+
+    @Override
+    public List<ZxAssetManagement> selectAssetManagementList() {
+        return zxRepairsMapper.selectAssetManagementList();
     }
 }
