@@ -29,7 +29,7 @@
 			<div class="form-group">
 				<label class="col-sm-3 control-label">使用部门：</label>
 				<div class="col-sm-8">
-					<select name="useDepartment" id="useDepartment" class="form-control m-b" th:with="type=${@dict.getType('zc_department')}">
+					<select name="useDepartment"  id="useDepartment" class="form-control m-b" th:with="type=${@dict.getType('zc_department')}">
 						<option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
 					</select>
 				</div>
@@ -54,14 +54,14 @@
 					</select>
 				</div>
 			</div>
-			<div class="form-group">
-				<label class="col-sm-3 control-label">转移时间：</label>
-				<div class="col-sm-8">
-					<div class="input-group date">
-						<input type="date" name="extend1" id="extend1" class="form-control">
-					</div>
-				</div>
-			</div>
+<!--			<div class="form-group">-->
+<!--				<label class="col-sm-3 control-label">转移时间：</label>-->
+<!--				<div class="col-sm-8">-->
+<!--					<div class="input-group date">-->
+<!--						<input type="date" name="extend1" id="extend1" class="form-control">-->
+<!--					</div>-->
+<!--				</div>-->
+<!--			</div>-->
 
 			<div class="ibox-content" id="test">
 				<p>请选中你想要转移的资源 </p>
@@ -157,20 +157,25 @@
 
             //获取资产名称
             var ids = $("#ids").val();
-            var campus = $("#campus").val();
-            var department = $("#department").val();
+            var submittedDepartment = $("#submittedDepartment").val();
+            var submitOne = $("#submitOne").val();
+            var useDepartment = $("#useDepartment").val();
+            var users = $("#users").val();
             var extend2 = $("#extend2").val();
-            var recipientsTime = $("#recipientsTime").val();
+            var extend3 = $("#extend3").val();
             $.ajax({
                 cache: true,
                 type: "POST",
                 url: prefix + "/add",
                 data: {
                     "ids": ids,
-                    "campus": campus,
-                    "department": department,
+                    "submittedDepartment": submittedDepartment,
+                    "submitOne": submitOne,
+                    "useDepartment": useDepartment,
                     "extend2": extend2,
-                    "recipientsTime": recipientsTime
+                    "users": users,
+                    "extend3": extend3
+
                 },
                 async: false,
                 error: function (request) {

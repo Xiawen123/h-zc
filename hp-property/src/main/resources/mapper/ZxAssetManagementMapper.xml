@@ -44,7 +44,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <include refid="selectZxAssetManagementVo"/>
         <where>  
             <if test="name != null  and name != ''"> and name like concat('%', #{name}, '%')</if>
-            <if test="assetNum != null  and assetNum != ''"> and asset_num = #{assetNum}</if>
+            <if test="assetNum != null  and assetNum != ''"> and asset_num like concat('%', #{assetNum}, '%')</if>
             <if test="brand != null  and brand != ''"> and brand = #{brand}</if>
             <if test="assetSpecification != null  and assetSpecification != ''"> and asset_specification = #{assetSpecification}</if>
             <if test="number != null "> and number = #{number}</if>
@@ -55,7 +55,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="price != null "> and price = #{price}</if>
             <if test="purchasingTime != null "> and purchasing_time = #{purchasingTime}</if>
             <if test="storageTime != null "> and storage_time = #{storageTime}</if>
-            <if test="warehousingCampus != null "> and warehousing_campus = #{warehousingCampus}</if>
+            <if test="warehousingCampus != null and warehousingCampus != 100"> and warehousing_campus = #{warehousingCampus}</if>
             <if test="state != null "> and state = #{state}</if>
             <if test="operator != null  and operator != ''"> and operator = #{operator}</if>
             <if test="location != null "> and location = #{location}</if>

@@ -19,15 +19,40 @@ public interface ZxReturnMapper
 
     List<ZxChange> selectZxChangeByAssetsId(Long id);
 
+    /**
+     * 查询退还信息
+     * @param zxChange
+     * @return
+     */
+    List<ZxChange> selectReturnList(ZxChange zxChange);
+
+    /**'
+     * 通过id查询详情
+     * @param id
+     * @return
+     */
+    ZxChange selectDetailById(Long id);
+
     List<ZxChange> selectZxAssetManagementList(ZxChange zxChange);
 
+    /**
+     * 通过id查询退还详情
+     * @param id
+     * @return
+     */
     ZxAssetManagement selectZxAssetManagementById(Long id);
 
-    List<ZxAssetManagement> selectZxAssetManagementsList(ZxAssetManagement zxAssetManagement);
+    /**
+     * 查询在用状态列表
+     * @return
+     */
+    List<ZxAssetManagement> selectAssetManagementList();
 
     int updateManagementStateById(Long id);
 
     int insertChange(ZxChange zxChange);
 
-   /* List<ZxAssetManagement> selectZxAssetManagementsByIds(Long[] ids);*/
+    List<ZxAssetManagement> selectManagementList(ZxAssetManagement zxAssetManagement);
+
+    /* List<ZxAssetManagement> selectZxAssetManagementsByIds(Long[] ids);*/
 }

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
 <head>
-    <th:block th:include="include :: header('退还信息列表')" />
+    <th:block th:include="include :: header('报修信息列表')" />
     <script th:src="@{/ajax/libs/laydate/laydate.js}"></script>
     <th:block th:include="include :: layout-latest-css" />
     <th:block th:include="include :: ztree-css" />
@@ -30,15 +30,16 @@
         <div class="row">
             <div class="col-sm-12 search-collapse">
                 <form id="formId">
-                    <input type="hidden" id="deptId" name="extend5">
+                    <input type="hidden" id="deptId" name="campus">
+                    <input type="hidden" id="parentId" name="parentId">
                     <div class="select-list">
                         <ul>
                             <li>
-                                <p>退还日期：</p>
-                                <input type="text" name="shareTime" id="returnTime"/>
+                                <p>报修日期：</p>
+                                <input type="text" name="extend4" id="repairsTime"/>
                             </li>
                             <li>
-                                <p>退还物品：</p>
+                                <p>报修物品：</p>
                                 <input type="text" name="name"/>
                             </li>
                             <li>
@@ -46,15 +47,15 @@
                                 <input type="text" name="assetNum"/>
                             </li>
                             <li>
-                                <p>退还部门：</p>
-                                <select name="useDepartment" th:with="type=${@dict.getType('zc_department')}">
+                                <p>报修部门：</p>
+                                <select name="extend1" th:with="type=${@dict.getType('zc_department')}">
                                     <option value="">请选择部门</option>
                                     <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
                                 </select>
                             </li>
                             <li>
-                                <p>退还人员：</p>
-                                <input type="text" name="users"/>
+                                <p>报修人员：</p>
+                                <input type="text" name="extend2"/>
                             </li>
                             <li>
                                 <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
@@ -66,9 +67,18 @@
             </div>
 
             <div class="btn-group-sm" id="toolbar" role="group">
-                <a class="btn btn-success" onclick="$.operate.addFull()" shiro:hasPermission="property:return:add">
-                    <i class="fa fa-plus"></i> 退还登记
+                <a class="btn btn-success" onclick="$.operate.addFull()" shiro:hasPermission="property:repairs:add">
+                    <i class="fa fa-plus"></i> 资产报修
                 </a>
+               <!-- <a class="btn btn-primary single disabled" onclick="$.operate.edit()" shiro:hasPermission="system:management:edit">
+                    <i class="fa fa-edit"></i> 修改
+                </a>
+                <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()" shiro:hasPermission="system:management:remove">
+                    <i class="fa fa-remove"></i> 删除
+                </a>
+                <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="system:management:export">
+                    <i class="fa fa-download"></i> 导出
+                 </a>-->
             </div>
             <div class="col-sm-12 select-table table-striped">
                 <table id="bootstrap-table" data-mobile-responsive="true"></table>
@@ -81,11 +91,14 @@
      <th:block th:include="include :: ztree-js" />
     <script th:inline="javascript">
 
-       var detailFlag = [[${@permission.hasPermi('property:return:detail')}]];
-       var prefix = ctx + "property/return";
-       var type=[[${@dict.getType('zc_type')}]];
-       var dept=[[${@dict.getType('zc_department')}]];
-       var unit=[[${@dict.getType('zc_unit')}]];
+       var selectFlag = [[${@permission.hasPermi('property:repairs:select')}]];
+       /* var removeFlag = [[${@permission.hasPermi('system:management:remove')}]];*/
+        var prefix = ctx + "property/repairs";
+        var type=[[${@dict.getType('zc_type')}]]
+       var dept=[[${@dict.getType('zc_department')}]]
+       var unit=[[${@dict.getType('zc_unit')}]]
+       var campus=[[${@dict.getType('zc_unit')}]]
+       var state=[[${@dict.getType('zc_state')}]]
 
         $(function() {
             var panehHidden = false;
@@ -100,8 +113,11 @@
             var options = {
                 url: prefix + "/list",
                 createUrl: prefix + "/add",
+                /*updateUrl: prefix + "/select/{id}",*/
+                /*removeUrl: prefix + "/remove",
+                exportUrl: prefix + "/export",*/
                 detailUrl: prefix+"/select/{id}",
-                modalName: "退还登记",
+                modalName: "资产报修",
                 columns: [{
                     checkbox: true
                 },
@@ -111,8 +127,8 @@
                         visible: false
                     },
                     {
-                        field : 'shareTime',
-                        title : '退还时间'
+                        field : 'extend4',
+                        title : '创建时间'
                     },
                     {
                         field : 'assetNum',
@@ -149,36 +165,65 @@
                         }
                     },
                     {
-                        field : 'useDepartment',
-                        title : '退还部门',
+                        field : 'extend1',
+                        title : '报修部门',
                         formatter:function (value, row, index) {
                             return $.table.selectDictLabel(dept,value);
                         }
                     },
                     {
-                        field : 'users',
-                        title : '退还人员'
+                        field : 'extend2',
+                        title : '报修人员'
                     },
                     {
-                        field: 'deptName',
-                        title: '校区'
+                        field : 'extend3',
+                        title : '状态',
+                        formatter:function (value, row, index) {
+                           if(value==1){
+                               return "报修中";
+                           }else if(value==0){
+                               return "未报修";
+                           }
+                        }
                     },
                     {
-                        field : 'extend1',
-                        title : '创建时间'
+                        field: 'extend5',
+                        title: '校区',
+           /* formatter:function (value, row, index) {
+                return $.table.selectDictLabel(dept,value);
+            }*/
                     },
                     {
                         title: '详情',
                         align: 'center',
                         formatter: function(value, row, index) {
                             var actions = [];
-                            actions.push('<a class="btn btn-info btn-xs ' + detailFlag + '" href="#" onclick="$.operate.detail(\'' + row.id + '\')"><i class="fa fa-list-ul"></i>查看</a> ');
+                            actions.push('<a class="btn btn-info btn-xs ' + selectFlag + '" href="javascript:void(0)" onclick="$.operate.detail(\'' + row.id + '\')"><i class="fa fa-list-ul"></i>查看</a> ');
+                            actions.push('<a class="btn btn-danger btn-xs" href="javascript:void(0)" onclick="xgstate(\'' + row.id + '\')"><i class="fa fa-remove"></i>更改状态</a>');
                             return actions.join('');
                         }
                     }]
             };
             $.table.init(options);
         }
+        function xgstate(id) {
+            $.ajax({
+                cache: true,
+                type: "POST",
+                url: prefix + "/xgstate",
+                data: {
+                    "id": id
+                },
+                async: false,
+                error: function (request) {
+                    $.modal.alertError("系统错误");
+                },
+                success: function (data) {
+                    $.modal.alertError("状态修改成功！");
+                }
+        })
+        }
+
        function queryDeptTree()
        {
            var url = ctx + "system/dept/treeData";
@@ -191,17 +236,21 @@
 
            function zOnClick(event, treeId, treeNode) {
                $("#deptId").val(treeNode.id);
+               $("#parentId").val(treeNode.pId);
                $.table.search();
            }
-       }
 
-       //时间选择器
-       laydate.render({
-           elem: '#returnTime'
-           ,trigger: 'click',
-           type:'date'
-           ,range: '~'
-       });
+       }
     </script>
+     <script type="text/javascript">
+         //时间选择器
+         laydate.render({
+             elem: '#repairsTime'
+             ,trigger: 'click',
+             type:'date'
+             ,range: true
+
+         });
+     </script>
 </body>
 </html>

@@ -1,12 +1,16 @@
 <!DOCTYPE HTML>
 <html  lang="zh" xmlns:th="http://www.thymeleaf.org">
 <meta charset="utf-8">
-<head th:include="include :: header('添加校区领用登记')"></head>
+<head>
+	<th:block th:include="include :: header('添加校区领用登记')" />
+	<th:block th:include="include :: datetimepicker-css" />
+	<script th:src="@{/ajax/libs/laydate/laydate.js}"></script>
+</head>
 <body class="white-bg">
 <div class="wrapper wrapper-content animated fadeInRight ibox-content">
 	<form class="form-horizontal m" id="form-campusrecive-add">
 
-		<input type="text" id="ids" name="ids" value="">
+		<input type="text" id="ids" name="ids" value="" style="display: none">
 
 		<div class="form-group">
 			<label class="col-sm-3 control-label">领用校区：</label>
@@ -31,9 +35,7 @@
 		<div class="form-group">
 			<label class="col-sm-3 control-label">领用时间：</label>
 			<div class="col-sm-8">
-				<div class="input-group date">
-					<input type="date" name="recipientsTime" id="recipientsTime" class="form-control">
-				</div>
+				<input name="extend1" class="form-control" type="text" id="recipientsTime">
 			</div>
 		</div>
 
@@ -49,6 +51,7 @@
 	</form>
 </div>
 <div th:include="include::footer"></div>
+<th:block th:include="include :: datetimepicker-js" />
 <script type="text/javascript">
 
     var prefix = ctx + "property/campusrecive";
@@ -155,6 +158,12 @@
             }
         })
     }
+
+    //时间选择器
+    laydate.render({
+        elem: '#recipientsTime'
+        ,trigger: 'click'
+    });
 </script>
 </body>
 </html>

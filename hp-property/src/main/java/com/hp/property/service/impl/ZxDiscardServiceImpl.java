@@ -25,9 +25,9 @@ public class ZxDiscardServiceImpl implements IZxDiscardService {
      * @return
      */
     @Override
-    public List<ZxChange> selectZxDiscardList(ZxChange zxChange,String campus) {
+    public List<ZxChange> selectZxDiscardList(ZxChange zxChange/*,String campus*/) {
         zxChange.setChangeType(4);
-        zxChange.setExtend5(campus);
+        //zxChange.setExtend5(campus);
         System.out.println(zxChange.toString());
         List<ZxChange> changes = zxDiscardMapper.selectZxChangeList(zxChange);
         return changes;
