@@ -205,7 +205,7 @@ public class ZxAssetManagementController extends BaseController
      */
 
     @GetMapping("/oneChangee/{id}")
-    public String oneChangee(@PathVariable("id") Integer id, ModelMap mmap)
+    public String oneChangee(@PathVariable("id") Long id, ModelMap mmap)
     {
 
         mmap.put("id",id);
