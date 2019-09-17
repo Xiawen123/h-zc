@@ -36,7 +36,7 @@ public interface ZxReturnMapper
     List<ZxChange> selectZxAssetManagementList(ZxChange zxChange);
 
     /**
-     * 通过id查询退还详情
+     * 通过id查询详情
      * @param id
      * @return
      */

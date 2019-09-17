@@ -102,4 +102,5 @@ public interface ZxAssetManagementMapper extends BaseMapper<ZxAssetManagement>
      */
     List<ZxAssetManagement> selectZxAssetManagementListById(ZxAssetManagement zxAssetManagement);
 
+    int getCountByType(String type);
 }

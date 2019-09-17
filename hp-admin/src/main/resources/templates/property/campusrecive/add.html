@@ -59,6 +59,8 @@
 
 
     var prefix = ctx + "property/campusrecive";
+    var unit=[[${@dict.getType('zc_unit')}]];
+    var state=[[${@dict.getType('zc_state')}]];
 
 
     // 获取列表
@@ -97,11 +99,17 @@
                 },
                 {
                     field : 'units',
-                    title : '单位'
+                    title : '单位',
+                    formatter:function (value, row, index) {
+                        return $.table.selectDictLabel(unit,value);
+                    }
                 },
                 {
                     field : 'state',
-                    title : '资产状态'
+                    title : '资产状态',
+                    formatter:function (value, row, index) {
+                        return $.table.selectDictLabel(state,value);
+                    }
 
                 }
 			]
@@ -138,17 +146,6 @@
             $.table.search();
         }
     }
-
-   /* $("#form-campusrecive-add").validate({
-        focusCleanup: true
-    });
-
-    //保存信息
-    function submitHandler() {
-        if ($.validate.form()) {
-            $.operate.save(prefix + "/add", $('#form-campusrecive-add').serialize());
-        }
-    }*/
 
     // 选择闲置资产（弹框）
     function selectUsersToParent(){

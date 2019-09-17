@@ -6,7 +6,6 @@ import com.hp.common.core.domain.AjaxResult;
 import com.hp.common.core.page.TableDataInfo;
 import com.hp.common.enums.BusinessType;
 import com.hp.common.utils.FastJsonUtils;
-import com.hp.common.utils.SnowFlake;
 import com.hp.common.utils.poi.ExcelUtil;
 import com.hp.framework.util.ShiroUtils;
 import com.hp.property.domain.ZxAssetManagement;
@@ -24,7 +23,6 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Base64;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -68,8 +66,8 @@ public class ZxAssetAddController extends BaseController
         startPage();
         List<ZxAssetManagement> list = zxAssetManagementService.selectZxAssetManagementList(zxAssetManagement);
         for (ZxAssetManagement z:list){
-            if (z.getCampus()!=null) {
-                Integer z1=z.getCampus();
+            if (z.getWarehousingCampus()!=null) {
+                Integer z1=z.getWarehousingCampus();
                 SysDept s= iSysDeptService.selectDeptById(z1.longValue());
                 z.setExtend5(s.getDeptName());
             }
@@ -105,34 +103,27 @@ public class ZxAssetAddController extends BaseController
     @ResponseBody
     public AjaxResult addSave(ZxAssetManagement zxAssetManagement)
     {
-            //添加雪花算法 表id
-            zxAssetManagement.setId(SnowFlake.nextId());
-            //添加资产编号
-            String maxNum = zxAssetManagementService.getMaxNum(zxAssetManagement);
-            String substring = maxNum.substring(8);
-            int aNum = Integer.parseInt(substring);
-            zxAssetManagement.setAssetNum("WHHP-"+zxAssetManagement.getType()+ String.format("%05d",(aNum+1)));
-            //添加入库时间
-            zxAssetManagement.setStorageTime(new Date());
             //添加操作人,直接获取登录账户
             zxAssetManagement.setOperator(ShiroUtils.getLoginName());
             //添加状态为,默认为闲置状态,字典键值为1
             zxAssetManagement.setState(1);
-            //添加入库校区?
-            zxAssetManagement.setWarehousingCampus(115);
-            //添加所在校区
-            zxAssetManagement.setCampus(zxAssetManagement.getWarehousingCampus());
+            //添加入库校区
+            zxAssetManagement.setWarehousingCampus(ShiroUtils.getSysUser().getDeptId().intValue());
             //添加图片url
-            List<Map<String, Object>> list = FastJsonUtils.getJsonToListMap(zxAssetManagement.getPicture());
-            for (int i = 0; i < list.size(); i++) {
-                String a=list.get(i).get("img").toString();
-                String suffix = a.substring(a.indexOf("/")+1,a.indexOf(";"));
-                CloudStorageService storage = OSSFactory.build();
-                String str = a.substring(a.indexOf(",") + 1, a.length());
-                byte[] bytes = Base64.getDecoder().decode(str);
-                String url = storage.uploadSuffix(bytes, "." + suffix);
-                zxAssetManagement.setPicture(url);
+            if (zxAssetManagement.getPicture() != null){
+                List<Map<String, Object>> list = FastJsonUtils.getJsonToListMap(zxAssetManagement.getPicture());
+                for (int i = 0; i < list.size(); i++) {
+                    String a=list.get(i).get("img").toString();
+                    String suffix = a.substring(a.indexOf("/")+1,a.indexOf(";"));
+                    CloudStorageService storage = OSSFactory.build();
+                    String str = a.substring(a.indexOf(",") + 1, a.length());
+                    byte[] bytes = Base64.getDecoder().decode(str);
+                    String url = storage.uploadSuffix(bytes, "." + suffix);
+                    zxAssetManagement.setPicture(url);
+                }
             }
+
+
         return toAjax(zxAssetManagementService.insertZxAssetManagement(zxAssetManagement));
     }
 
