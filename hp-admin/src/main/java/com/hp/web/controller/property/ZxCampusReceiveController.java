@@ -197,7 +197,7 @@ public class ZxCampusReceiveController extends BaseController {
 
         // 带条件查询所有
         startPage();
-        List<ZxAssetManagement> list = zxAssetManagementService.findAllStateOne(zxAssetManagement);
+        List<ZxAssetManagement> list = zxAssetManagementService.selectZxAssetManagementList(zxAssetManagement);
         return getDataTable(list);
     }
 
