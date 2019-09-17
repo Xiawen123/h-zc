@@ -85,4 +85,6 @@ public interface IZxAssetManagementService
     List<ZxAssetManagement> selectZxAssetManagementListById(ZxAssetManagement zxAssetManagement);
 
      String getMaxNum(ZxAssetManagement zxAssetManagement);
+
+     int getCountByType(String type);
 }

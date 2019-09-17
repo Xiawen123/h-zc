@@ -338,4 +338,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             AND `campus` like concat('%',#{campus},'%')
         </if>
     </select>
+
+    <select id="getCountByType" resultType="int">
+        select count(*) from zx_asset_management where type = #{type}
+    </select>
 </mapper>
