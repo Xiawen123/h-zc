@@ -15,7 +15,11 @@
 		<div class="form-group">
 			<label class="col-sm-3 control-label">领用校区：</label>
 			<div class="col-sm-8">
-				<input name="extend4" id="extend4" class="form-control" type="text">
+				<!--<input name="extend4" id="extend4" class="form-control" type="text">-->
+				<select id="extend4" name="extend4" type="text" class="form-control" >
+					<option th:each="obj,eStat:${school}" th:value="${obj.deptId}"
+							th:text="${obj.deptName}"></option>
+				</select>
 			</div>
 		</div>
 		<div class="form-group">
@@ -59,6 +63,8 @@
 
 
     var prefix = ctx + "property/campusrecive";
+    var unit=[[${@dict.getType('zc_unit')}]];
+    var state=[[${@dict.getType('zc_state')}]];
 
 
     // 获取列表
@@ -97,11 +103,17 @@
                 },
                 {
                     field : 'units',
-                    title : '单位'
+                    title : '单位',
+                    formatter:function (value, row, index) {
+                        return $.table.selectDictLabel(unit,value);
+                    }
                 },
                 {
                     field : 'state',
-                    title : '资产状态'
+                    title : '资产状态',
+                    formatter:function (value, row, index) {
+                        return $.table.selectDictLabel(state,value);
+                    }
 
                 }
 			]
@@ -138,17 +150,6 @@
             $.table.search();
         }
     }
-
-   /* $("#form-campusrecive-add").validate({
-        focusCleanup: true
-    });
-
-    //保存信息
-    function submitHandler() {
-        if ($.validate.form()) {
-            $.operate.save(prefix + "/add", $('#form-campusrecive-add').serialize());
-        }
-    }*/
 
     // 选择闲置资产（弹框）
     function selectUsersToParent(){

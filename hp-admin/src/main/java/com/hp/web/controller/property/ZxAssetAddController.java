@@ -6,7 +6,6 @@ import com.hp.common.core.domain.AjaxResult;
 import com.hp.common.core.page.TableDataInfo;
 import com.hp.common.enums.BusinessType;
 import com.hp.common.utils.FastJsonUtils;
-import com.hp.common.utils.SnowFlake;
 import com.hp.common.utils.poi.ExcelUtil;
 import com.hp.framework.util.ShiroUtils;
 import com.hp.property.domain.ZxAssetManagement;
@@ -24,7 +23,6 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Base64;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -68,8 +66,8 @@ public class ZxAssetAddController extends BaseController
         startPage();
         List<ZxAssetManagement> list = zxAssetManagementService.selectZxAssetManagementList(zxAssetManagement);
         for (ZxAssetManagement z:list){
-            if (z.getCampus()!=null) {
-                Integer z1=z.getCampus();
+            if (z.getWarehousingCampus()!=null) {
+                Integer z1=z.getWarehousingCampus();
                 SysDept s= iSysDeptService.selectDeptById(z1.longValue());
                 z.setExtend5(s.getDeptName());
             }
