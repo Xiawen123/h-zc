@@ -26,10 +26,12 @@
 			<div class="form-group">
 				<label class="col-sm-3 control-label">存放地点：</label>
 				<div class="col-sm-8">
-					<!--<input name="extend3"  id="extend3" class="form-control" type="text">-->
-					<select id="extend3" name="extend3" class="form-control" type="text">
+					<!--<select id="extend3" name="extend3" class="form-control" type="text">
 						<option th:each="obj,eStat:${deptList}" th:value="${obj.deptId}"
 								th:text="${obj.deptName}"></option>
+					</select>-->
+					<select name="extend3" id="extend3" class="form-control m-b" th:with="type=${@dict.getType('zc_location')}">
+						<option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
 					</select>
 				</div>
 			</div>

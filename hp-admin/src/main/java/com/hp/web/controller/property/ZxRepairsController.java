@@ -193,10 +193,10 @@ public class ZxRepairsController extends BaseController {
     @RequiresPermissions("property:return:list")
     @PostMapping("/listss")
     @ResponseBody
-    public TableDataInfo listss()
+    public TableDataInfo listss(ZxAssetManagement zxAssetManagement)
     {
         startPage();
-        List<ZxAssetManagement> list = zxRepairsService.selectAssetManagementList();
+        List<ZxAssetManagement> list = zxRepairsService.selectAssetManagementList(zxAssetManagement);
         return getDataTable(list);
     }
 

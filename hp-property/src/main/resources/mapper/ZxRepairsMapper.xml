@@ -84,7 +84,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         ON c.extend5 = d.dept_id
         <where>
             <if test="name != null  and name != ''"> and a.name like concat('%', #{name}, '%')</if>
-            <if test="assetNum != null  and assetNum != ''"> and a.asset_num = #{assetNum}</if>
+            <if test="assetNum != null  and assetNum != ''"> and a.asset_num like concat('%', #{assetNum}, '%')</if>
             <if test="useDepartment != null "> and c.use_department = #{useDepartment}</if>
             <if test="users != null  and users != ''"> and c.users like concat('%', #{users}, '%')</if>
             <if test="params.beginTime != null and params.beginTime != ''"><!-- 开始时间检索 -->
@@ -130,9 +130,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </update>
 
 
-
-    <select id="selectAssetManagementList" resultMap="ZxAssetManagementResult">
+<select id="selectAssetManagementList" parameterType="ZxAssetManagement" resultMap="ZxAssetManagementResult">
         select * from zx_asset_management where state in (1,2) and extend3='0'
+        <if test="name != null  and name != ''"> and name like concat('%', #{name}, '%')</if>
     </select>
 
 </mapper>

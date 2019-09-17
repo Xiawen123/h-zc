@@ -104,8 +104,11 @@ public class ZxCampusReceiveController extends BaseController {
      * 新增资产信息
      */
     @GetMapping("/add")
-    public String add()
+    public String add(ModelMap mmap)
     {
+        SysDept sysDept = new SysDept();
+        List<SysDept> sysDepts = iSysDeptService.selectDeptList(sysDept);
+        mmap.put("school",sysDepts);
         return prefix + "/add";
     }
 
@@ -194,7 +197,7 @@ public class ZxCampusReceiveController extends BaseController {
 
         // 带条件查询所有
         startPage();
-        List<ZxAssetManagement> list = zxAssetManagementService.findAllStateOne(zxAssetManagement);
+        List<ZxAssetManagement> list = zxAssetManagementService.selectZxAssetManagementList(zxAssetManagement);
         return getDataTable(list);
     }
 

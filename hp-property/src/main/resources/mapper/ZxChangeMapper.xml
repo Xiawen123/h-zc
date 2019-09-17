@@ -163,7 +163,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     <!--查询变动类型为1,即领用的所有信息-->
     <select id="selectAllChangeTypeOne" resultMap="ZxChangeResult" parameterType="ZxChange">
-        SELECT a.id,c.extend1,a.asset_num,a.name,a.type,a.brand,a.asset_specification,a.number,a.units,c.extend4,c.use_department,c.users
+        SELECT a.id,c.share_time,a.asset_num,a.name,a.type,a.brand,a.asset_specification,a.number,a.units,c.extend4,c.use_department,c.users,c.extend1
         FROM `zx_change` c
         LEFT join `zx_asset_management` a
         ON c.assets_id= a.id
@@ -186,7 +186,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         select c.*,am.`name`,am.asset_num,am.type,am.brand,am.asset_specification,am.number,am.units,d.dept_name
         from zx_change c
         left join zx_asset_management am on c.assets_id = am.id
-        left join sys_dept d on c.extend3 = d.dept_id
+        left join sys_dept d on c.extend5 = d.dept_id
         <where>
             c.change_type = 6
             <if test="name != null  and name != ''"> and am.name like concat('%', #{name}, '%')</if>

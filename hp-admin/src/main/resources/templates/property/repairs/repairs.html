@@ -30,7 +30,7 @@
         <div class="row">
             <div class="col-sm-12 search-collapse">
                 <form id="formId">
-                    <input type="hidden" id="deptId" name="campus">
+                    <input type="hidden" id="deptId" name="extend5">
                     <input type="hidden" id="parentId" name="parentId">
                     <div class="select-list">
                         <ul>
@@ -182,7 +182,7 @@
                            if(value==1){
                                return "报修中";
                            }else if(value==0){
-                               return "未报修";
+                               return "已完成";
                            }
                         }
                     },
@@ -208,22 +208,27 @@
             $.table.init(options);
         }
         function xgstate(id) {
-            $.ajax({
-                cache: true,
-                type: "POST",
-                url: prefix + "/xgstate",
-                data: {
-                    "id": id
-                },
-                async: false,
-                error: function (request) {
-                    $.modal.alertError("系统错误");
-                },
-                success: function (data) {
-                    $.table.search();
-                    $.modal.alertError("状态修改成功！");
-                }
-        })
+            var r=confirm("确认修改该状态吗？");
+            if(r==true){
+                $.ajax({
+                    cache: true,
+                    type: "POST",
+                    url: prefix + "/xgstate",
+                    data: {
+                        "id": id
+                    },
+                    async: false,
+                    error: function (request) {
+                        $.modal.alertError("系统错误");
+                    },
+                    success: function (data) {
+                        $.table.search();
+
+                    }
+                })
+            }
+
+
         }
 
        function queryDeptTree()
