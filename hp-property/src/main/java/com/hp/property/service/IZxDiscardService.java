@@ -12,18 +12,11 @@ public interface IZxDiscardService {
 
     /**
      * 查询报废信息列表
-     *
      * @param zxChange
      * @return
      */
-    List<ZxChange> selectZxDiscardList(ZxChange zxChange);
+    List<ZxChange> selectDiscardList(ZxChange zxChange);
 
-    /**
-     * 根据   变更记录id查询详情
-     * @param id
-     * @return
-     */
-    ZxChange selectDiscardChangeById(Long id);
 
     /**
      * 查询未报废的资产
@@ -32,4 +25,12 @@ public interface IZxDiscardService {
      * @return
      */
     List<ZxAssetManagement> selectZxNoDiscardList(ZxAssetManagement zxAssetManagement);
+
+
+    /**
+     * 通过id查询详情
+     * @param id
+     * @return
+     */
+    ZxAssetManagement selectZxAssetManagementById(Long id);
 }

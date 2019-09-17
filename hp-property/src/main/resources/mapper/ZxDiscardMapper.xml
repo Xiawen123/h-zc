@@ -4,8 +4,32 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.hp.property.mapper.ZxDiscardMapper">
 
+    <resultMap type="ZxChange" id="ZxChangeResult">
+        <id property="id"    column="id"    />
+        <result property="assetsId"    column="assets_id"    />
+        <result property="changeType"    column="change_type"    />
+        <result property="submittedDepartment"    column="submitted_department"    />
+        <result property="submitOne"    column="submit_one"    />
+        <result property="useDepartment"    column="use_department"    />
+        <result property="users"    column="users"    />
+        <result property="extend1"    column="extend1"    />
+        <result property="extend2"    column="extend2"    />
+        <result property="extend3"    column="extend3"    />
+        <result property="extend4"    column="extend4"    />
+        <result property="extend5"    column="extend5"    />
+        <result property="assetNum"    column="asset_num"    />
+        <result property="name"    column="name"    />
+        <result property="type"    column="type"    />
+        <result property="brand"    column="brand"    />
+        <result property="assetSpecification"    column="asset_specification"    />
+        <result property="number"    column="number"    />
+        <result property="units"    column="units"    />
+        <result property="shareTime"  column="share_time"   />
+        <result property="deptName"     column="dept_name"  />
+    </resultMap>
+
     <resultMap type="ZxAssetManagement" id="ZxAssetManagementResult">
-        <result property="id"    column="id"    />
+        <id property="id"    column="id"    />
         <result property="name"    column="name"    />
         <result property="assetNum"    column="asset_num"    />
         <result property="brand"    column="brand"    />
@@ -34,31 +58,12 @@
         <result property="extend3"    column="extend3"    />
         <result property="extend4"    column="extend4"    />
         <result property="extend5"    column="extend5"    />
+        <result property="shareTime"  column="share_time"   />
+        <result property="useDepartment"    column="use_department"    />
+        <result property="users"    column="users"    />
+        <result property="deptName"     column="dept_name"  />
+        <result property="branch"     column="branch"   />
     </resultMap>
-
-
-    <resultMap type="ZxChange" id="ZxChangeResult">
-    <result property="id"    column="id"    />
-    <result property="assetsId"    column="assets_id"    />
-    <result property="changeType"    column="change_type"    />
-    <result property="submittedDepartment"    column="submitted_department"    />
-    <result property="submitOne"    column="submit_one"    />
-    <result property="useDepartment"    column="use_department"    />
-    <result property="users"    column="users"    />
-    <result property="extend1"    column="extend1"    />
-    <result property="extend2"    column="extend2"    />
-    <result property="extend3"    column="extend3"    />
-    <result property="extend4"    column="extend4"    />
-    <result property="extend5"    column="extend5"    />
-
-    <result property="assetNum"    column="asset_num"    />
-    <result property="name"    column="name"    />
-    <result property="type"    column="type"    />
-    <result property="brand"    column="brand"    />
-    <result property="assetSpecification"    column="asset_specification"    />
-    <result property="number"    column="number"    />
-    <result property="units"    column="units"    />
-</resultMap>
 
 
 
@@ -106,30 +111,26 @@
     </select>
 
     <!--查询变更类型为报废（4）的变更记录-->
-    <select id="selectZxChangeList" parameterType="ZxChange" resultMap="ZxChangeResult">
-        SELECT c.*, a.asset_num, a.name, a.type, a.brand, a.asset_specification, a.number, a.units
-        FROM zx_change c
-        LEFT join zx_asset_management a ON c.assets_id= a.id
-        where c.change_type=#{changeType}
-        <if test="extend1 != null   and extend1 != ''">
-            and date_format(c.extend1,'%y%m%d') &gt;= date_format(SUBSTR(#{extend1} FROM 1 FOR 10),'%y%m%d')
-        </if>
-        <if test="extend1 != null   and extend1 != ''">
-            and date_format(c.extend1,'%y%m%d') &lt;= date_format(SUBSTR(#{extend1} FROM 14 FOR 10),'%y%m%d')
-        </if>
-        <if test="name != null   and name != ''">
-            AND a.name like concat('%', #{name}, '%')
-        </if>
-        <if test="useDepartment != null  and useDepartment != ''">
-            and c.use_department = #{useDepartment}
-        </if>
-        <if test="users != null   and users != ''">
-            AND c.users like concat('%', #{users}, '%')
-        </if>
-        <if test="extend5 != null   and extend5 != ''">
-            AND a.warehousing_campus like concat('%', #{extend5}, '%')
-        </if>
-        ORDER BY c.extend1 DESC
+    <select id="selectChangeList" parameterType="ZxChange" resultMap="ZxChangeResult">
+        select c.*,am.`name`,am.asset_num,am.type,am.brand,am.asset_specification,am.number,am.units,d.dept_name
+        from zx_change c
+        left join zx_asset_management am on c.assets_id = am.id
+        left join sys_dept d on c.extend5 = d.dept_id
+        <where>
+            c.change_type = 4
+            <if test="name != null  and name != ''"> and am.name like concat('%', #{name}, '%')</if>
+            <!--<if test="assetNum != null  and assetNum != ''"> and am.asset_num like concat('%', #{assetNum}, '%')</if>-->
+            <if test="useDepartment != null "> and c.use_department = #{useDepartment}</if>
+            <if test="users != null  and users != ''"> and c.users like concat('%', #{users}, '%')</if>
+            <if test="params.beginTime != null and params.beginTime != ''"><!-- 开始时间检索 -->
+                and c.share_time &gt;= #{params.beginTime}
+            </if>
+            <if test="params.endTime != null and params.endTime != ''"><!-- 结束时间检索 -->
+                and c.share_time &lt;= #{params.endTime}
+            </if>
+            <if test="extend5 != null and extend5 != ''"> and c.extend5 = #{extend5}</if>
+        </where>
+        ORDER BY c.extend1 desc
     </select>
 
     <!--查询未报废的资产信息-->
@@ -140,11 +141,13 @@
         </where>
     </select>
 
-    <!--根据变更记录id去查询变更详情-->
-    <select id="selectDiscardChangeById" parameterType="Long" resultMap="ZxChangeResult">
-        SELECT c.*, a.asset_num, a.name, a.type, a.brand, a.asset_specification, a.number, a.units
-        FROM zx_change c
-        LEFT join zx_asset_management a ON c.assets_id= a.id
+    <!-- 通过id查询报废详情 -->
+    <select id="selectZxAssetManagementById" parameterType="Long" resultMap="ZxAssetManagementResult">
+        select c.share_time,c.use_department,c.users,am.*,d.dept_name,dept.dept_name branch
+        from zx_change c
+        left join zx_asset_management am on c.assets_id = am.id
+        left join sys_dept d on c.extend5 = d.dept_id
+		left join sys_dept dept on dept.dept_id = am.warehousing_campus
         where c.id = #{id}
     </select>
 </mapper>
