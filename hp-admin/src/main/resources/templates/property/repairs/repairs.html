@@ -36,7 +36,7 @@
                         <ul>
                             <li>
                                 <p>报修日期：</p>
-                                <input type="text" name="extend4" id="repairsTime"/>
+                                <input type="text" name="shareTime" id="repairsTime"/>
                             </li>
                             <li>
                                 <p>报修物品：</p>
@@ -48,14 +48,14 @@
                             </li>
                             <li>
                                 <p>报修部门：</p>
-                                <select name="extend1" th:with="type=${@dict.getType('zc_department')}">
+                                <select name="useDepartment" th:with="type=${@dict.getType('zc_department')}">
                                     <option value="">请选择部门</option>
                                     <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
                                 </select>
                             </li>
                             <li>
                                 <p>报修人员：</p>
-                                <input type="text" name="extend2"/>
+                                <input type="text" name="users"/>
                             </li>
                             <li>
                                 <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
@@ -127,8 +127,8 @@
                         visible: false
                     },
                     {
-                        field : 'extend4',
-                        title : '创建时间'
+                        field : 'shareTime',
+                        title : '报修时间'
                     },
                     {
                         field : 'assetNum',
@@ -165,14 +165,14 @@
                         }
                     },
                     {
-                        field : 'extend1',
+                        field : 'useDepartment',
                         title : '报修部门',
                         formatter:function (value, row, index) {
                             return $.table.selectDictLabel(dept,value);
                         }
                     },
                     {
-                        field : 'extend2',
+                        field : 'users',
                         title : '报修人员'
                     },
                     {
@@ -187,11 +187,12 @@
                         }
                     },
                     {
-                        field: 'extend5',
+                        field: 'deptName',
                         title: '校区',
-           /* formatter:function (value, row, index) {
-                return $.table.selectDictLabel(dept,value);
-            }*/
+                    },
+                    {
+                        field: 'extend1',
+                        title: '创建时间',
                     },
                     {
                         title: '详情',
@@ -219,6 +220,7 @@
                     $.modal.alertError("系统错误");
                 },
                 success: function (data) {
+                    $.table.search();
                     $.modal.alertError("状态修改成功！");
                 }
         })
@@ -248,8 +250,7 @@
              elem: '#repairsTime'
              ,trigger: 'click',
              type:'date'
-             ,range: true
-
+             ,range: '~'
          });
      </script>
 </body>

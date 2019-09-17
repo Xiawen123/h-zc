@@ -12,8 +12,6 @@ import com.hp.property.domain.ZxChange;
 import com.hp.property.service.IZxAssetManagementService;
 import com.hp.property.service.IZxChangeService;
 import com.hp.property.service.IZxRepairsService;
-import com.hp.property.service.IZxReturnService;
-import com.hp.system.domain.SysDept;
 import com.hp.system.domain.SysUser;
 import com.hp.system.service.ISysDeptService;
 import com.hp.system.service.ISysDictDataService;
@@ -26,7 +24,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -65,47 +62,17 @@ public class ZxRepairsController extends BaseController {
     }
 
     /**
-     * 数据展示
-     * @param zxAssetManagement
+     * 报修数据展示
+     * @param zxChange
      * @return
      */
 
     @RequiresPermissions("property:repairs:list")
     @PostMapping("/list")
     @ResponseBody
-    public TableDataInfo list(ZxAssetManagement zxAssetManagement){
+    public TableDataInfo list(ZxChange zxChange){
         startPage();
-        List<ZxAssetManagement> list = zxRepairsService.selectZxAssetManagementList(zxAssetManagement);
-        SysDept sysDept = new SysDept();
-        List<SysDept> sysDepts = iSysDeptService.selectDeptList(sysDept);
-        //循环存入校区名，存入备用字段5
-        for (ZxAssetManagement zxAssetManagement1:list){
-            for (SysDept sysDept1:sysDepts) {
-                if (zxAssetManagement1.getWarehousingCampus()!=null){
-                    String a=zxAssetManagement1.getWarehousingCampus().toString();
-                    String b=sysDept1.getDeptId().toString();
-                    if (a.equals(b)) {
-                        String c=sysDept1.getDeptName();
-                        zxAssetManagement1.setExtend5(c);}
-                }
-            }
-            Long id = zxAssetManagement1.getId();
-            List<ZxChange> zxChanges= zxRepairsService.selectZxChangeByAssetId(id);
-            for(ZxChange zxChange:zxChanges){
-               if(zxChange.getExtend1()!=null){
-                  zxAssetManagement1.setExtend4(zxChange.getExtend1());
-               }
-               if(zxChange.getUseDepartment()!=null){
-                   zxAssetManagement1.setExtend1(zxChange.getUseDepartment().toString());
-
-               }
-               if(zxChange.getUsers()!=null){
-                   zxAssetManagement1.setExtend2(zxChange.getUsers());
-               }
-
-            }
-        }
-
+        List<ZxChange> list = zxRepairsService.selectRepairsList(zxChange);
         return getDataTable(list);
     }
 
@@ -115,6 +82,7 @@ public class ZxRepairsController extends BaseController {
     @GetMapping("/select/{id}")
     public String select(@PathVariable("id") Long id, ModelMap mmap)
     {
+        System.out.println(id);
         ZxAssetManagement zxAssetManagement = zxRepairsService.selectZxAssetManagementById(id);
         mmap.put("zxAssetManagement", zxAssetManagement);
         return prefix + "/select";
@@ -131,32 +99,181 @@ public class ZxRepairsController extends BaseController {
         ZxAssetManagement management = zxRepairsService.selectZxAssetManagementById(id);
         String extend3 = management.getExtend3();
         int i;
-        if(extend3.equals("1")){
-            management.setExtend3("0");
-           i= zxRepairsService.updateExtend3(management);
-        }else if(extend3.equals("0")){
-            management.setExtend3("1");
-           i=zxRepairsService.updateExtend3(management);
-        }else{
-            i=0;
+            if(extend3.equals("1")){
+                management.setExtend3("0");
+                i= zxRepairsService.updateExtend3(management);
+            }else if(extend3.equals("0")){
+                management.setExtend3("1");
+                i=zxRepairsService.updateExtend3(management);
+            }else{
+                i=0;
         }
+
 
         return toAjax(i);
     }
 
-
     /**
-     * 新增页面展示
+     * 新增报修页面展示
      * @return
      */
 
     @RequiresPermissions("property:repairs:add")
     @GetMapping("/add")
-    public String add()
+    public String add(HttpServletRequest request)
     {
-
+        if(request.getSession().getAttribute("s")!=null){
+            request.getSession().removeAttribute("s");
+        }
         return prefix + "/add";
     }
+
+    /**
+     * 新增报修信息
+     */
+    @RequiresPermissions("property:repairs:add")
+    @Log(title = "报修登记", businessType = BusinessType.INSERT)
+    @PostMapping("/add")
+    @ResponseBody
+    public AjaxResult addSave(ZxChange zxChange,ZxAssetManagement zxAssetManagement,HttpServletRequest request)
+    {
+        String ids =  request.getSession().getAttribute("s").toString();  //列表id
+        //String ids = zxAssetManagement.getIds();
+        int i1=0;
+        if (ids != null && !ids.equals("")){
+            ZxAssetManagement zxone = null;
+            Set set = new HashSet();
+            String[] split = ids.split(",");
+            for (int i=0; i<split.length; i++){
+                set.add(split[i]);
+            }
+            set.remove("0");
+            set.remove("");
+            for(Object id:set){
+                String s1 = id.toString();  //获取单个id
+                if (!s1.equals("")) {
+                    zxone = new ZxAssetManagement();  //创建ZxAssetManagement表对象（用于传参）
+                    zxone.setId(Long.parseLong(s1));  //单个id
+                    zxone.setExtend3("1");
+
+                    long l = SnowFlake.nextId();
+                    zxChange.setId(l);
+                    zxChange.setAssetsId(Long.parseLong(s1));
+                    zxChange.setChangeType(3);  //7：退还
+                    zxChange.setUseDepartment(zxChange.getUseDepartment());  //退还部门
+
+                    SysUser sysUser = ShiroUtils.getSysUser();  //获取用户信息
+                    Long schoolId = sysUser.getDeptId();  //获取部门编号（校区）
+                    zxChange.setExtend5(schoolId);
+                    SimpleDateFormat time = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                    zxChange.setExtend1(time.format(new Date()));  //创建时间
+
+                    int result = zxChangeService.insertZxChange(zxChange);  //插入退还新的记录
+                    i1 = zxAssetManagementService.updateZxAssetManagement(zxone);  //更改退还后物品状态
+                }
+            }
+            return toAjax(i1);
+        }else{
+            return toAjax(zxChangeService.insertZxChange(null));
+        }
+    }
+
+    @RequiresPermissions("property:return:adds")
+    @GetMapping("/adds")
+    public String adds()
+    {
+        return prefix + "/adds";
+    }
+
+
+    /**
+     * 获取在用状态的列表(弹框)
+     * @return
+     */
+    @RequiresPermissions("property:return:list")
+    @PostMapping("/listss")
+    @ResponseBody
+    public TableDataInfo listss()
+    {
+        startPage();
+        List<ZxAssetManagement> list = zxRepairsService.selectAssetManagementList();
+        return getDataTable(list);
+    }
+
+
+    @RequiresPermissions("property:return:list")
+    @PostMapping("/lists")
+    @ResponseBody
+    public TableDataInfo lists(ZxAssetManagement zxAssetManagement, HttpServletRequest request) {
+        int num = zxAssetManagement.getNum(); //获取num（用于删除做判断：num=0删除状态,num=-1正常添加状态）
+        if(num == 0){
+            request.getSession().removeAttribute("s");//清空session信息
+
+            if (zxAssetManagement.getIds() != null && !zxAssetManagement.getIds().equals("")){
+                List<ZxAssetManagement> list = new LinkedList<>();
+                String s = zxAssetManagement.getIds(); //获取ids
+                HttpSession session = request.getSession();
+                if(session.getAttribute("s") == null){
+                    session.setAttribute("s","0");
+                    session.setAttribute("s",session.getAttribute("s")+","+s);
+                }else{
+                    session.setAttribute("s",session.getAttribute("s")+","+s);
+                }
+                String spl = session.getAttribute("s").toString();
+                Set set = new HashSet();
+                String[] split = spl.split(",");
+                for (int i=0; i<split.length; i++){
+                    set.add(split[i]);
+                }
+                set.remove("0");
+                set.remove(" ");
+                for(Object id:set){
+                    String s1 = id.toString();
+                    if(!s1.equals("")){
+                        ZxAssetManagement ls = zxAssetManagementService.selectZxAssetManagementById(Long.parseLong(s1));
+                        list.add(ls);
+                    }
+                }
+                return getDataTable(list);
+            }else {
+                List<ZxAssetManagement> list = new LinkedList<>();
+                return getDataTable(list);
+            }
+        }else {
+            if (zxAssetManagement.getIds() != null && !zxAssetManagement.getIds().equals("")){
+                List<ZxAssetManagement> list = new LinkedList<>();
+                String s = zxAssetManagement.getIds();
+                HttpSession session = request.getSession();
+                if(session.getAttribute("s") == null){
+                    session.setAttribute("s","0");
+                    session.setAttribute("s",session.getAttribute("s")+","+s);
+                }else{
+                    session.setAttribute("s",session.getAttribute("s")+","+s);
+                }
+                String spl = session.getAttribute("s").toString();
+                Set set = new HashSet();
+                String[] split = spl.split(",");
+                for (int i=0; i<split.length; i++){
+                    set.add(split[i]);
+                }
+                set.remove("0");
+                set.remove(" ");
+                for(Object id:set){
+                    String s1 = id.toString();
+                    if(!s1.equals("")){
+                        ZxAssetManagement ls = zxAssetManagementService.selectZxAssetManagementById(Long.parseLong(s1));
+                        list.add(ls);
+                    }
+                }
+                return getDataTable(list);
+            }else {
+                List<ZxAssetManagement> list = new LinkedList<>();
+                return getDataTable(list);
+            }
+        }
+    }
+
+
 
 
 }
