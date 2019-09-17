@@ -76,7 +76,7 @@ public class ZxRepairsServiceImpl implements IZxRepairsService
     }
 
     @Override
-    public List<ZxAssetManagement> selectAssetManagementList() {
-        return zxRepairsMapper.selectAssetManagementList();
+    public List<ZxAssetManagement> selectAssetManagementList(ZxAssetManagement zxAssetManagement) {
+        return zxRepairsMapper.selectAssetManagementList(zxAssetManagement);
     }
 }
