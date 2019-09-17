@@ -29,6 +29,6 @@ public interface IZxRepairsService
      */
     List<ZxChange> selectRepairsList(ZxChange zxChange);
 
-    List<ZxAssetManagement> selectAssetManagementList();
+    List<ZxAssetManagement> selectAssetManagementList(ZxAssetManagement zxAssetManagement);
 
 }
