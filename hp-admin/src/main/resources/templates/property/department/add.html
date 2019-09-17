@@ -2,9 +2,10 @@
 <html  lang="zh" xmlns:th="http://www.thymeleaf.org">
 <meta charset="utf-8">
 <head th:include="include :: header('添加领用登记')"></head>
+<script th:src="@{/ajax/libs/laydate/laydate.js}"></script>
 <body class="white-bg">
     <div class="wrapper wrapper-content animated fadeInRight ibox-content">
-        <form class="form-horizontal m" id="form-campusrecive-add">
+        <form class="form-horizontal m" id="form-department-add">
 			<input type="hidden" id="ids" name="ids" />
 			<input type="hidden" id="num" name="num" /><!-- 用于删除传参 -->
 
@@ -44,21 +45,21 @@
 					<input name="shareTime" class="form-control" type="text" id="shareTime">
 				</div>
 			</div>
-
-			<div class="ibox-content" id="test">
-				<p>请选中你想要领取的资源 </p>
-				<button type="button" class="btn btn-info" onclick="selectUsersToParent()">选择</button>
-				<p id="userids"> </p>
-			</div>
-			<a class="btn btn-danger multiple disabled" onclick="del()">
-				<i class="fa fa-remove"></i> 删除
-			</a>
+            <div class="btn-group-sm" id="toolbar" role="group">
+                <a class="btn btn-success" onclick="selectUsersToParent()">
+                    <i class="fa fa-plus"></i> 添加
+                </a>
+                <a class="btn btn-danger multiple disabled" onclick="del()">
+                    <i class="fa fa-remove"></i> 删除
+                </a>
+            </div>
 			<div class="col-sm-12 select-table table-striped">
 				<table id="bootstrap-table" data-mobile-responsive="true"></table>
 			</div>
 		</form>
 	</div>
     <div th:include="include::footer"></div>
+    <th:block th:include="include :: datetimepicker-js" />
     <script type="text/javascript">
 		var prefix = ctx + "property/department";
 
@@ -100,8 +101,8 @@
                 search: false,
                 showExport: true,
                 columns: [{
-                    checkbox: true
-                },
+                        checkbox: true
+                    },
                     {
                         field : 'id',
                         title : '资产id'
