@@ -114,7 +114,7 @@
                     checkbox: true
                 },
                 {
-                    field : 'extend1',
+                    field : 'shareTime',
                     title : '领用时间'
                 },
                 {
@@ -170,6 +170,10 @@
                         actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.detail(\'' + row.id + '\')">查看</a> ');
                         return actions.join('');
                     }
+                },
+                {
+                    field : 'extend1',
+                    title : '创建时间'
                 }]
             };
             $.table.init(options);
