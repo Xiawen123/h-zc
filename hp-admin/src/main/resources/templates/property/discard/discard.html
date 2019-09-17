@@ -32,12 +32,11 @@
             <div class="col-sm-12 search-collapse">
                 <form id="formId">
                     <input type="hidden" id="deptId" name="extend5">
-                    <input type="hidden" id="parentId" name="parentId">
                     <div class="select-list">
                         <ul>
                             <li>
                                 <p>报废日期：</p>
-                                <input type="text" name="extend1" id="extend1"/>
+                                <input type="text" name="shareTime" id="discardTime"/>
                             </li>
                             <li>
                                 <p>申报部门：</p>
@@ -66,17 +65,8 @@
 
             <div class="btn-group-sm" id="toolbar" role="group">
                 <a class="btn btn-success" onclick="$.operate.addFull()" shiro:hasPermission="property:discard:add">
-                    <i class="fa fa-plus"></i> 添加
+                    <i class="fa fa-plus"></i> 报废登记
                 </a>
-                <!--<a clas    s="btn btn-primary single disabled" onclick="$.operate.edit()" shiro:hasPermission="property:discard:edit">
-                    <i class="fa fa-edit"></i> 修改
-                </a>
-                <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()" shiro:hasPermission="property:discard:remove">
-                    <i class="fa fa-remove"></i> 删除
-                </a>
-                <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="property:discard:export">
-                    <i class="fa fa-download"></i> 导出
-                 </a>-->
             </div>
             <div class="col-sm-12 select-table table-striped">
                 <table id="bootstrap-table" data-mobile-responsive="true"></table>
@@ -88,13 +78,13 @@
 <th:block th:include="include :: layout-latest-js" />
 <th:block th:include="include :: ztree-js" />
     <script th:inline="javascript">
-        var editFlag = [[${@permission.hasPermi('property:discard:edit')}]];
-        var removeFlag = [[${@permission.hasPermi('property:discard:remove')}]];
+
         var detailFlag = [[${@permission.hasPermi('property:discard:detail')}]];
         var types = [[${@dict.getType('zc_type')}]];
         var unit = [[${@dict.getType('zc_unit')}]];
         var datas = [[${@dict.getType('zc_department')}]];
         var prefix = ctx + "property/discard";
+
         $(function() {
             var panehHidden = false;
             if ($(this).width() < 769) {
@@ -119,19 +109,17 @@
                 },
                 {
                     field : 'id',
-                    title : '变更记录ID',
-                    visible: false
-                },
-                {
-                    field : 'assetsId',
                     title : '资产ID',
                     visible: false
                 },
                 {
-                    field : 'extend1',
-                    title : '创建时间',
-
+                    field : 'shareTime',
+                    title : '报废时间'
                 },
+               /* {
+                    field : 'assetNum',
+                    title : '资产编号'
+                },*/
                 {
                     field : 'name',
                     title : '资产名称'
@@ -177,17 +165,20 @@
                     title : '申报人',
                 },
                 {
-                    field : 'extend5',
+                    field : 'deptName',
                     title : '校区'
                 },
                 {
-                    title: '操作',
+                    field : 'extend1',
+                    title : '创建时间',
+
+                },
+                {
+                    title: '详情',
                     align: 'center',
                     formatter: function(value, row, index) {
                         var actions = [];
-                        /*actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.edit(\'' + row.id + '\')"><i class="fa fa-edit"></i>编辑</a>');*/
                         actions.push('<a class="btn btn-info btn-xs ' + detailFlag + '" href="javascript:void(0)" onclick="$.operate.detail(\'' + row.id + '\')"><i class="fa fa-list-ul"></i>查看</a> ');
-                        /*actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.id + '\')"><i class="fa fa-remove"></i>删除</a>');*/
                         return actions.join('');
                     }
                 }]
@@ -215,9 +206,9 @@
         $(function(){
             //时间选择器
             laydate.render({
-                elem: '#extend1',
-                /*type: 'datetime'*/
-                range: true,
+                elem: '#discardTime',
+                type: 'date',
+                range: '~',
                 trigger: 'click'
             });
         });

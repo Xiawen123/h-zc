@@ -1,8 +1,6 @@
 package com.hp.property.service.impl;
 
-import com.hp.common.core.text.Convert;
 import com.hp.common.utils.SnowFlake;
-import com.hp.framework.util.ShiroUtils;
 import com.hp.property.domain.ZxAssetManagement;
 import com.hp.property.domain.ZxChange;
 import com.hp.property.mapper.ZxAssetManagementMapper;

@@ -78,4 +78,11 @@ public interface ZxChangeMapper extends BaseMapper<ZxChange>
      * @return
      */
     List<ZxChange> selectAllChangeTypeOne(ZxChange zxChange);
+
+    /**
+     * 查询部门领用列表
+     * @param zxChange
+     * @return
+     */
+    List<ZxChange> selectDeptReceiveList(ZxChange zxChange);
 }

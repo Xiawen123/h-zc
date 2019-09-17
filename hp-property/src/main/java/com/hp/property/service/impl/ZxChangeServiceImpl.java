@@ -10,7 +10,9 @@ import com.hp.property.service.IZxChangeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 资产变更Service业务层处理
@@ -126,8 +128,25 @@ public class ZxChangeServiceImpl implements IZxChangeService
      * @return
      */
     @Override
-    public List<ZxChange> findAllChangeTypeOne(ZxChange zxChange,String campus) {
-        //zxChange.setExtend5(campus);
+    public List<ZxChange> findAllChangeTypeOne(ZxChange zxChange) {
         return zxChangeMapper.selectAllChangeTypeOne(zxChange);
+    }
+
+    /**
+     * 查询部门领用列表
+     * @param zxChange
+     * @return
+     */
+    @Override
+    public List<ZxChange> selectDeptReceiveList(ZxChange zxChange){
+        String shareTime = zxChange.getShareTime();  //获取范围时间
+        Map<String,Object> param = new HashMap<>();
+        if(shareTime != null && !shareTime.equals("") && shareTime.length() != 0){
+            String[] shareTimeArray = shareTime.split(" ~ ");
+            param.put("beginTime",shareTimeArray[0]);
+            param.put("endTime",shareTimeArray[1]);
+        }
+        zxChange.setParams(param);
+        return zxChangeMapper.selectDeptReceiveList(zxChange);
     }
 }

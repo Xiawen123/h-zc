@@ -6,6 +6,8 @@ import com.hp.property.mapper.ZxAssetManagementMapper;
 import com.hp.property.mapper.ZxChangeMapper;
 import com.hp.property.mapper.ZxDiscardMapper;
 import com.hp.property.service.IZxDiscardService;
+import com.hp.system.domain.SysDept;
+import com.hp.system.mapper.SysDeptMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,6 +20,9 @@ import java.util.List;
 public class ZxDiscardServiceImpl implements IZxDiscardService {
     @Autowired
     private ZxDiscardMapper zxDiscardMapper;
+
+    @Autowired
+    private SysDeptMapper sysDeptMapper;
     /**
      * 查询报废的变更记录信息列表
      *
@@ -25,22 +30,11 @@ public class ZxDiscardServiceImpl implements IZxDiscardService {
      * @return
      */
     @Override
-    public List<ZxChange> selectZxDiscardList(ZxChange zxChange/*,String campus*/) {
+    public List<ZxChange> selectDiscardList(ZxChange zxChange) {
         zxChange.setChangeType(4);
-        //zxChange.setExtend5(campus);
         System.out.println(zxChange.toString());
-        List<ZxChange> changes = zxDiscardMapper.selectZxChangeList(zxChange);
+        List<ZxChange> changes = zxDiscardMapper.selectChangeList(zxChange);
         return changes;
-    }
-
-    /**
-     * 根据  资产id查询详情
-     * @param id
-     * @return
-     */
-    @Override
-    public ZxChange selectDiscardChangeById(Long id) {
-        return zxDiscardMapper.selectDiscardChangeById(id);
     }
 
     /**
@@ -52,5 +46,10 @@ public class ZxDiscardServiceImpl implements IZxDiscardService {
     @Override
     public List<ZxAssetManagement> selectZxNoDiscardList(ZxAssetManagement zxAssetManagement) {
         return zxDiscardMapper.selectNoDiscardZxAssetList(zxAssetManagement);
+    }
+
+    @Override
+    public ZxAssetManagement selectZxAssetManagementById(Long id) {
+        return zxDiscardMapper.selectZxAssetManagementById(id);
     }
 }

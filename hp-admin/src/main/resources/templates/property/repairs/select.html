@@ -1,24 +1,24 @@
 <!DOCTYPE html>
 <html lang="zh" xmlns:th="http://www.thymeleaf.org" >
 <head>
-    <th:block th:include="include :: header('资产报废信息')" />
+    <th:block th:include="include :: header('查看资产信息')" />
     <th:block th:include="include :: datetimepicker-css" />
 </head>
 <body class="white-bg">
-<div class="wrapper wrapper-content animated fadeInRight ibox-content">
-    <form class="form-horizontal m" id="form-management1-edit" th:object="${zxAssetManagement}">
-        <input name="id" th:field="*{id}" type="hidden">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal m" id="form-management-edit" th:object="${zxAssetManagement}">
+            <input name="id" th:field="*{id}" type="hidden">
             <div class="form-group">
                 <label class="col-sm-3 control-label">资产名称：</label>
                 <div class="col-sm-8">
-                    <!-- <label class="col-sm-3 control-label" th:text="*{name}"></label>-->
+                   <!-- <label class="col-sm-3 control-label" th:text="*{name}"></label>-->
                     <input name="name" th:field="*{name}" class="form-control" type="text" readonly="readonly">
                 </div>
             </div>
             <div class="form-group">
                 <label class="col-sm-3 control-label">资产编号：</label>
                 <div class="col-sm-8">
-                    <!--  <label class="col-sm-3 control-label" th:text="*{assetNum}"></label>-->
+                  <!--  <label class="col-sm-3 control-label" th:text="*{assetNum}"></label>-->
                     <input name="assetNum" th:field="*{assetNum}" class="form-control" type="text" readonly="readonly">
                 </div>
             </div>
@@ -32,7 +32,7 @@
             <div class="form-group">
                 <label class="col-sm-3 control-label">资产规格：</label>
                 <div class="col-sm-8">
-                    <!-- <label class="col-sm-3 control-label" th:text="*{assetSpecification}"></label>-->
+                   <!-- <label class="col-sm-3 control-label" th:text="*{assetSpecification}"></label>-->
                     <input name="assetSpecification" th:field="*{assetSpecification}" class="form-control" type="text" readonly="readonly">
                 </div>
             </div>
@@ -48,7 +48,7 @@
                 <div class="col-sm-8">
                     <select name="type"  th:with="type=${@dict.getType('zc_type')}" disabled="disabled">
                         <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}" th:field="*{type}"></option>
-                    </select>
+                        </select>
                 </div>
             </div>
             <div class="form-group">
@@ -142,11 +142,11 @@
                 </div>
             </div>
         </form>
-</div>
-<th:block th:include="include :: footer" />
-<th:block th:include="include :: datetimepicker-js" />
-<script type="text/javascript">
+    </div>
+    <th:block th:include="include :: footer" />
+    <th:block th:include="include :: datetimepicker-js" />
+    <script type="text/javascript">
 
-</script>
+    </script>
 </body>
 </html>

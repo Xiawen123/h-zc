@@ -1,18 +1,10 @@
 <!DOCTYPE HTML>
 <html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
 <meta charset="utf-8">
-<head th:include="include :: header('添加校区领用登记')"></head>
+<head th:include="include :: header('领用登记')"></head>
 <body class="white-bg">
 <div class="container-div">
     <div class="row">
-        <div class="btn-group-sm hidden-xs" id="toolbar" role="group">
-            <a class="btn btn-danger btn-del btn-del disabled" onclick="xuan()" shiro:hasPermission="teach:major:remove">
-                <i class="fa fa-remove"></i> 确认
-            </a>
-            <!--<a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="teach:teachMajor:export">
-                    <i class="fa fa-download"></i> 导出
-             </a>-->
-        </div>
         <div class="col-sm-12 select-table table-striped">
             <table id="bootstrap-table" data-mobile-responsive="true"></table>
         </div>
@@ -20,25 +12,13 @@
 </div>
 <div th:include="include :: footer"></div>
 <script th:inline="javascript">
-    var zc_type = [[${@dict.getType('zc_type')}]];
-    var zc_location = [[${@dict.getType('zc_location')}]];
-    var zc_unit = [[${@dict.getType('zc_unit')}]];
-    var zc_department = [[${@dict.getType('zc_department')}]];
-    var zc_state = [[${@dict.getType('zc_state')}]];
-    var editFlag = [[${@permission.hasPermi('teach:teachMajor:edit')}]];
-    var removeFlag = [[${@permission.hasPermi('teach:teachMajor:remove')}]];
     var prefix = ctx + "property/department";
 
     $(function() {
-        //var datas = [[${@dict.getType('teach_major_type')}]];
+        var zc_type = [[${@dict.getType('zc_type')}]];
         var options = {
             url: prefix + "/listooo",
-            createUrl: prefix + "/add",
-            updateUrl: prefix + "/edit/{id}",
-            removeUrl: prefix + "/remove",
-            exportUrl: prefix + "/export",
-            xuanUrl:prefix+"/xuan",
-            modalName: "闲置资产",
+            modalName: "资产列表",
             search: false,
             showExport: true,
             columns: [{
@@ -46,7 +26,7 @@
             },
                 {
                     field : 'id',
-                    title : '资产id',
+                    title : '资产id'
                 },
                 {
                     field : 'name',
@@ -75,6 +55,7 @@
         };
         $.table.init(options);
     });
+
     /* 添加用户-选择用户-提交 */
     function submitHandler(index, layero) {
         var rows = $.table.selectFirstColumns();
@@ -83,10 +64,6 @@
             return;
         }
         $.modal.close();
-        // 父页面的方法
-        // parent.selectUsers();
-        // 父页面的变量
-        parent.$('#ids').val(rows.join());
     }
 </script>
 </body>

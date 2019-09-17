@@ -12,10 +12,10 @@
     <div class="box box-main">
         <div class="box-header">
             <div class="box-title">
-                <i class="fa icon-grid"></i> 组织机构
+                <i class="fa icon-grid"></i> 校区
             </div>
             <div class="box-tools pull-right">
-                <a type="button" class="btn btn-box-tool" href="#" onclick="dept()" title="管理部门"><i class="fa fa-edit"></i></a>
+                <!--<a type="button" class="btn btn-box-tool" href="#" onclick="dept()" title="管理部门"><i class="fa fa-edit"></i></a>-->
                 <button type="button" class="btn btn-box-tool" id="btnExpand" title="展开" style="display:none;"><i class="fa fa-chevron-up"></i></button>
                 <button type="button" class="btn btn-box-tool" id="btnCollapse" title="折叠"><i class="fa fa-chevron-down"></i></button>
                 <button type="button" class="btn btn-box-tool" id="btnRefresh" title="刷新部门"><i class="fa fa-refresh"></i></button>
@@ -32,34 +32,32 @@
         <div class="row">
             <div class="col-sm-12 search-collapse">
                 <form id="formId">
-                    <input type="hidden" id="deptId" name="campus">
-                    <input type="hidden" id="parentId" name="parentId">
+                    <input type="hidden" id="deptId" name="extend3">
                     <div class="select-list">
                         <ul>
-                            <!--<li class="select-time">-->
-                                <!--<p>领用时间：</p>-->
-                                <!--<input type="text" id="startTime" name="startTime"/>-->
-                            <!--</li>-->
                             <li>
-                                <p>资产名称：</p>
+                                <p>领用日期：</p>
+                                <input type="text" name="shareTime" id="shareTime"/>
+                            </li>
+                            <li>
+                                <p>领用物品：</p>
                                 <input type="text" name="name"/>
                             </li>
                             <li>
-                                <p>资产编号：</p>
+                                <p>物品编号：</p>
                                 <input type="text" name="assetNum"/>
                             </li>
                             <li>
                                 <p>领用部门：</p>
-                                <select name="extend1" class="form-control m-b" th:with="type=${@dict.getType('zc_department')}">
+                                <select name="useDepartment" th:with="type=${@dict.getType('zc_department')}">
                                     <option value="">所有</option>
                                     <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
                                 </select>
                             </li>
                             <li>
-                                <p>使用人：</p>
-                                <input type="text" name="extend2"/>
+                                <p>领用人员：</p>
+                                <input type="text" name="users"/>
                             </li>
-                            <br><br>
                             <li>
                                 <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
                                 <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
@@ -70,7 +68,7 @@
             </div>
 
             <div class="btn-group-sm" id="toolbar" role="group">
-                <a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="property:campusrecive:add">
+                <a class="btn btn-success" onclick="$.operate.addFull()" shiro:hasPermission="property:campusrecive:add">
                     <i class="fa fa-plus"></i> 领用登记
                 </a>
             </div>
@@ -100,12 +98,7 @@
             queryList();
             queryDeptTree();
         });
-        // $(function(){
-        //     //时间选择器
-        //     laydate.render({
-        //         elem: '#startTime',trigger: 'click',range: true
-        //     });
-        // });
+
         function queryList() {
             var options = {
                 url: prefix + "/list",
@@ -114,10 +107,19 @@
                 removeUrl: prefix + "/remove",
                 exportUrl: prefix + "/export",
                 detailUrl: prefix+"/detail/{id}",
-                modalName: "资产信息",
+                modalName: "领用登记",
                 columns: [{
-                    checkbox: true
-                },
+                        checkbox: true
+                    },
+                    {
+                        field : 'id',
+                        title : '领用编号',
+                        visible: false
+                    },
+                    {
+                        field : 'shareTime',
+                        title : '领用时间'
+                    },
                     {
                         field : 'name',
                         title : '资产名称'
@@ -149,22 +151,34 @@
                         }
                     },
                     {
-                        field : 'department',
-                        title : '部门',
+                        field : 'useDepartment',
+                        title : '领用部门',
                         formatter: function(value, row, index) {
                             return $.table.selectDictLabel(zc_department,value);
                         }
                     },
                     {
-                        field : 'extend2',
+                        field : 'users',
                         title : '领用人员'
+                    },
+                    {
+                        field: 'extend2',
+                        title: '接收人员'
+                    },
+                    {
+                        field: 'deptName',
+                        title: '存放地点'
+                    },
+                    {
+                        field : 'extend1',
+                        title : '创建时间'
                     },
                     {
                         title: '详情',
                         align: 'center',
                         formatter: function(value, row, index) {
                             var actions = [];
-                            actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.detail(\'' + row.id + '\')">查看</a> ');
+                            actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="#" onclick="$.operate.detail(\'' + row.id + '\')">查看</a> ');
                             return actions.join('');
                         }
                     }]
@@ -183,10 +197,17 @@
 
             function zOnClick(event, treeId, treeNode) {
                 $("#deptId").val(treeNode.id);
-                $("#parentId").val(treeNode.pId);
                 $.table.search();
             }
         }
+
+        //时间选择器
+        laydate.render({
+            elem: '#shareTime'
+            ,trigger: 'click',
+            type:'date'
+            ,range: '~'
+        });
     </script>
 </body>
 </html>

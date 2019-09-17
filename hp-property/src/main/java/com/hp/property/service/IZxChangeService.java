@@ -81,5 +81,12 @@ public interface IZxChangeService
      * @param zxChange
      * @return
      */
-    List<ZxChange> findAllChangeTypeOne(ZxChange zxChange,String campus);
+    List<ZxChange> findAllChangeTypeOne(ZxChange zxChange);
+
+    /**
+     * 查询部门领用列表
+     * @param zxChange
+     * @return
+     */
+    List<ZxChange> selectDeptReceiveList(ZxChange zxChange);
 }

@@ -13,7 +13,7 @@ public interface ZxDiscardMapper {
      * @param zxChange 资产信息
      * @return 资产信息集合
      */
-    public List<ZxChange> selectZxChangeList(ZxChange zxChange);
+    public List<ZxChange> selectChangeList(ZxChange zxChange);
 
     /**
      * 查询未报废   的资产信息
@@ -31,12 +31,10 @@ public interface ZxDiscardMapper {
      */
     ZxAssetManagement selectZxAssetManagementList(Long assetsId);
 
-
     /**
-     * 根据变更记录id查询对应的详情
-     *
+     * 通过id查询退还详情
      * @param id
      * @return
      */
-    ZxChange selectDiscardChangeById(Long id);
+    ZxAssetManagement selectZxAssetManagementById(Long id);
 }
