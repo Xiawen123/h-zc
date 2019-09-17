@@ -14,11 +14,21 @@ import java.util.List;
 public interface IZxRepairsService
 {
 
-    List<ZxAssetManagement> selectZxAssetManagementList(ZxAssetManagement zxAssetManagement);
+
 
     List<ZxChange> selectZxChangeByAssetId(Long id);
 
     ZxAssetManagement selectZxAssetManagementById(Long id);
 
     int updateExtend3(ZxAssetManagement assetManagement);
+
+    /**
+     * 查询所有报修数据
+     * @param zxChange
+     * @return
+     */
+    List<ZxChange> selectRepairsList(ZxChange zxChange);
+
+    List<ZxAssetManagement> selectAssetManagementList();
+
 }

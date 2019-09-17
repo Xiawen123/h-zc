@@ -171,8 +171,10 @@ public class ZxChange extends BaseEntity
     public void setStartTime(String startTime) {
         this.startTime = startTime;
         try {
-            this.setOneTime(startTime.substring(0,10));
-            this.setTwoTime(startTime.substring(13));
+            if (startTime != null && startTime != ""){
+                this.setOneTime(startTime.substring(0,10));
+                this.setTwoTime(startTime.substring(13));
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }

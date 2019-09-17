@@ -30,13 +30,11 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
  * 资产报废Controller
- *
- * @author 小鱼儿
- * @date 2019-09-02
  */
 @Controller
 @RequestMapping("/property/discard")
@@ -59,8 +57,7 @@ public class ZxDiscardController extends BaseController {
     private ISysUserService iSysUserService;
 
     /**
-     * 跳转到 discard.html
-     *
+     * 页面展示
      * @return
      */
     @RequiresPermissions("property:discard:view")
@@ -70,18 +67,16 @@ public class ZxDiscardController extends BaseController {
     }
 
     /**
-     * 查询报废信息列表
-     *
-     * @param zxChange
+     * 数据展示(查询报废列表)
+     * @param
      * @return
      */
     @RequiresPermissions("property:discard:list")
     @PostMapping("/list")
     @ResponseBody
-    public TableDataInfo list(ZxChange zxChange/*,@Param("campus") String campus*/) {
+    public TableDataInfo list(ZxChange zxChange) {
         startPage();
-        //调用    zxDiscardService 的 selectZxDiscardList 方法查询报废记录信息列表
-        List<ZxChange> list = zxDiscardService.selectZxDiscardList(zxChange/*,campus*/);
+        List<ZxChange> list = zxDiscardService.selectDiscardList(zxChange);
         return getDataTable(list);
     }
 
@@ -90,10 +85,6 @@ public class ZxDiscardController extends BaseController {
      */
     @GetMapping("/add")
     public String add(HttpServletRequest request) {
-        //清空session的值，防止有上次残留的值
-        if (request.getSession().getAttribute("s") != null) {
-            request.getSession().removeAttribute("s");
-        }
         return prefix + "/add";
     }
 
@@ -117,46 +108,80 @@ public class ZxDiscardController extends BaseController {
     @PostMapping("/alist")
     @ResponseBody
     public TableDataInfo alist(ZxAssetManagement zxAssetManagement, HttpServletRequest request) {
-        System.out.println(zxAssetManagement.getIds());
-        //判断id是否为空或为null
-        if (zxAssetManagement.getIds() != null && !zxAssetManagement.getIds().equals("")) {
-            List<ZxAssetManagement> list = new LinkedList<>();
-            //获取id
-            String s = zxAssetManagement.getIds();
-            System.out.println("s=" + s);
-            //获取session
-            HttpSession session = request.getSession();
-            //判断session是否为空
-            if (session.getAttribute("s") == null) {
-                session.setAttribute("s", "0");//为了保持一样的格式方便切割（0，s）
-                session.setAttribute("s", session.getAttribute("s") + "," + s);
-            } else {
-                session.setAttribute("s", session.getAttribute("s") + "," + s);
-            }
-            //获取session里的s的值
-            String spl = session.getAttribute("s").toString();
-            Set set = new HashSet();
-            //切割
-            String[] split = spl.split(",");
-            //利用set去除重复的id
-            for (int i = 0; i < split.length; i++) {
-                set.add(split[i]);
-            }
-            //移除0和" "
-            set.remove("0");
-            set.remove(" ");
-            //根据id查询相应的资产，存入list
-            for (Object id : set) {
-                String s1 = id.toString();
-                if (!s1.equals("")) {
-                    ZxAssetManagement ls = zxAssetManagementService.selectZxAssetManagementById(Long.parseLong(s1));
-                    list.add(ls);
+        int num = zxAssetManagement.getNum(); //获取num（用于删除做判断：num=0删除状态,num=-1正常添加状态）
+        if(num == 0){
+            request.getSession().removeAttribute("s");//清空session信息
+
+            if (zxAssetManagement.getIds() != null && !zxAssetManagement.getIds().equals("")){
+                List<ZxAssetManagement> list = new LinkedList<>();
+                String s = zxAssetManagement.getIds(); //获取ids
+                HttpSession session = request.getSession();
+                if(session.getAttribute("s") == null){
+                    session.setAttribute("s","0");
+                    session.setAttribute("s",session.getAttribute("s")+","+s);
+                }else{
+                    session.setAttribute("s",session.getAttribute("s")+","+s);
                 }
+                String spl = session.getAttribute("s").toString();
+                Set set = new HashSet();
+                String[] split = spl.split(",");
+                for (int i=0; i<split.length; i++){
+                    set.add(split[i]);
+                }
+                set.remove("0");
+                set.remove("");
+                for(Object id:set){
+                    String s1 = id.toString();
+                    if(!s1.equals("")){
+                        ZxAssetManagement ls = zxAssetManagementService.selectZxAssetManagementById(Long.parseLong(s1));
+                        list.add(ls);
+                    }
+                }
+                return getDataTable(list);
+            }else {
+                List<ZxAssetManagement> list = new LinkedList<>();
+                return getDataTable(list);
             }
-            return getDataTable(list);
-        } else {
-            List<ZxAssetManagement> list = new LinkedList<>();
-            return getDataTable(list);
+        }else {
+            if (zxAssetManagement.getIds() != null && !zxAssetManagement.getIds().equals("")) {
+                List<ZxAssetManagement> list = new LinkedList<>();
+                //获取id
+                String s = zxAssetManagement.getIds();
+                System.out.println("s=" + s);
+                //获取session
+                HttpSession session = request.getSession();
+                //判断session是否为空
+                if (session.getAttribute("s") == null) {
+                    session.setAttribute("s", "0");//为了保持一样的格式方便切割（0，s）
+                    session.setAttribute("s", session.getAttribute("s") + "," + s);
+                } else {
+                    session.setAttribute("s", session.getAttribute("s") + "," + s);
+                }
+                //获取session里的s的值
+                String spl = session.getAttribute("s").toString();
+                Set set = new HashSet();
+                //切割
+                String[] split = spl.split(",");
+                //利用set去除重复的id
+                for (int i = 0; i < split.length; i++) {
+                    set.add(split[i]);
+                }
+                //移除0和" "
+                set.remove("0");
+                set.remove(" ");
+                //根据id查询相应的资产，存入list
+                for (Object id : set) {
+                    String s1 = id.toString();
+                    if (!s1.equals("")) {
+                        ZxAssetManagement ls = zxAssetManagementService.selectZxAssetManagementById(Long.parseLong(s1));
+                        list.add(ls);
+                    }
+                }
+                return getDataTable(list);
+            } else {
+                List<ZxAssetManagement> list = new LinkedList<>();
+                return getDataTable(list);
+            }
         }
     }
 
@@ -168,69 +193,47 @@ public class ZxDiscardController extends BaseController {
     @Log(title = "新增资产报废", businessType = BusinessType.INSERT)
     @PostMapping("/add")
     @ResponseBody
-    public AjaxResult addSave(ZxAssetManagement zxAssetManagement, HttpServletRequest request) {
-        String ids = request.getSession().getAttribute("s").toString();
-        System.out.println("ids=" + ids);
-        int i1 = 0;
-        Set set = new HashSet();
-        ZxChange zxChange = new ZxChange();
-        String[] split = ids.split(",");
-        for (int i = 0; i < split.length; i++) {
-            set.add(split[i]);
-        }
-        set.remove("0");
-        set.remove(" ");
-        System.out.println("set=" + set);
-        for (Object id : set) {
-            String s1 = id.toString();
-            System.out.println("id=" + id);
-            if (!s1.equals("")) {
-                ZxAssetManagement zxone = zxAssetManagementService.selectZxAssetManagementById(Long.parseLong(s1));
-                //资产表资产的状态
-                zxone.setState(4);
-                //资产表的报废时间
-                zxone.setDiscardTime(zxAssetManagement.getDiscardTime());
-                //资产表的使用人
-                zxone.setExtend2(zxAssetManagement.getExtend2());
-                //变更表的资产id
-                zxChange.setAssetsId(Long.parseLong(s1));
-                //雪花算法生成id
-                long cid = SnowFlake.nextId();
-                //变更表的id
-                zxChange.setId(cid);
-                //变更表的变更类型
-                zxChange.setChangeType(4);
-                //提交部门
-                SysUser sysUser = iSysUserService.selectUserByLoginName(ShiroUtils.getLoginName());
-                SysDept sysDept = iSysDeptService.selectDeptById(sysUser.getDeptId());
-                String deptName = sysDept.getDeptName();
-                List<SysDept> sysDepts = iSysDeptService.selectDeptList(sysDept);
-                // List<SysDictData> zc_department = iSysDictDataService.selectDictDataByType("zc_department");
-                for (SysDept sysDept1 : sysDepts) {
-                    if (deptName.equals(sysDept1.getDeptName())) {
-                        int d = sysDept1.getParentId().intValue();
-                        ;
-                        //变更表的提交部门
-                        zxChange.setSubmittedDepartment(d);
-                        //资产表的提交部门
-                        zxone.setExtend1(String.valueOf(d));
+    public AjaxResult addSave(ZxChange zxChange,ZxAssetManagement zxAssetManagement, HttpServletRequest request) {
+        String ids =  request.getSession().getAttribute("s").toString();  //列表id
+        //String ids = zxAssetManagement.getIds();
+        int i1=0;
+        if (ids != null && !ids.equals("")) {
+            ZxAssetManagement zxone = null;
+            Set set = new HashSet();
+            String[] split = ids.split(",");
+            for (int i = 0; i < split.length; i++) {
+                set.add(split[i]);
+            }
+            set.remove("0");
+            set.remove("");
+            System.out.println("set=" + set);
+            for (Object id : set) {
+                    String s1 = id.toString();  //获取单个id
+                    if (!s1.equals("")) {
+                        zxone = new ZxAssetManagement();  //创建ZxAssetManagement表对象（用于传参）
+                        zxone.setId(Long.parseLong(s1));  //单个id
+                        zxone.setState(3);  //状态（1：闲置，2：在用，3：报废）
+
+                        long l = SnowFlake.nextId();
+                        zxChange.setId(l);
+                        zxChange.setAssetsId(Long.parseLong(s1));
+                        zxChange.setChangeType(4);  //7：报废
+                        zxChange.setUseDepartment(zxChange.getUseDepartment());  //报废部门
+
+                        SysUser sysUser = ShiroUtils.getSysUser();  //获取用户信息
+                        Long schoolId = sysUser.getDeptId();  //获取部门编号（校区）
+                        zxChange.setExtend5(schoolId);
+                        SimpleDateFormat time = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                        zxChange.setExtend1(time.format(new Date()));  //创建时间
+
+                        int result = zxChangeService.insertZxChange(zxChange);  //插入报废新的记录
+                        i1 = zxAssetManagementService.updateZxAssetManagement(zxone);  //更改报废后物品状态
                     }
                 }
-                    System.out.println(zxChange.getExtend5() + "校区");
-                    //变更表的使用部门
-                    zxChange.setUseDepartment(zxAssetManagement.getDepartment());
-                    //变更表的提交人
-                    zxChange.setSubmitOne(ShiroUtils.getLoginName());
-                    //变更表的使用人
-                    zxChange.setUsers(zxAssetManagement.getExtend2());
-                    //变更表的变更时间
-                    /*zxChange.setExtend1(DateString.getString(new Date(),"yyyy-MM-dd HH:mm:ss"));*/
-                    zxChange.setExtend1(DateString.getString(zxAssetManagement.getDiscardTime(), "yyyy-MM-dd HH:mm:ss"));
-                    int i = zxChangeService.insertZxChange(zxChange);
-                    i1 = zxAssetManagementService.updateZxAssetManagement(zxone);
-                }
+                return toAjax(i1);
+            }else{
+                return toAjax(zxChangeService.insertZxChange(null));
             }
-            return toAjax(i1);
         }
 
         /**
@@ -253,8 +256,8 @@ public class ZxDiscardController extends BaseController {
         @GetMapping("/one/{id}")
         public String one (@PathVariable("id") Long id, ModelMap mmap)
         {
-            ZxChange change = zxDiscardService.selectDiscardChangeById(id);
-            mmap.put("change", change);
+            ZxAssetManagement zxAssetManagement = zxDiscardService.selectZxAssetManagementById(id);
+            mmap.put("zxAssetManagement", zxAssetManagement);
             return prefix + "/one";
         }
 

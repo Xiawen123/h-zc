@@ -1,12 +1,15 @@
 package com.hp.property.service.impl;
 
 import com.hp.common.core.text.Convert;
+import com.hp.common.utils.SnowFlake;
 import com.hp.property.domain.ZxAssetManagement;
 import com.hp.property.mapper.ZxAssetManagementMapper;
 import com.hp.property.service.IZxAssetManagementService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -20,6 +23,9 @@ public class ZxAssetManagementServiceImpl implements IZxAssetManagementService {
 
     @Resource
     private ZxAssetManagementMapper zxAssetManagementMapper;
+
+    @Autowired
+    private IZxAssetManagementService zxAssetManagementService;
 
     /**
      * 查询资产信息
@@ -51,7 +57,28 @@ public class ZxAssetManagementServiceImpl implements IZxAssetManagementService {
      */
     @Override
     public int insertZxAssetManagement(ZxAssetManagement zxAssetManagement) {
-        return zxAssetManagementMapper.insertZxAssetManagement(zxAssetManagement);
+        int number = zxAssetManagement.getNumber();
+        for (int i = 0; i < number; i++){
+            //添加雪花算法 表id
+            zxAssetManagement.setId(SnowFlake.nextId());
+            int aNum = 0;
+            int count = zxAssetManagementService.getCountByType(zxAssetManagement.getType());
+            if (count != 0){
+                //添加资产编号
+                String maxNum = zxAssetManagementService.getMaxNum(zxAssetManagement);
+                String substring = maxNum.substring(8);
+                aNum = Integer.parseInt(substring);
+            }
+            zxAssetManagement.setAssetNum("WHHP-"+zxAssetManagement.getType()+ String.format("%05d",(aNum+1)));
+            //添加入库时间
+            zxAssetManagement.setStorageTime(new Date());
+            zxAssetManagement.setNumber(1);
+            int a = zxAssetManagementMapper.insertZxAssetManagement(zxAssetManagement);
+            if (a<1){
+                return 0;
+            }
+        }
+        return 1;
     }
 
 
@@ -115,5 +142,11 @@ public class ZxAssetManagementServiceImpl implements IZxAssetManagementService {
     public String getMaxNum(ZxAssetManagement zxAssetManagement) {
 
         return zxAssetManagementMapper.getMaxNum(zxAssetManagement);
+    }
+
+    @Override
+    public int getCountByType(String type) {
+
+        return zxAssetManagementMapper.getCountByType(type);
     }
 }

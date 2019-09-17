@@ -131,14 +131,21 @@ public class ZxCampusReceiveController extends BaseController {
 
                 zxChange.setAssetsId(Long.parseLong(split[i]));
                 long l = SnowFlake.nextId();
+                // 在变更表中存入资产id
                 zxChange.setId(l);
+                // 在变更表中存入变动类型为领用
                 zxChange.setChangeType(1);
+                // 在变更表中存入使用部门
                 zxChange.setUseDepartment(zxAssetManagement.getDepartment());
+                // 在变更表中存入使用人
                 zxChange.setUsers(zxAssetManagement.getExtend2());
+                // 在变更表中存入创建时间
                 zxChange.setExtend1(DateString.getString(new Date(),"yyyy-MM-dd HH:mm:ss"));
-                //在变更表中存入提交人
+                // 在变更表中存入领用时间
+                zxChange.setShareTime(DateString.getString(zxAssetManagement.getRecipientsTime(),"yyyy-MM-dd"));
+                // 在变更表中存入提交人
                 zxChange.setSubmitOne(ShiroUtils.getLoginName());
-                //在变更表中存入提交人所属部门
+                // 在变更表中存入提交人所属部门
                 SysUser sysUser = iSysUserService.selectUserByLoginName(ShiroUtils.getLoginName());
                 String c= iSysDeptService.selectDeptById(sysUser.getDeptId()).getDeptName();
                 List<SysDictData> zc_department = iSysDictDataService.selectDictDataByType("zc_department");
@@ -198,66 +205,75 @@ public class ZxCampusReceiveController extends BaseController {
     @ResponseBody
     public TableDataInfo list3(ZxAssetManagement zxAssetManagement, HttpServletRequest request)
     {
-       /* LinkedList<ZxAssetManagement> list = new LinkedList<>();
-        if(zxAssetManagement.getIds() != null && !zxAssetManagement.getIds().equals("")){
-            // 获取前台传递过来的ids值
-            String ids = zxAssetManagement.getIds();
-            String[] idsStr = ids.split(",");
-            HttpSession session = request.getSession();
-            String idsSession = (String) session.getAttribute("ids");
-            HashSet<String> set = new HashSet<>();
-            if(idsSession != null && !idsSession.equals("")){
-                String idss = idsSession + "," + idsStr;
-                String[] idsStr2 = idss.split(",");
-                for(int i = 0; i < idsStr2.length; i++ ){
-                    set.add(idsStr2[i]);
-                }
-                session.setAttribute("ids",idss);
-            }else{
-                session.setAttribute("ids",ids);
-            }
-            for (int j = 0; j < idsStr.length; j++){
-                ZxAssetManagement assertList = zxAssetManagementService.selectZxAssetManagementById(Long.parseLong(idsStr[j]));
-                list.add(assertList);
-            }
-            return getDataTable(list);
-        }else{
-            return getDataTable(list);
-        }*/
+        //获取num（用于删除做判断：num=0删除状态,num=-1正常添加状态）
+        int num = zxAssetManagement.getNum();
+        if(num == 0){
+            //清空session信息
+            request.getSession().removeAttribute("s");
 
-        if (zxAssetManagement.getIds()!=null&&!zxAssetManagement.getIds().equals("")){
-            List<ZxAssetManagement> list=new LinkedList<>();
-            String s=zxAssetManagement.getIds();
-            HttpSession session=request.getSession();
-            if(session.getAttribute("s")==null){
-                session.setAttribute("s","0");
-                session.setAttribute("s",session.getAttribute("s")+","+s);
-            }else{
-                session.setAttribute("s",session.getAttribute("s")+","+s);
-            }
-            String spl=session.getAttribute("s").toString();
-            Set set = new HashSet();
-            String[] split =spl.split(",");
-            for (int i=0;i<split.length;i++){
-                set.add(split[i]);
-                System.out.println("set********************:" + set);
-            }
-            set.remove("0");
-            set.remove(" ");
-            for(Object id:set){
-                String s1 = id.toString();
-                System.out.println("s1*****************:" + s1);
-                System.out.println("id********************:" + id);
-                if(!s1.equals("")){
-                    long idam = Long.parseLong(s1);
-                    ZxAssetManagement ls = zxAssetManagementService.selectZxAssetManagementById(idam);
-                    list.add(ls);
+            if (zxAssetManagement.getIds()!=null&&!zxAssetManagement.getIds().equals("")){
+                List<ZxAssetManagement> list=new LinkedList<>();
+                String s=zxAssetManagement.getIds();
+                HttpSession session=request.getSession();
+                if(session.getAttribute("s")==null){
+                    session.setAttribute("s","0");
+                    session.setAttribute("s",session.getAttribute("s")+","+s);
+                }else{
+                    session.setAttribute("s",session.getAttribute("s")+","+s);
                 }
+                String spl=session.getAttribute("s").toString();
+                Set set = new HashSet();
+                String[] split =spl.split(",");
+                for (int i=0;i<split.length;i++){
+                    set.add(split[i]);
+                }
+                set.remove("0");
+                set.remove(" ");
+                for(Object id:set){
+                    String s1 = id.toString();
+                    if(!s1.equals("")){
+                        long idam = Long.parseLong(s1);
+                        ZxAssetManagement ls = zxAssetManagementService.selectZxAssetManagementById(idam);
+                        list.add(ls);
+                    }
+                }
+                return getDataTable(list);
+            }else {
+                List<ZxAssetManagement> list=new LinkedList<>();
+                return getDataTable(list);
             }
-            return getDataTable(list);
-        }else {
-            List<ZxAssetManagement> list=new LinkedList<>();
-            return getDataTable(list);
+        }else{
+            if (zxAssetManagement.getIds()!=null&&!zxAssetManagement.getIds().equals("")){
+                List<ZxAssetManagement> list=new LinkedList<>();
+                String s=zxAssetManagement.getIds();
+                HttpSession session=request.getSession();
+                if(session.getAttribute("s")==null){
+                    session.setAttribute("s","0");
+                    session.setAttribute("s",session.getAttribute("s")+","+s);
+                }else{
+                    session.setAttribute("s",session.getAttribute("s")+","+s);
+                }
+                String spl=session.getAttribute("s").toString();
+                Set set = new HashSet();
+                String[] split =spl.split(",");
+                for (int i=0;i<split.length;i++){
+                    set.add(split[i]);
+                }
+                set.remove("0");
+                set.remove(" ");
+                for(Object id:set){
+                    String s1 = id.toString();
+                    if(!s1.equals("")){
+                        long idam = Long.parseLong(s1);
+                        ZxAssetManagement ls = zxAssetManagementService.selectZxAssetManagementById(idam);
+                        list.add(ls);
+                    }
+                }
+                return getDataTable(list);
+            }else {
+                List<ZxAssetManagement> list=new LinkedList<>();
+                return getDataTable(list);
+            }
         }
     }
 }
