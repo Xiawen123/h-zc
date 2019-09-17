@@ -2,6 +2,7 @@
 <html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
 <head>
     <th:block th:include="include :: header('资产转移列表')" />
+    <script th:src="@{/ajax/libs/laydate/laydate.js}"></script>
     <th:block th:include="include :: layout-latest-css" />
     <th:block th:include="include :: ztree-css" />
 </head>
@@ -11,7 +12,7 @@
     <div class="box box-main">
         <div class="box-header">
             <div class="box-title">
-                <i class="fa icon-grid"></i> 组织机构
+                <i class="fa icon-grid"></i> 校区
             </div>
             <div class="box-tools pull-right">
                 <a type="button" class="btn btn-box-tool" href="#" onclick="dept()" title="校区"><i class="fa fa-edit"></i></a>
@@ -34,9 +35,15 @@
                         <ul>
                             <li>
                                 <p>转移日期：</p>
-                                <input type="date" name="extend1"/>
+                                <input type="text" name="shareTime" id="transferTime"/>
                             </li>
-
+                            <li>
+                                <p>使用部门：</p>
+                                <select name="useDepartment" th:with="type=${@dict.getType('zc_department')}">
+                                    <option value="">所有</option>
+                                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+                                </select>
+                            </li>
                             <li>
                                 <p>转移物品：</p>
                                 <input type="text" name="name"/>
@@ -44,14 +51,6 @@
                             <li>
                                 <p>物品编号：</p>
                                 <input type="text" name="assetNum"/>
-                            </li>
-                            <li>
-                                <p>使用部门：</p>
-<!--                                <input type="text" name="useDepartment"/>-->
-                                <select name="useDepartment" class="form-control m-b" th:with="type=${@dict.getType('zc_department')}">
-                                    <option value="">所有</option>
-                                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
-                                </select>
                             </li>
                             <li>
                                 <p>使用人员：</p>
@@ -63,8 +62,7 @@
                             </li>
                         </ul>
                     </div>
-                    <input type="hidden" id="deptId" name="extend4">
-                    <input type="hidden" id="parentId" name="parentId">
+                    <input type="hidden" id="deptId" name="extend5"><!--校区搜索-->
                 </form>
             </div>
 
@@ -86,7 +84,7 @@
             <th:block th:include="include :: layout-latest-js" />
             <th:block th:include="include :: ztree-js" />
     <script th:inline="javascript">
-        var editFlag = [[${@permission.hasPermi('system:transfer:edit')}]];
+        var detailFlag = [[${@permission.hasPermi('system:transfer:detail')}]];
         var removeFlag = [[${@permission.hasPermi('system:transfer:remove')}]];
         var datas1=[[${@dict.getType('zc_department')}]];
         var datas2=[[${@dict.getType('zc_unit')}]];
@@ -107,7 +105,7 @@
             var options = {
                 url: prefix + "/transferList",
                 createUrl: prefix + "/add",
-                detailUrl: prefix + "/detail/{id}",
+                detailUrl: prefix + "/one/{id}",
                 removeUrl: prefix + "/remove",
                 exportUrl: prefix + "/export",
                 modalName: "资产转移",
@@ -116,16 +114,20 @@
                 },
                 {
                     field : 'id',
-                    title : '序号',
+                    title : '转移编号',
                     visible: false
                 },
                 {
-                    field : 'extend1',
+                    field : 'shareTime',
                     title : '转移时间'
                 },
                 {
                     field : 'name',
                     title : '资产名称'
+                },
+                {
+                    field : 'assetNum',
+                    title : '资产编号'
                 },
                 {
                     field : 'type',
@@ -163,9 +165,7 @@
                     align : 'center',
                     formatter:function (value,row,index) {
                         return $.table.selectDictLabel(datas1,value);
-
                     }
-
                 },
 
                 {
@@ -174,10 +174,10 @@
                 },
                 {
                     field : 'extend2',
-                    title : '接受人员'
+                    title : '接收人员'
                 },
                     {
-                        field : 'extend4',
+                        field : 'deptName',
                         title : '校区'
                     },
                 {
@@ -185,8 +185,7 @@
                         align: 'center',
                         formatter: function(value, row, index) {
                             var actions = [];
-                            actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.detail(\'' + row.id + '\')"><i class="fa fa-detail"></i>查看</a>');
-                            // actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.id + '\')"><i class="fa fa-remove"></i>删除</a>');
+                            actions.push('<a class="btn btn-info btn-xs ' + detailFlag + '" href="javascript:void(0)" onclick="$.operate.detail(\'' + row.id + '\')"><i class="fa fa-list-ul"></i>查看</a> ');
                             return actions.join('');
                         }
                 }]
@@ -210,21 +209,16 @@
                 $.table.search();
             }
         }
-        // function zcchange(id) {
-        //     var _url = prefix + "/oneChangee/"+id;
-        //     var options = {
-        //         title: $.table._option.modalName + "变更记录",
-        //         width: '1500px',
-        //         height: '1500px',
-        //         url: _url,
-        //         skin: 'layui-layer-gray',
-        //         btn: ['关闭'],
-        //         yes: function (index, layero) {
-        //             layer.close(index);
-        //         }
-        //     };
-        //     $.modal.openOptions(options);
-        // }
+
+        $(function(){
+            //时间选择器
+            laydate.render({
+                elem: '#transferTime',
+                type: 'date',
+                range: '~',
+                trigger: 'click'
+            });
+        });
     </script>
 </body>
 </html>

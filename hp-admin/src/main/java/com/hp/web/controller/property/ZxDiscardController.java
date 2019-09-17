@@ -84,7 +84,7 @@ public class ZxDiscardController extends BaseController {
      * 新增报废信息
      */
     @GetMapping("/add")
-    public String add(HttpServletRequest request) {
+    public String add() {
         return prefix + "/add";
     }
 
@@ -261,76 +261,6 @@ public class ZxDiscardController extends BaseController {
             return prefix + "/one";
         }
 
-        /**
-         * 删除资产信息
-         */
-        @RequiresPermissions("property:discard:remove")
-        @Log(title = "报废", businessType = BusinessType.DELETE)
-        @PostMapping("/remove")
-        @ResponseBody
-        public AjaxResult remove (String id, HttpServletRequest request, HttpServletResponse reps)
-        {
-            String s = request.getSession().getAttribute("s").toString();
-            /*Set set = new HashSet();*/
-            String c = "";
-            String[] split = s.split(",");
-            System.out.println(split);
-            for (int i = 0; i < split.length; i++) {
-                /* set.add(split[i]);*/
-                c = c + "," + split[i];
-            }
-/*        set.remove("0");
-        set.remove(" ");*/
-            /* set.remove("s");*/
-        /*System.out.println("set="+set);
-        set.remove(" ");
-        set.remove(id);*/
-       /* System.out.println("set.toString()"+set.toString());
-        request.getSession().removeAttribute("s");
-        request.getSession().setAttribute("s",set.toString());*/
-            System.out.println("c=" + c);
-            request.getSession().removeAttribute("s");
-            request.getSession().setAttribute("s", c);
-            /*Cookie cookie = new Cookie("u"+i, java.net.URLEncoder.encode(jsonUser.toString(), "UTF-8"));*/
-        /*String c = set.toString();
-        System.out.println(c+"!!!!!");
-        if (c.contains("[")){
-            c.replace("[","");
-        }
-        if (c.contains("]")){
-            c.replace("]","");
-        }
-        if (c.contains(",")){
-            c.replace(",","#");
-        }
-        Cookie cookie = new Cookie("is",c);
-        System.out.println(cookie.getValue());
-        reps.addCookie(cookie);*/
-            return toAjax(1);
-        }
-
-    /*public TableDataInfo remove(String ids,HttpServletRequest request)
-    {
-        List<ZxAssetManagement> list=new LinkedList<>();
-        String s = request.getSession().getAttribute("s").toString();
-        Set set = new HashSet();
-        //切割
-        String[] split =s.split(",");
-        //利用set去除重复的id
-        for (int i=0;i<split.length;i++){
-            set.add(split[i]);
-        }
-        //移除0和" "
-        set.remove("0");
-        set.remove(" ");
-        set.remove(ids);
-        request.getSession().setAttribute("s",set);
-        Object[] array = set.toArray();
-        System.out.println(array);
-        *//*session.setAttribute("s",session.getAttribute("s")+","+s);*//*
-
-        return getDataTable(list);
-    }*/
 
 
 

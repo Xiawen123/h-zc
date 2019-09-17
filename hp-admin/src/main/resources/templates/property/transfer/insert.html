@@ -24,7 +24,7 @@
                 </div>
             </form>
 
-        <div class="col-sm-12 select-table table-striped" name="ins">
+            <div class="col-sm-12 select-table table-striped" name="ins">
             <table id="bootstrap-table" data-mobile-responsive="true"></table>
         </div>
     </div>
@@ -35,7 +35,7 @@
     var types = [[${@dict.getType('zc_type')}]];
     var unit = [[${@dict.getType('zc_unit')}]];
     var datas = [[${@dict.getType('zc_department')}]];
-    var prefix = ctx + "property/discard";
+    var prefix = ctx + "property/transfer";
 
 
 
@@ -47,7 +47,7 @@
             removeUrl: prefix + "/remove",
             exportUrl: prefix + "/export",
             detailUrl: prefix + "/one/{id}",
-            modalName: "资产报废",
+            modalName: "资产转移",
             columns: [{
                 checkbox: true
             },
