@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -71,7 +72,9 @@ public class ZxAssetManagementServiceImpl implements IZxAssetManagementService {
             }
             zxAssetManagement.setAssetNum("WHHP-"+zxAssetManagement.getType()+ String.format("%05d",(aNum+1)));
             //添加入库时间
-            zxAssetManagement.setStorageTime(new Date().toString());
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            String format = sdf.format(new Date());
+            zxAssetManagement.setStorageTime(format);
             zxAssetManagement.setNumber(1);
             int a = zxAssetManagementMapper.insertZxAssetManagement(zxAssetManagement);
             if (a<1){
