@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hp.property.mapper.ZxInfoMapper">
+
+    <resultMap type="ZxChange" id="ZxChangeResult">
+        <id property="id"    column="id"    />
+        <result property="assetsId"    column="assets_id"    />
+        <result property="changeType"    column="change_type"    />
+        <result property="submittedDepartment"    column="submitted_department"    />
+        <result property="submitOne"    column="submit_one"    />
+        <result property="useDepartment"    column="use_department"    />
+        <result property="users"    column="users"    />
+        <result property="extend1"    column="extend1"    />
+        <result property="extend2"    column="extend2"    />
+        <result property="extend3"    column="extend3"    />
+        <result property="extend4"    column="extend4"    />
+        <result property="extend5"    column="extend5"    />
+        <result property="assetNum"    column="asset_num"    />
+        <result property="name"    column="name"    />
+        <result property="type"    column="type"    />
+        <result property="brand"    column="brand"    />
+        <result property="assetSpecification"    column="asset_specification"    />
+        <result property="number"    column="number"    />
+        <result property="units"    column="units"    />
+        <result property="shareTime"  column="share_time"   />
+        <result property="deptName"     column="dept_name"  />
+    </resultMap>
+
+    <resultMap type="ZxAssetManagement" id="ZxAssetManagementResult">
+        <id property="id"    column="id"    />
+        <result property="name"    column="name"    />
+        <result property="assetNum"    column="asset_num"    />
+        <result property="brand"    column="brand"    />
+        <result property="assetSpecification"    column="asset_specification"    />
+        <result property="number"    column="number"    />
+        <result property="type"    column="type"    />
+        <result property="units"    column="units"    />
+        <result property="supplier"    column="supplier"    />
+        <result property="picture"    column="picture"    />
+        <result property="price"    column="price"    />
+        <result property="purchasingTime"    column="purchasing_time"    />
+        <result property="storageTime"    column="storage_time"    />
+        <result property="warehousingCampus"    column="warehousing_campus"    />
+        <result property="state"    column="state"    />
+        <result property="operator"    column="operator"    />
+        <result property="location"    column="location"    />
+        <result property="recipientsTime"    column="recipients_time"    />
+        <result property="repairTime"    column="repair_time"    />
+        <result property="transferTime"    column="transfer_time"    />
+        <result property="discardTime"    column="discard_time"    />
+        <result property="returnTime"    column="return_time"    />
+        <result property="campus"    column="campus"    />
+        <result property="department"    column="department"    />
+        <result property="extend1"    column="extend1"    />
+        <result property="extend2"    column="extend2"    />
+        <result property="extend3"    column="extend3"    />
+        <result property="extend4"    column="extend4"    />
+        <result property="extend5"    column="extend5"    />
+        <result property="shareTime"  column="share_time"   />
+        <result property="useDepartment"    column="use_department"    />
+        <result property="users"    column="users"    />
+        <result property="deptName"     column="dept_name"  />
+        <result property="branch"     column="branch"   />
+    </resultMap>
+
+
+    <sql id="selectZxAssetManagementVo1">
+        select id, name, asset_num, brand, asset_specification, number, type, units, supplier, picture, price, purchasing_time, storage_time, warehousing_campus, state, operator, location, recipients_time, repair_time, transfer_time, discard_time, return_time, campus, department, extend1, extend2, extend3, extend4, extend5 from zx_asset_management
+    </sql>
+
+    <sql id="selectZxAssetManagementVo">
+    select id, name, asset_num, brand, asset_specification, number, type, units, supplier, picture, price, purchasing_time, storage_time, warehousing_campus, state, operator, location, recipients_time, repair_time, transfer_time, discard_time, return_time, campus, department, extend1, extend2, extend3, extend4, extend5 from zx_asset_management
+    </sql>
+    <select id="selectZxAssetManagementList" parameterType="ZxAssetManagement" resultMap="ZxAssetManagementResult">
+        <include refid="selectZxAssetManagementVo"/>
+        <where>
+            <if test="name != null  and name != ''"> and name like concat('%', #{name}, '%')</if>
+            <if test="assetNum != null  and assetNum != ''"> and asset_num like concat('%', #{assetNum}, '%')</if>
+            <if test="brand != null  and brand != ''"> and brand = #{brand}</if>
+            <if test="assetSpecification != null  and assetSpecification != ''"> and asset_specification = #{assetSpecification}</if>
+            <if test="number != null "> and number = #{number}</if>
+            <if test="type != null and type != ''"> and type = #{type}</if>
+            <if test="units != null "> and units = #{units}</if>
+            <if test="supplier != null  and supplier != ''"> and supplier = #{supplier}</if>
+            <if test="picture != null  and picture != ''"> and picture = #{picture}</if>
+            <if test="price != null "> and price = #{price}</if>
+            <if test="purchasingTime != null "> and purchasing_time = #{purchasingTime}</if>
+            <if test="storageTime != null "> and storage_time = #{storageTime}</if>
+            <if test="warehousingCampus != null and warehousingCampus != 100"> and warehousing_campus = #{warehousingCampus}</if>
+            <if test="state != null "> and state = #{state}</if>
+            <if test="operator != null  and operator != ''"> and operator = #{operator}</if>
+            <if test="location != null "> and location = #{location}</if>
+            <if test="recipientsTime != null "> and recipients_time = #{recipientsTime}</if>
+            <if test="repairTime != null "> and repair_time = #{repairTime}</if>
+            <if test="transferTime != null "> and transfer_time = #{transferTime}</if>
+            <if test="discardTime != null "> and discard_time = #{discardTime}</if>
+            <if test="returnTime != null "> and return_time = #{returnTime}</if>
+            <if test="campus != null "> and campus = #{campus}</if>
+            <if test="department != null "> and department = #{department}</if>
+            <if test="extend1 != null  and extend1 != ''"> and extend1 = #{extend1}</if>
+            <if test="extend2 != null  and extend2 != ''"> and extend2 like concat('%', #{extend2}, '%')</if>
+            <if test="extend3 != null  and extend3 != ''"> and extend3 = #{extend3}</if>
+            <if test="extend4 != null  and extend4 != ''"> and extend4 = #{extend4}</if>
+            <if test="extend5 != null  and extend5 != ''"> and extend5 = #{extend5}</if>
+        </where>
+    </select>
+
+
+
+
+
+    <select id="selectZxChangeById" parameterType="Long" resultMap="ZxChangeResult">
+        select c.*, d.dept_name
+        from zx_change c
+        left join sys_dept d on c.extend5 = d.dept_id
+         where c.assets_id=#{id}
+    </select>
+
+    <select id="selectZxAssetManagementById" parameterType="long" resultMap="ZxAssetManagementResult">
+    <include refid="selectZxAssetManagementVo"/>
+    where id=#{id}
+    </select>
+</mapper>
