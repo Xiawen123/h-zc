@@ -40,12 +40,9 @@
 <body class="white-bg">
     <div class="wrapper wrapper-content animated fadeInRight ibox-content">
         <form class="form-horizontal m" id="form-management1-edit" th:object="${zxAssetManagement}">
-            <div class="form-group">
-            <label class="col-sm-3 control-label"></label>
-            <div class="col-sm-8">
-                <input name="id" th:field="*{id}" type="hidden" readonly="readonly">
-            </div>
-            </div>
+
+            <input name="id" th:field="*{id}" type="hidden">  <!--隐藏的id-->
+
             <div class="form-group">
                 <label class="col-sm-3 control-label">资产编号：</label>
                 <div class="col-sm-8">
@@ -105,16 +102,12 @@
                     <input name="price" th:field="*{price}" class="form-control" type="text">
                 </div>
             </div>
-            <div class="form-group">    
+            <div class="form-group">
                 <label class="col-sm-3 control-label">购置时间：</label>
                 <div class="col-sm-8">
-                    <div class="input-group date">
-                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
-                        <input name="purchasingTime" th:value="${#dates.format(zxAssetManagement.purchasingTime, 'yyyy-MM-dd')}" class="form-control" placeholder="yyyy-MM-dd" type="text">
-                    </div>
+                    <input name="purchasingTime" th:field="*{purchasingTime}" class="form-control" type="text">
                 </div>
             </div>
-
 
             <div class="form-group">    
                 <label class="col-sm-3 control-label">状态：</label>
