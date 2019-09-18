@@ -201,7 +201,7 @@ public class ZxCampusReceiveController extends BaseController {
         String users = zxChange.getUsers();
         zxAssetManagement.setExtend2(users);
 
-        // 将校区存入zxAssetManagement对象
+        // 将领用校区存入zxAssetManagement对象
         String extend4 = zxChange.getExtend4();
         if(extend4 != null && !"".equals(extend4)){
             SysDept sysDept = iSysDeptService.selectDeptById(Long.parseLong(extend4));
@@ -234,6 +234,8 @@ public class ZxCampusReceiveController extends BaseController {
     {
         // 资产状态1代表闲置
         zxAssetManagement.setState(1);
+        // 未保修的
+        zxAssetManagement.setExtend3("0");
 
         // 带条件查询所有
         startPage();
