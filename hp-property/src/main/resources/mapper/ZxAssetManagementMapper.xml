@@ -374,11 +374,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     <!--校区领用详情页-->
     <select id="selectZxAssetManagementById2" parameterType="long" resultMap="ZxAssetManagementResult">
-        SELECT am.*,zc.use_department,zc.users,zc.share_time,sd.dept_name,zc.extend4
-        FROM zx_asset_management am
-        LEFT JOIN zx_change zc ON am.id = zc.assets_id
-        LEFT JOIN sys_dept sd ON sd.dept_id = zc.extend4
-        WHERE zc.id = #{id}
+         SELECT am.`name`,am.asset_num,am.brand,am.asset_specification,am.number,am.type,am.units,am.supplier,am.picture,am.price,am.purchasing_time,am.storage_time,am.warehousing_campus,am.state,am.operator,am.location,zc.extend4,zc.use_department,zc.users,zc.share_time,dept.dept_name
+         FROM zx_asset_management am
+         LEFT JOIN zx_change zc ON am.id = zc.assets_id
+         LEFT JOIN sys_dept sd ON sd.dept_id = zc.extend4
+		 LEFT JOIN sys_dept dept on dept.dept_id = am.warehousing_campus
+         WHERE zc.id = #{id}
     </select>
 
 </mapper>
