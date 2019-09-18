@@ -26,6 +26,8 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
@@ -176,13 +178,35 @@ public class ZxCampusReceiveController extends BaseController {
     {
         ZxAssetManagement zxAssetManagement = zxAssetManagementService.selectZxAssetManagementById2(id);
 
-
-       Long dept = zxAssetManagement.getUseDepartment();
-        String department = "";
-        if(dept != null && !"".equals(dept)){
-            department = iSysDictDataService.selectDictLabel("zc_department",dept.toString());
+        ZxChange zxChange = zxChangeService.selectZxChangeById(id);
+        // 将领用时间存入zxAssetManagement对象
+        String shareTime = zxChange.getShareTime();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        try {
+            Date shareTime2 = sdf.parse(shareTime);
+            zxAssetManagement.setRecipientsTime(shareTime2);
+        } catch (ParseException e) {
+            e.printStackTrace();
         }
-        zxAssetManagement.setDepartmentName(department);
+
+        // 将领用部门存入zxAssetManagement对象
+        Integer useDepartment = zxChange.getUseDepartment();
+        String uDepartment = "";
+        if(useDepartment != null && !"".equals(useDepartment)){
+            uDepartment = iSysDictDataService.selectDictLabel("zc_department",useDepartment.toString());
+        }
+        zxAssetManagement.setExtend1(uDepartment);
+
+        // 将领用人存入zxAssetManagement对象
+        String users = zxChange.getUsers();
+        zxAssetManagement.setExtend2(users);
+
+        // 将校区存入zxAssetManagement对象
+        String extend4 = zxChange.getExtend4();
+        if(extend4 != null && !"".equals(extend4)){
+            SysDept sysDept = iSysDeptService.selectDeptById(Long.parseLong(extend4));
+            zxAssetManagement.setExtend5(sysDept.getDeptName());
+        }
 
         Integer state = zxAssetManagement.getState();
         String status = "";
