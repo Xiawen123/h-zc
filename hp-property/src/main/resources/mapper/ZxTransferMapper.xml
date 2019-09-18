@@ -2,7 +2,7 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.hp.property.mapper.ZxDiscardMapper">
+<mapper namespace="com.hp.property.mapper.ZxTransferMapper">
 
     <resultMap type="ZxChange" id="ZxChangeResult">
         <id property="id"    column="id"    />
@@ -75,14 +75,14 @@
         select id, assets_id, change_type, submitted_department, submit_one, use_department, users, extend1, extend2, extend3, extend4, extend5 from zx_change
     </sql>
 
-    <!--查询变更类型为报废（4）的变更记录-->
-    <select id="selectDiscardList" parameterType="ZxChange" resultMap="ZxChangeResult">
+    <!--查询变更类型为转移（2）的变更记录-->
+    <select id="selectTransferList" parameterType="ZxChange" resultMap="ZxChangeResult">
         select c.*,am.`name`,am.asset_num,am.type,am.brand,am.asset_specification,am.number,am.units,d.dept_name
         from zx_change c
         left join zx_asset_management am on c.assets_id = am.id
         left join sys_dept d on c.extend5 = d.dept_id
         <where>
-            c.change_type = 4
+            c.change_type = 2
             <if test="name != null  and name != ''"> and am.name like concat('%', #{name}, '%')</if>
             <if test="assetNum != null  and assetNum != ''"> and am.asset_num like concat('%', #{assetNum}, '%')</if>
             <if test="useDepartment != null "> and c.use_department = #{useDepartment}</if>
@@ -99,12 +99,12 @@
     </select>
 
     <!--查询未报废的资产信息-->
-    <select id="selectNoDiscardZxAssetList" parameterType="ZxAssetManagement" resultMap="ZxAssetManagementResult">
+    <select id="selectNoTransferList" parameterType="ZxAssetManagement" resultMap="ZxAssetManagementResult">
         select * from zx_asset_management
-        <where>
-            not state = #{state}
-            <if test="name != null  and name != ''"> and name like concat('%', #{name}, '%')</if>
-        </where>
+            <where>
+                not state = #{state}
+                <if test="name != null  and name != ''"> and name like concat('%', #{name}, '%')</if>
+            </where>
     </select>
 
     <!-- 通过id查询报废详情 -->
@@ -113,7 +113,7 @@
         from zx_change c
         left join zx_asset_management am on c.assets_id = am.id
         left join sys_dept d on c.extend5 = d.dept_id
-		left join sys_dept dept on dept.dept_id = am.warehousing_campus
+        left join sys_dept dept on dept.dept_id = am.warehousing_campus
         where c.id = #{id}
     </select>
 </mapper>

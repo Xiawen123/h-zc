@@ -1,13 +1,11 @@
-package com.hp.property.service.impl;
+package com.hp.property.service.impl;/**
+ * create by dell on 2019/9/17
+ */
 
 import com.hp.property.domain.ZxAssetManagement;
 import com.hp.property.domain.ZxChange;
-import com.hp.property.mapper.ZxAssetManagementMapper;
-import com.hp.property.mapper.ZxChangeMapper;
-import com.hp.property.mapper.ZxDiscardMapper;
-import com.hp.property.service.IZxDiscardService;
-import com.hp.system.domain.SysDept;
-import com.hp.system.mapper.SysDeptMapper;
+import com.hp.property.mapper.ZxTransferMapper;
+import com.hp.property.service.IzxTransferService;
 import com.hp.system.mapper.SysDictDataMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,23 +15,24 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * 报废Service的实现类  IZxDiscardService
- */
+ * 转移实现类
+ * @date : 2019-09-17 10:25
+ **/
 @Service
-public class ZxDiscardServiceImpl implements IZxDiscardService {
+public class ZxTransferServiceimpl implements IzxTransferService{
+
     @Autowired
-    private ZxDiscardMapper zxDiscardMapper;
+    private ZxTransferMapper zxTransferMapper;
 
     @Autowired
     private SysDictDataMapper sysDictDataMapper;
     /**
-     * 查询报废的变更记录信息列表
-     *
+     * 转移信息列表
      * @param zxChange
      * @return
      */
     @Override
-    public List<ZxChange> selectDiscardList(ZxChange zxChange) {
+    public List<ZxChange> selectTransferList(ZxChange zxChange) {
         String shareTime = zxChange.getShareTime();  //获取范围时间
         Map<String,Object> param = new HashMap<>();
         if(shareTime != null && !shareTime.equals("") && shareTime.length() != 0){
@@ -42,24 +41,12 @@ public class ZxDiscardServiceImpl implements IZxDiscardService {
             param.put("endTime",shareTimeArray[1]);
         }
         zxChange.setParams(param);
-        List<ZxChange> changes = zxDiscardMapper.selectDiscardList(zxChange);
-        return changes;
-    }
-
-    /**
-     * 查询未报废的资产
-     *
-     * @param zxAssetManagement
-     * @return
-     */
-    @Override
-    public List<ZxAssetManagement> selectZxNoDiscardList(ZxAssetManagement zxAssetManagement) {
-        return zxDiscardMapper.selectNoDiscardZxAssetList(zxAssetManagement);
+        return zxTransferMapper.selectTransferList(zxChange);
     }
 
     @Override
     public ZxAssetManagement selectZxAssetManagementById(Long id) {
-        ZxAssetManagement management = zxDiscardMapper.selectZxAssetManagementById(id);
+        ZxAssetManagement management = zxTransferMapper.selectZxAssetManagementById(id);
         System.out.println(management);
         Long dept= management.getUseDepartment();
         String department = "";
@@ -75,4 +62,16 @@ public class ZxDiscardServiceImpl implements IZxDiscardService {
         management.setStatus(status);
         return management;
     }
+
+    /**
+     * 查询未报废的资产
+     *
+     * @param zxAssetManagement
+     * @return
+     */
+    @Override
+    public List<ZxAssetManagement> selectNoTransferList(ZxAssetManagement zxAssetManagement) {
+        return zxTransferMapper.selectNoTransferList(zxAssetManagement);
+    }
+
 }

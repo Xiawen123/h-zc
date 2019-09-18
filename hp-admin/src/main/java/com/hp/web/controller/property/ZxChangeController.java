@@ -7,21 +7,23 @@ import com.hp.common.core.page.TableDataInfo;
 import com.hp.common.enums.BusinessType;
 import com.hp.common.utils.DateString;
 import com.hp.common.utils.SnowFlake;
+import com.hp.framework.util.ShiroUtils;
 import com.hp.property.domain.ZxAssetManagement;
 import com.hp.property.domain.ZxChange;
 import com.hp.property.service.IZxAssetManagementService;
 import com.hp.property.service.IZxChangeService;
+import com.hp.property.service.IzxTransferService;
+import com.hp.system.domain.SysUser;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.LinkedList;
-import java.util.List;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 /**
  * 资产变更Controller
@@ -41,6 +43,9 @@ public class ZxChangeController extends BaseController
     @Autowired
     private IZxAssetManagementService zxAssetManagementService;
 
+    @Autowired
+    private IzxTransferService zxTransferService;
+
     @RequiresPermissions("property:transfer:view")
     @GetMapping()
     public String change()
@@ -50,9 +55,6 @@ public class ZxChangeController extends BaseController
 
     /**
      *@description:  转移查询
-     *@author:  CaiYan
-     *@createTime:  2019/9/3
-     *@return:
      *@param:
      *
      */
@@ -62,134 +64,196 @@ public class ZxChangeController extends BaseController
     public TableDataInfo transferList(ZxChange zxChange)
     {
         startPage();
-        List<ZxChange> list = zxChangeService.selectZxChangeTransferList(zxChange);
+        List<ZxChange> list = zxTransferService.selectTransferList(zxChange);
+        System.out.println(list);
         return getDataTable(list);
     }
 
+
     /**
-     * 查看资产详情
+     * 根据变更记录id查询详情
      */
-    @GetMapping("/detail/{id}")
-    public String detail(@PathVariable("id") Long id, ModelMap mmap)
+    @GetMapping("/one/{id}")
+    public String one (@PathVariable("id") Long id, ModelMap mmap)
     {
-        ZxChange zxChange = zxChangeService.selectZxChangeById(id);
-        mmap.put("zxChange", zxChange);
-        return prefix + "/detail";
+        ZxAssetManagement zxAssetManagement = zxTransferService.selectZxAssetManagementById(id);
+        mmap.put("zxAssetManagement", zxAssetManagement);
+        return prefix + "/one";
     }
 
 
     /**
-     * 新增资产变更
+     * 新增报废信息
      */
     @GetMapping("/add")
-    public String add()
-    {
-
-        return prefix+"/add";
+    public String add() {
+        return prefix + "/add";
     }
 
     /**
-     * 新增保存转移信息
+     * 跳转到查询未报废的信息列表的页面(子窗口)
      */
-    @RequiresPermissions("property:transfer:add")
-    @Log(title = "资产信息", businessType = BusinessType.INSERT)
-    @PostMapping("/add")
-    @ResponseBody
-    public AjaxResult addSave(ZxChange zxChange)
-    {
-
-        String ids = zxChange.getIds();
-        int i1=0;
-        if (ids!=null&&!ids.equals("")){
-            String[] split = ids.split(",");
-            //ZxChange zxChange1=new ZxChange();
-            for (int i=0;i<split.length;i++){
-                ZxAssetManagement zxone = zxAssetManagementService.selectZxAssetManagementById(Long.parseLong(split[i]));
-                zxone.setLocation(Integer.parseInt(zxChange.getExtend3()));
-                zxChange.setAssetsId(Long.parseLong(split[i]));
-                zxChange.setId(SnowFlake.nextId());
-                zxChange.setChangeType(2);
-                zxChange.setExtend1(DateString.getString(new Date(),"yyyy-MM-dd HH:mm:ss"));
-                zxChangeService.insertZxChange(zxChange);
-                i1 = zxAssetManagementService.updateZxAssetManagement(zxone);
-            }
-            return toAjax(i1);
-        }
-        return toAjax(zxChangeService.insertZxChange(null));
+    @GetMapping("/insert")
+    public String insert() {
+        return prefix + "/insert";
     }
 
-    @RequiresPermissions("property:department:propertyList")
-    @PostMapping("/propertyList")
+    /**
+     * 根据小窗口的id查未报废的资产数据
+     * <p>
+     * （就是根据传过来的ids查询数据）
+     *
+     * @param zxAssetManagement
+     * @return
+     */
+    @RequiresPermissions("property:discard:alist")
+    @PostMapping("/alist")
     @ResponseBody
-    public TableDataInfo propertyList(ZxAssetManagement zxAssetManagement, HttpSession httpSession)
-    {
-        if (zxAssetManagement.getIds()!=null&&!zxAssetManagement.getIds().equals("")){
-            List<ZxAssetManagement> list=new LinkedList<>();
-            String s=zxAssetManagement.getIds();
-            String[] split = s.split(",");
-            String ids = (String)httpSession.getAttribute("ids");
-            if (ids!=null&&!ids.equals("")){
-                String s1 = ids + s;
-                String[] split1 = s1.split(",");
-                List<String> list1=new ArrayList<>();
-                for (int i=0;i<split1.length;i++){
-           //如果集合里面没有相同的元素才往里存
-                    if(!list1.contains(split1[i])){
-                        list1.add(split1[i]);
+    public TableDataInfo alist(ZxAssetManagement zxAssetManagement, HttpServletRequest request) {
+        int num = zxAssetManagement.getNum(); //获取num（用于删除做判断：num=0删除状态,num=-1正常添加状态）
+        if(num == 0){
+            request.getSession().removeAttribute("s");//清空session信息
+
+            if (zxAssetManagement.getIds() != null && !zxAssetManagement.getIds().equals("")){
+                List<ZxAssetManagement> list = new LinkedList<>();
+                String s = zxAssetManagement.getIds(); //获取ids
+                HttpSession session = request.getSession();
+                if(session.getAttribute("s") == null){
+                    session.setAttribute("s","0");
+                    session.setAttribute("s",session.getAttribute("s")+","+s);
+                }else{
+                    session.setAttribute("s",session.getAttribute("s")+","+s);
+                }
+                String spl = session.getAttribute("s").toString();
+                Set set = new HashSet();
+                String[] split = spl.split(",");
+                for (int i=0; i<split.length; i++){
+                    set.add(split[i]);
+                }
+                set.remove("0");
+                set.remove("");
+                for(Object id:set){
+                    String s1 = id.toString();
+                    if(!s1.equals("")){
+                        ZxAssetManagement ls = zxAssetManagementService.selectZxAssetManagementById(Long.parseLong(s1));
+                        list.add(ls);
                     }
                 }
-                split = list1.toArray(new String[1]);
+                return getDataTable(list);
             }else {
-                httpSession.setAttribute("ids",s);
+                List<ZxAssetManagement> list = new LinkedList<>();
+                return getDataTable(list);
             }
-            for (int i=0;i<split.length;i++){
-                if (split[i]!=null&&!split[i].equals("")) {
-                    ZxAssetManagement ls = zxAssetManagementService.selectZxAssetManagementById(Long.parseLong(split[i]));
-                    list.add(ls);
-                }
-            }
-            return getDataTable(list);
         }else {
-            List<ZxAssetManagement> list=new LinkedList<>();
-            return getDataTable(list);
+            if (zxAssetManagement.getIds() != null && !zxAssetManagement.getIds().equals("")) {
+                List<ZxAssetManagement> list = new LinkedList<>();
+                //获取id
+                String s = zxAssetManagement.getIds();
+                System.out.println("s=" + s);
+                //获取session
+                HttpSession session = request.getSession();
+                //判断session是否为空
+                if (session.getAttribute("s") == null) {
+                    session.setAttribute("s", "0");//为了保持一样的格式方便切割（0，s）
+                    session.setAttribute("s", session.getAttribute("s") + "," + s);
+                } else {
+                    session.setAttribute("s", session.getAttribute("s") + "," + s);
+                }
+                //获取session里的s的值
+                String spl = session.getAttribute("s").toString();
+                Set set = new HashSet();
+                //切割
+                String[] split = spl.split(",");
+                //利用set去除重复的id
+                for (int i = 0; i < split.length; i++) {
+                    set.add(split[i]);
+                }
+                //移除0和" "
+                set.remove("0");
+                set.remove(" ");
+                //根据id查询相应的资产，存入list
+                for (Object id : set) {
+                    String s1 = id.toString();
+                    if (!s1.equals("")) {
+                        ZxAssetManagement ls = zxAssetManagementService.selectZxAssetManagementById(Long.parseLong(s1));
+                        list.add(ls);
+                    }
+                }
+                return getDataTable(list);
+            } else {
+                List<ZxAssetManagement> list = new LinkedList<>();
+                return getDataTable(list);
+            }
         }
     }
 
-    @GetMapping("/parent")
-    public String parent()
-    {
-        return prefix + "/addProperty";
-    }
+
     /**
-     * 资产详情
+     * 新增保存资产变更
      */
-    @RequiresPermissions("property:transfer:listooo")
-    @PostMapping("/listooo")
+    @RequiresPermissions("property:discard:add")
+    @Log(title = "新增资产报废", businessType = BusinessType.INSERT)
+    @PostMapping("/add")
     @ResponseBody
-    public TableDataInfo listooo(ZxAssetManagement zxAssetManagement)
+    public AjaxResult addSave(ZxChange zxChange,ZxAssetManagement zxAssetManagement, HttpServletRequest request) {
+        String ids =  request.getSession().getAttribute("s").toString();  //列表id
+        //String ids = zxAssetManagement.getIds();
+        int i1=0;
+        if (ids != null && !ids.equals("")) {
+            ZxAssetManagement zxone = null;
+            Set set = new HashSet();
+            String[] split = ids.split(",");
+            for (int i = 0; i < split.length; i++) {
+                set.add(split[i]);
+            }
+            set.remove("0");
+            set.remove("");
+            System.out.println("set=" + set);
+            for (Object id : set) {
+                String s1 = id.toString();  //获取单个id
+                if (!s1.equals("")) {
+                    zxone = new ZxAssetManagement();  //创建ZxAssetManagement表对象（用于传参）
+                    zxone.setId(Long.parseLong(s1));  //单个id
+                    //zxone.setState(3);  //状态（1：闲置，2：在用，3：报废）
+                    zxone.setLocation(Integer.valueOf(zxChange.getExtend3()));//存放地点
+
+                    long l = SnowFlake.nextId();
+                    zxChange.setId(l);
+                    zxChange.setAssetsId(Long.parseLong(s1));
+                    zxChange.setChangeType(2);  //7：转移
+                    zxChange.setUseDepartment(zxChange.getUseDepartment());  //转移部门
+
+
+                    SysUser sysUser = ShiroUtils.getSysUser();  //获取用户信息
+                    Long schoolId = sysUser.getDeptId();  //获取部门编号（校区）
+                    zxChange.setExtend5(schoolId);
+                    SimpleDateFormat time = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                    zxChange.setExtend1(time.format(new Date()));  //创建时间
+
+                    int result = zxChangeService.insertZxChange(zxChange);  //插入转移新的记录
+                    i1 = zxAssetManagementService.updateZxAssetManagement(zxone);  //更改转移后物品状态
+                }
+            }
+            return toAjax(i1);
+        }else{
+            return toAjax(zxChangeService.insertZxChange(null));
+        }
+    }
+
+    /**
+     * 查询资产信息列表（查询未转移的资产））
+     */
+    @RequiresPermissions("property:discard:inserts")
+    @PostMapping("/inserts")
+    @ResponseBody
+    public TableDataInfo insert (ZxAssetManagement zxAssetManagement)
     {
         zxAssetManagement.setState(2);
         startPage();
-        List<ZxAssetManagement> list = zxAssetManagementService.selectZxAssetManagementList(zxAssetManagement);
+        List<ZxAssetManagement> list = zxTransferService.selectNoTransferList(zxAssetManagement);
         return getDataTable(list);
     }
 
-    /**
-     * 添加资产信息
-     */
-    @GetMapping("/addProperty")
-    public String addProperty(){
-        return prefix+"/addProperty";
-    }
 
-    @PostMapping("/xuan")
-    @ResponseBody
-    public AjaxResult xuan(String ids){
-        try {
-            return toAjax(0);
-        } catch (Exception e) {
-            return error(e.getMessage());
-        }
-    }
 
 }
