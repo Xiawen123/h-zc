@@ -105,13 +105,15 @@
             var options = {
                 url: prefix + "/list",
                 createUrl: prefix + "/add",
-                updateUrl: prefix + "/edit/{id}",
-                removeUrl: prefix + "/remove",
-                exportUrl: prefix + "/export",
                 detailUrl: prefix+"/detail/{id}",
                 modalName: "资产信息",
                 columns: [{
                     checkbox: true
+                },
+                {
+                    field : 'id',
+                    title : '领用ID',
+                    visible: false
                 },
                 {
                     field : 'shareTime',
