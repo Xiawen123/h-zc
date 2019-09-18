@@ -53,8 +53,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="supplier != null  and supplier != ''"> and supplier = #{supplier}</if>
             <if test="picture != null  and picture != ''"> and picture = #{picture}</if>
             <if test="price != null "> and price = #{price}</if>
-            <if test="purchasingTime != null "> and purchasing_time = #{purchasingTime}</if>
-            <if test="storageTime != null "> and storage_time = #{storageTime}</if>
+            <if test="purchasingTime != null and purchasingTime != ''">
+                and date_format(purchasing_time,'%y%m%d') >= date_format(SUBSTR(#{purchasingTime} FROM 1 FOR 10),'%y%m%d')
+                and date_format(purchasing_time,'%y%m%d') <![CDATA[ <= ]]> date_format(SUBSTR(#{purchasingTime} FROM 14 FOR 10),'%y%m%d')
+            </if>
+            <if test="storageTime != null and storageTime != ''">
+                and date_format(storage_time,'%y%m%d') >= date_format(SUBSTR(#{storageTime} FROM 1 FOR 10),'%y%m%d')
+                and date_format(storage_time,'%y%m%d') <![CDATA[ <= ]]> date_format(SUBSTR(#{storageTime} FROM 14 FOR 10),'%y%m%d')
+            </if>
             <if test="warehousingCampus != null and warehousingCampus != 100"> and warehousing_campus = #{warehousingCampus}</if>
             <if test="state != null "> and state = #{state}</if>
             <if test="operator != null  and operator != ''"> and operator = #{operator}</if>
@@ -72,6 +78,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="extend4 != null  and extend4 != ''"> and extend4 = #{extend4}</if>
             <if test="extend5 != null  and extend5 != ''"> and extend5 = #{extend5}</if>
         </where>
+        order by storage_time desc,asset_num desc
     </select>
 
 

@@ -52,7 +52,7 @@
                             </li>
                             <li>
                                 <p>操作人员：</p>
-                                <input type="text" name="extend2"/>
+                                <input type="text" name="operator"/>
                             </li>
                             <li>
                                 <p>入库校区：</p>
@@ -169,15 +169,6 @@
                     {
                         field : 'operator',
                         title : '操作人员',
-                    },
-                    {
-                        title: '操作',
-                        align: 'center',
-                        formatter: function(value, row, index) {
-                            var actions = [];
-                            actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.edit(\'' + row.id + '\')"><i class="fa fa-edit"></i>详情</a> ');
-                            return actions.join('');
-                        }
                     }]
             };
             $.table.init(options);
