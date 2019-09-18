@@ -26,6 +26,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="units"    column="units"    />
         <result property="shareTime"  column="share_time"   />
         <result property="deptName"     column="dept_name"  />
+        <result property="place"      column="place"    />
     </resultMap>
 
     <sql id="selectZxChangeVo">
@@ -183,10 +184,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     <!-- 查询部门领用列表 -->
     <select id="selectDeptReceiveList" parameterType="ZxChange" resultMap="ZxChangeResult">
-        select c.*,am.`name`,am.asset_num,am.type,am.brand,am.asset_specification,am.number,am.units,d.dept_name
+        select c.*,am.`name`,am.asset_num,am.type,am.brand,am.asset_specification,am.number,am.units,d.dept_name,sd.dept_name place
         from zx_change c
         left join zx_asset_management am on c.assets_id = am.id
         left join sys_dept d on c.extend5 = d.dept_id
+        left join sys_dept sd on c.extend3 = sd.dept_id
         <where>
             c.change_type = 6
             <if test="name != null  and name != ''"> and am.name like concat('%', #{name}, '%')</if>

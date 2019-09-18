@@ -83,6 +83,16 @@ public class ZxChange extends BaseEntity
 
     /** 校区 */
     private String deptName;
+    /** 存放地点（显示用） */
+    private String place;
+
+    public String getPlace() {
+        return place;
+    }
+
+    public void setPlace(String place) {
+        this.place = place;
+    }
 
     public String getDeptName() {
         return deptName;
