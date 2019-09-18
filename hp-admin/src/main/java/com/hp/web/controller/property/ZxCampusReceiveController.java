@@ -43,7 +43,7 @@ public class ZxCampusReceiveController extends BaseController {
     @Autowired
     private ZxChangeServiceImpl zxChangeService;
 
-    @Autowired(required = false)
+    @Autowired
     private IZxAssetManagementService zxAssetManagementService;
 
     @Autowired
@@ -55,13 +55,13 @@ public class ZxCampusReceiveController extends BaseController {
     @Autowired
     private ISysDictDataService iSysDictDataService;
 
+
     // 跳转到校区领用主页面
     @RequiresPermissions("property:campusrecive:view")
     @GetMapping()
     public String management(ModelMap mmap)
     {
-        SysDept sysDept = new SysDept();
-        List<SysDept> sysDepts = iSysDeptService.selectDeptList(sysDept);
+        List<SysDept> sysDepts = iSysDeptService.selectDeptByParentId();
         mmap.put("school",sysDepts);
         return prefix + "/campusrecive";
     }
@@ -170,11 +170,27 @@ public class ZxCampusReceiveController extends BaseController {
         return toAjax(zxChangeService.insertZxChange(null));
     }
 
-    // 修改资产信息
+    // 查看资产信息详情
     @GetMapping("/detail/{id}")
     public String edit(@PathVariable("id") Long id, ModelMap mmap)
     {
-        ZxAssetManagement zxAssetManagement = zxAssetManagementService.selectZxAssetManagementById(id);
+        ZxAssetManagement zxAssetManagement = zxAssetManagementService.selectZxAssetManagementById2(id);
+
+
+       Long dept = zxAssetManagement.getUseDepartment();
+        String department = "";
+        if(dept != null && !"".equals(dept)){
+            department = iSysDictDataService.selectDictLabel("zc_department",dept.toString());
+        }
+        zxAssetManagement.setDepartmentName(department);
+
+        Integer state = zxAssetManagement.getState();
+        String status = "";
+        if(state != null && !"".equals(state)){
+            status = iSysDictDataService.selectDictLabel("zc_state",state.toString());
+        }
+        zxAssetManagement.setStatus(status);
+
         mmap.put("zxAssetManagement", zxAssetManagement);
         return prefix + "/detail";
     }

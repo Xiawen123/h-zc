@@ -51,7 +51,7 @@ public class ZxDiscardController extends BaseController {
     private IZxChangeService zxChangeService;
 
     @Autowired
-    private ISysDeptService iSysDeptService;
+    private ISysDeptService sysDeptService;
 
     @Autowired
     private ISysUserService iSysUserService;
@@ -62,7 +62,9 @@ public class ZxDiscardController extends BaseController {
      */
     @RequiresPermissions("property:discard:view")
     @GetMapping()
-    public String change() {
+    public String change(ModelMap mmap){
+        List<SysDept> sysDepts = sysDeptService.selectDeptByParentId();
+        mmap.put("school",sysDepts);
         return prefix + "/discard";
     }
 

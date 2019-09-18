@@ -47,9 +47,14 @@ public class ZxDepartmentController extends BaseController {
     @Autowired
     private IZxReturnService zxReturnService;
 
+    @Autowired
+    private ISysDeptService sysDeptService;
+
     @RequiresPermissions("property:department:view")
     @GetMapping()
-    public String department(){
+    public String department(ModelMap mmap){
+        List<SysDept> sysDepts = sysDeptService.selectDeptByParentId();
+        mmap.put("school",sysDepts);
         return prefix+"/department";
     }
 
@@ -151,6 +156,7 @@ public class ZxDepartmentController extends BaseController {
     public TableDataInfo listooo(ZxAssetManagement zxAssetManagement)
     {
         zxAssetManagement.setState(1);
+        zxAssetManagement.setExtend3("0");  //未保修的
         startPage();
         List<ZxAssetManagement> list = zxAssetManagementService.selectZxAssetManagementList(zxAssetManagement);
         return getDataTable(list);

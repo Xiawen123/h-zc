@@ -87,4 +87,7 @@ public interface IZxAssetManagementService
      String getMaxNum(ZxAssetManagement zxAssetManagement);
 
      int getCountByType(String type);
+
+     // 校区领用详情页
+    ZxAssetManagement selectZxAssetManagementById2(Long id);
 }

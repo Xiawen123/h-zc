@@ -13,7 +13,9 @@ import com.hp.property.domain.ZxChange;
 import com.hp.property.service.IZxAssetManagementService;
 import com.hp.property.service.IZxChangeService;
 import com.hp.property.service.IzxTransferService;
+import com.hp.system.domain.SysDept;
 import com.hp.system.domain.SysUser;
+import com.hp.system.service.ISysDeptService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -46,10 +48,14 @@ public class ZxChangeController extends BaseController
     @Autowired
     private IzxTransferService zxTransferService;
 
+    @Autowired
+    private ISysDeptService sysDeptService;
+
     @RequiresPermissions("property:transfer:view")
     @GetMapping()
-    public String change()
-    {
+    public String change(ModelMap mmap){
+        List<SysDept> sysDepts = sysDeptService.selectDeptByParentId();
+        mmap.put("school",sysDepts);
         return prefix + "/transfer";
     }
 
@@ -65,7 +71,6 @@ public class ZxChangeController extends BaseController
     {
         startPage();
         List<ZxChange> list = zxTransferService.selectTransferList(zxChange);
-        System.out.println(list);
         return getDataTable(list);
     }
 

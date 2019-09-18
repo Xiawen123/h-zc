@@ -36,6 +36,28 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="extend5"    column="extend5"    />
     </resultMap>
 
+    <resultMap type="ZxChange" id="ZxChangeResult">
+        <result property="id"    column="id"    />
+        <result property="assetsId"    column="assets_id"    />
+        <result property="changeType"    column="change_type"    />
+        <result property="submittedDepartment"    column="submitted_department"    />
+        <result property="submitOne"    column="submit_one"    />
+        <result property="useDepartment"    column="use_department"    />
+        <result property="users"    column="users"    />
+        <result property="extend1"    column="extend1"    />
+        <result property="extend2"    column="extend2"    />
+        <result property="extend3"    column="extend3"    />
+        <result property="extend4"    column="extend4"    />
+        <result property="extend5"    column="extend5"    />
+        <result property="assetNum"    column="asset_num"    />
+        <result property="name"    column="name"    />
+        <result property="type"    column="type"    />
+        <result property="brand"    column="brand"    />
+        <result property="assetSpecification"    column="asset_specification"    />
+        <result property="number"    column="number"    />
+        <result property="units"    column="units"    />
+    </resultMap>
+
     <sql id="selectZxAssetManagementVo">
         select id, name, asset_num, brand, asset_specification, number, type, units, supplier, picture, price, purchasing_time, storage_time, warehousing_campus, state, operator, location, recipients_time, repair_time, transfer_time, discard_time, return_time, campus, department, extend1, extend2, extend3, extend4, extend5 from zx_asset_management
     </sql>
@@ -53,8 +75,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="supplier != null  and supplier != ''"> and supplier = #{supplier}</if>
             <if test="picture != null  and picture != ''"> and picture = #{picture}</if>
             <if test="price != null "> and price = #{price}</if>
-            <if test="purchasingTime != null "> and purchasing_time = #{purchasingTime}</if>
-            <if test="storageTime != null "> and storage_time = #{storageTime}</if>
+            <if test="purchasingTime != null and purchasingTime != ''">
+                and date_format(purchasing_time,'%y%m%d') >= date_format(SUBSTR(#{purchasingTime} FROM 1 FOR 10),'%y%m%d')
+                and date_format(purchasing_time,'%y%m%d') <![CDATA[ <= ]]> date_format(SUBSTR(#{purchasingTime} FROM 14 FOR 10),'%y%m%d')
+            </if>
+            <if test="storageTime != null and storageTime != ''">
+                and date_format(storage_time,'%y%m%d') >= date_format(SUBSTR(#{storageTime} FROM 1 FOR 10),'%y%m%d')
+                and date_format(storage_time,'%y%m%d') <![CDATA[ <= ]]> date_format(SUBSTR(#{storageTime} FROM 14 FOR 10),'%y%m%d')
+            </if>
             <if test="warehousingCampus != null and warehousingCampus != 100"> and warehousing_campus = #{warehousingCampus}</if>
             <if test="state != null "> and state = #{state}</if>
             <if test="operator != null  and operator != ''"> and operator = #{operator}</if>
@@ -67,11 +95,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="campus != null "> and campus = #{campus}</if>
             <if test="department != null "> and department = #{department}</if>
             <if test="extend1 != null  and extend1 != ''"> and extend1 = #{extend1}</if>
-            <if test="extend2 != null  and extend2 != ''"> and extend2 = #{extend2}</if>
+            <if test="extend2 != null  and extend2 != ''"> and extend2 like concat('%', #{extend2}, '%')</if>
             <if test="extend3 != null  and extend3 != ''"> and extend3 = #{extend3}</if>
             <if test="extend4 != null  and extend4 != ''"> and extend4 = #{extend4}</if>
             <if test="extend5 != null  and extend5 != ''"> and extend5 = #{extend5}</if>
         </where>
+        order by storage_time desc,asset_num desc
     </select>
 
 
@@ -342,4 +371,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <select id="getCountByType" resultType="int">
         select count(*) from zx_asset_management where type = #{type}
     </select>
+
+    <!--校区领用详情页-->
+    <select id="selectZxAssetManagementById2" parameterType="long" resultMap="ZxAssetManagementResult">
+        SELECT am.*,zc.use_department,zc.users,zc.share_time,sd.dept_name,zc.extend4
+        FROM zx_asset_management am
+        LEFT JOIN zx_change zc ON am.id = zc.assets_id
+        LEFT JOIN sys_dept sd ON sd.dept_id = zc.extend4
+        WHERE zc.id = #{id}
+    </select>
+
 </mapper>

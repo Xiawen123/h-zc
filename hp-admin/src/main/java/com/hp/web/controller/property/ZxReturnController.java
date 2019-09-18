@@ -41,14 +41,18 @@ import java.util.*;
 @RequestMapping("/property/return")
 public class ZxReturnController extends BaseController {
     private String prefix = "property/return";
+
     @Autowired
     private IZxReturnService zxReturnService;
+
     @Autowired
     private IZxAssetManagementService zxAssetManagementService;
+
     @Autowired
     private IZxChangeService zxChangeService;
+
     @Autowired
-    private ISysDeptService iSysDeptService;
+    private ISysDeptService sysDeptService;
 
     /**
      * 页面展示
@@ -56,8 +60,10 @@ public class ZxReturnController extends BaseController {
      */
     @RequiresPermissions("property:return:view")
     @GetMapping()
-    public String returns()
+    public String returns(ModelMap mmap)
     {
+        List<SysDept> sysDepts = sysDeptService.selectDeptByParentId();
+        mmap.put("school",sysDepts);
         return prefix + "/return";
     }
 

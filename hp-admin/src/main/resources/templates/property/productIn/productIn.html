@@ -52,7 +52,7 @@
                             </li>
                             <li>
                                 <p>操作人员：</p>
-                                <input type="text" name="extend2"/>
+                                <input type="text" name="operator"/>
                             </li>
                             <li>
                                 <p>入库校区：</p>
@@ -61,7 +61,7 @@
                                             th:text="${obj.deptName}"></option>
                                 </select>
                             </li>
-                            <li>
+                            <li style="width: 100%;text-align: center">
                                 <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
                                 <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
                             </li>
@@ -169,15 +169,6 @@
                     {
                         field : 'operator',
                         title : '操作人员',
-                    },
-                    {
-                        title: '操作',
-                        align: 'center',
-                        formatter: function(value, row, index) {
-                            var actions = [];
-                            actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.edit(\'' + row.id + '\')"><i class="fa fa-edit"></i>详情</a> ');
-                            return actions.join('');
-                        }
                     }]
             };
             $.table.init(options);
@@ -226,7 +217,9 @@
         $(function () {
             laydate.render({
                 elem: '#purchasingTime'
-                ,format: 'yyyy-MM-dd'
+                ,trigger:'click'
+                ,type:'date'
+                ,range:true
             });
         });
 

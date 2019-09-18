@@ -91,4 +91,10 @@ public interface ISysDeptService
      * @return 结果
      */
     public String checkDeptNameUnique(SysDept dept);
+
+    /**
+     * 查询部门通过父级id
+     * @return
+     */
+    public List<SysDept> selectDeptByParentId();
 }

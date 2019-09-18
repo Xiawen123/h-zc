@@ -71,7 +71,7 @@ public class ZxAssetManagementServiceImpl implements IZxAssetManagementService {
             }
             zxAssetManagement.setAssetNum("WHHP-"+zxAssetManagement.getType()+ String.format("%05d",(aNum+1)));
             //添加入库时间
-            zxAssetManagement.setStorageTime(new Date());
+            zxAssetManagement.setStorageTime(new Date().toString());
             zxAssetManagement.setNumber(1);
             int a = zxAssetManagementMapper.insertZxAssetManagement(zxAssetManagement);
             if (a<1){
@@ -149,4 +149,11 @@ public class ZxAssetManagementServiceImpl implements IZxAssetManagementService {
 
         return zxAssetManagementMapper.getCountByType(type);
     }
+
+    // 校区领用详情页
+    @Override
+    public ZxAssetManagement selectZxAssetManagementById2(Long id) {
+        return zxAssetManagementMapper.selectZxAssetManagementById2(id);
+    }
+
 }
