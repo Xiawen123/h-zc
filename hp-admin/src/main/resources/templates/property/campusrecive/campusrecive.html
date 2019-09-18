@@ -15,7 +15,7 @@
                     <form id="formId">
                         <div class="select-list">
                             <ul>
-                                <li class="select-time">
+                                <li>
                                     <p>领用时间：</p>
                                     <input type="text" name="extend1" id="extend1" placeholder="领用时间"/>
                                 </li>
@@ -30,7 +30,6 @@
                                 <li>
                                     <p>领用校区：</p>
                                     <select id="extend4" name="extend4" type="text">
-                                        <option value="">全部</option>
                                         <option th:each="obj,eStat:${school}" th:value="${obj.deptId}"
                                                  th:text="${obj.deptName}"></option>
                                     </select>
