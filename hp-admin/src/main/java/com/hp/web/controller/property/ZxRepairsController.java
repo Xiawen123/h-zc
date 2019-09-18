@@ -12,6 +12,7 @@ import com.hp.property.domain.ZxChange;
 import com.hp.property.service.IZxAssetManagementService;
 import com.hp.property.service.IZxChangeService;
 import com.hp.property.service.IZxRepairsService;
+import com.hp.system.domain.SysDept;
 import com.hp.system.domain.SysUser;
 import com.hp.system.service.ISysDeptService;
 import com.hp.system.service.ISysDictDataService;
@@ -34,30 +35,34 @@ import java.util.*;
 @RequestMapping("/property/repairs")
 public class ZxRepairsController extends BaseController {
     private String prefix = "property/repairs";
+
     @Autowired
     private IZxRepairsService zxRepairsService;
+
     @Autowired
     private IZxAssetManagementService zxAssetManagementService;
+
     @Autowired
     private IZxChangeService zxChangeService;
+
     @Autowired
-    private ISysDeptService iSysDeptService;
+    private ISysDeptService sysDeptService;
+
     @Autowired
     private ISysDictDataService iSysDictDataService;
 
-
     @Autowired
     private ISysUserService iSysUserService;
+
     /**
      * 页面展示
      * @return
      */
     @RequiresPermissions("property:repairs:view")
     @GetMapping()
-    public String repairs()
-    {
-
-
+    public String repairs(ModelMap mmap){
+        List<SysDept> sysDepts = sysDeptService.selectDeptByParentId();
+        mmap.put("school",sysDepts);
         return prefix + "/repairs";
     }
 
@@ -82,7 +87,6 @@ public class ZxRepairsController extends BaseController {
     @GetMapping("/select/{id}")
     public String select(@PathVariable("id") Long id, ModelMap mmap)
     {
-        System.out.println(id);
         ZxAssetManagement zxAssetManagement = zxRepairsService.selectZxAssetManagementById(id);
         mmap.put("zxAssetManagement", zxAssetManagement);
         return prefix + "/select";
@@ -99,17 +103,15 @@ public class ZxRepairsController extends BaseController {
         ZxAssetManagement management = zxRepairsService.selectZxAssetManagementById(id);
         String extend3 = management.getExtend3();
         int i;
-            if(extend3.equals("1")){
-                management.setExtend3("0");
-                i= zxRepairsService.updateExtend3(management);
-            }else if(extend3.equals("0")){
-                management.setExtend3("1");
-                i=zxRepairsService.updateExtend3(management);
-            }else{
-                i=0;
+        if(extend3.equals("1")){
+            management.setExtend3("0");
+            i= zxRepairsService.updateExtend3(management);
+        }else if(extend3.equals("0")){
+            management.setExtend3("1");
+            i=zxRepairsService.updateExtend3(management);
+        }else{
+            i=0;
         }
-
-
         return toAjax(i);
     }
 
@@ -272,8 +274,4 @@ public class ZxRepairsController extends BaseController {
             }
         }
     }
-
-
-
-
 }

@@ -105,4 +105,10 @@ public interface SysDeptMapper
      * @return 部门列表
      */
     public List<SysDept> selectChildrenDeptById(Long deptId);
+
+    /**
+     * 查询部门通过父级id
+     * @return
+     */
+    public List<SysDept> selectDeptByParentId();
 }

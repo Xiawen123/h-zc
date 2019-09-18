@@ -7,31 +7,11 @@
     <th:block th:include="include :: ztree-css" />
 </head>
 <body class="gray-bg">
-<div class="ui-layout-west">
-    <div class="box box-main">
-        <div class="box-header">
-            <div class="box-title">
-                <i class="fa icon-grid"></i> 校区
-            </div>
-            <div class="box-tools pull-right">
-                <a type="button" class="btn btn-box-tool" href="#" onclick="dept()" title="管理部门"><i class="fa fa-edit"></i></a>
-                <button type="button" class="btn btn-box-tool" id="btnExpand" title="展开" style="display:none;"><i class="fa fa-chevron-up"></i></button>
-                <button type="button" class="btn btn-box-tool" id="btnCollapse" title="折叠"><i class="fa fa-chevron-down"></i></button>
-                <button type="button" class="btn btn-box-tool" id="btnRefresh" title="刷新部门"><i class="fa fa-refresh"></i></button>
-            </div>
-        </div>
-        <div class="ui-layout-content">
-            <div id="tree" class="ztree"></div>
-        </div>
-    </div>
-</div>
 <div class="ui-layout-center">
      <div class="container-div">
         <div class="row">
             <div class="col-sm-12 search-collapse">
                 <form id="formId">
-                    <input type="hidden" id="deptId" name="extend5">
-                    <input type="hidden" id="parentId" name="parentId">
                     <div class="select-list">
                         <ul>
                             <li>
@@ -58,6 +38,14 @@
                                 <input type="text" name="users"/>
                             </li>
                             <li>
+                                <p>校区：</p>
+                                <select id="extend5" name="extend5" type="text">
+                                    <option value="">全部</option>
+                                    <option th:each="obj,eStat:${school}" th:value="${obj.deptId}"
+                                            th:text="${obj.deptName}"></option>
+                                </select>
+                            </li>
+                            <li style="width: 100%;text-align: center">
                                 <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
                                 <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
                             </li>
@@ -70,15 +58,6 @@
                 <a class="btn btn-success" onclick="$.operate.addFull()" shiro:hasPermission="property:repairs:add">
                     <i class="fa fa-plus"></i> 资产报修
                 </a>
-               <!-- <a class="btn btn-primary single disabled" onclick="$.operate.edit()" shiro:hasPermission="system:management:edit">
-                    <i class="fa fa-edit"></i> 修改
-                </a>
-                <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()" shiro:hasPermission="system:management:remove">
-                    <i class="fa fa-remove"></i> 删除
-                </a>
-                <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="system:management:export">
-                    <i class="fa fa-download"></i> 导出
-                 </a>-->
             </div>
             <div class="col-sm-12 select-table table-striped">
                 <table id="bootstrap-table" data-mobile-responsive="true"></table>
@@ -92,20 +71,14 @@
     <script th:inline="javascript">
 
        var selectFlag = [[${@permission.hasPermi('property:repairs:select')}]];
-       /* var removeFlag = [[${@permission.hasPermi('system:management:remove')}]];*/
         var prefix = ctx + "property/repairs";
-        var type=[[${@dict.getType('zc_type')}]]
-       var dept=[[${@dict.getType('zc_department')}]]
-       var unit=[[${@dict.getType('zc_unit')}]]
-       var campus=[[${@dict.getType('zc_unit')}]]
-       var state=[[${@dict.getType('zc_state')}]]
+        var type=[[${@dict.getType('zc_type')}]];
+       var dept=[[${@dict.getType('zc_department')}]];
+       var unit=[[${@dict.getType('zc_unit')}]];
+       var campus=[[${@dict.getType('zc_unit')}]];
+       var state=[[${@dict.getType('zc_state')}]];
 
         $(function() {
-            var panehHidden = false;
-            if ($(this).width() < 769) {
-                panehHidden = true;
-            }
-            $('body').layout({ initClosed: panehHidden, west__size: 185 });
             queryList();
             queryDeptTree();
         });
@@ -113,9 +86,6 @@
             var options = {
                 url: prefix + "/list",
                 createUrl: prefix + "/add",
-                /*updateUrl: prefix + "/select/{id}",*/
-                /*removeUrl: prefix + "/remove",
-                exportUrl: prefix + "/export",*/
                 detailUrl: prefix+"/select/{id}",
                 modalName: "资产报修",
                 columns: [{
@@ -188,19 +158,21 @@
                     },
                     {
                         field: 'deptName',
-                        title: '校区',
+                        title: '校区'
                     },
                     {
                         field: 'extend1',
-                        title: '创建时间',
+                        title: '创建时间'
                     },
                     {
                         title: '详情',
                         align: 'center',
                         formatter: function(value, row, index) {
                             var actions = [];
-                            actions.push('<a class="btn btn-info btn-xs ' + selectFlag + '" href="javascript:void(0)" onclick="$.operate.detail(\'' + row.id + '\')"><i class="fa fa-list-ul"></i>查看</a> ');
-                            actions.push('<a class="btn btn-danger btn-xs" href="javascript:void(0)" onclick="xgstate(\'' + row.id + '\')"><i class="fa fa-remove"></i>更改状态</a>');
+                            actions.push('<a class="btn btn-info btn-xs ' + selectFlag + '" href="#" onclick="$.operate.detail(\'' + row.id + '\')"><i class="fa fa-list-ul"></i>查看</a> ');
+                            if(row.extend3 == "1"){
+                                actions.push('<a class="btn btn-danger btn-xs" href="#" onclick="xgstate(\'' + row.id + '\')"><i class="fa fa-check"></i>已完成</a>');
+                            }
                             return actions.join('');
                         }
                     }]
@@ -208,8 +180,7 @@
             $.table.init(options);
         }
         function xgstate(id) {
-            var r=confirm("确认修改该状态吗？");
-            if(r==true){
+            layer.confirm('确定要更改该状态吗?', {icon: 3, title:'提示'}, function(index){
                 $.ajax({
                     cache: true,
                     type: "POST",
@@ -225,10 +196,9 @@
                         $.table.search();
 
                     }
-                })
-            }
-
-
+                });
+                layer.close(index);
+            });
         }
 
        function queryDeptTree()
