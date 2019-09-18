@@ -50,8 +50,11 @@ public class ZxAssetAddController extends BaseController
      */
     @RequiresPermissions("property:productIn:view")
     @GetMapping()
-    public String management()
+    public String management(ModelMap mmap)
     {
+        SysDept sysDept = new SysDept();
+        List<SysDept> sysDepts = iSysDeptService.selectDeptList(sysDept);
+        mmap.put("school",sysDepts);
         return prefix + "/productIn";
     }
 

@@ -64,11 +64,11 @@ public class ZxAssetManagement extends BaseEntity
 
     /** 购置时间 */
     @Excel(name = "购置时间", width = 30, dateFormat = "yyyy-MM-dd")
-    private Date purchasingTime;
+    private String purchasingTime;
 
     /** 入库时间 */
     @Excel(name = "入库时间", width = 30, dateFormat = "yyyy-MM-dd")
-    private Date storageTime;
+    private String storageTime;
 
     /** 入库校区 */
     @Excel(name = "入库校区")
@@ -370,25 +370,24 @@ public class ZxAssetManagement extends BaseEntity
     {
         return price;
     }
-    public void setPurchasingTime(Date purchasingTime) 
-    {
+
+    public String getPurchasingTime() {
+        return purchasingTime;
+    }
+
+    public void setPurchasingTime(String purchasingTime) {
         this.purchasingTime = purchasingTime;
     }
 
-    public Date getPurchasingTime() 
-    {
-        return purchasingTime;
+    public String getStorageTime() {
+        return storageTime;
     }
-    public void setStorageTime(Date storageTime) 
-    {
+
+    public void setStorageTime(String storageTime) {
         this.storageTime = storageTime;
     }
 
-    public Date getStorageTime() 
-    {
-        return storageTime;
-    }
-    public void setWarehousingCampus(Integer warehousingCampus) 
+    public void setWarehousingCampus(Integer warehousingCampus)
     {
         this.warehousingCampus = warehousingCampus;
     }
