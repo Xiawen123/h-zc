@@ -53,7 +53,7 @@ public class ZxAssetAddController extends BaseController
     public String management(ModelMap mmap)
     {
         SysDept sysDept = new SysDept();
-        List<SysDept> sysDepts = iSysDeptService.selectDeptList(sysDept);
+        List<SysDept> sysDepts = iSysDeptService.selectDeptByParentId();
         mmap.put("school",sysDepts);
         return prefix + "/productIn";
     }
