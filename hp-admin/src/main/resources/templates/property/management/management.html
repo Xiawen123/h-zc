@@ -236,7 +236,8 @@
         }
         function zcchange(id) {
             var _url = prefix + "/oneChangee/"+id;
-            var options = {
+            $.modal.open($.table._option.modalName + "变更记录",_url,"1000","400")
+            /*var options = {
                 title: $.table._option.modalName + "变更记录",
                 width: '1500px',
                 height: '1500px',
@@ -247,7 +248,7 @@
                     layer.close(index);
                 }
             };
-            $.modal.openOptions(options);
+            $.modal.openOptions(options);*/
         }
     </script>
 </body>
