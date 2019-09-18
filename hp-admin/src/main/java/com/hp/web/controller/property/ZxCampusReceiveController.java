@@ -234,6 +234,8 @@ public class ZxCampusReceiveController extends BaseController {
     {
         // 资产状态1代表闲置
         zxAssetManagement.setState(1);
+        // 未保修的
+        zxAssetManagement.setExtend3("0");
 
         // 带条件查询所有
         startPage();
