@@ -84,7 +84,6 @@
         });
 
         function queryList() {
-            var datas = [[${@dict.getType('zc_location')}]];
             var options = {
                 url: prefix + "/list",
                 createUrl: prefix + "/add",
@@ -151,11 +150,8 @@
                         title: '接收人员'
                     },
                     {
-                        field: 'extend3',
-                        title: '存放地点',
-                        formatter: function(value, row, index) {
-                            return $.table.selectDictLabel(datas,value);
-                        }
+                        field: 'place',
+                        title: '存放地点'
                     },
                     {
                         field: 'deptName',
