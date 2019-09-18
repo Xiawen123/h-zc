@@ -203,8 +203,10 @@ public class ZxCampusReceiveController extends BaseController {
 
         // 将校区存入zxAssetManagement对象
         String extend4 = zxChange.getExtend4();
-        SysDept sysDept = iSysDeptService.selectDeptById(Long.parseLong(extend4));
-        zxAssetManagement.setExtend5(sysDept.getDeptName());
+        if(extend4 != null && !"".equals(extend4)){
+            SysDept sysDept = iSysDeptService.selectDeptById(Long.parseLong(extend4));
+            zxAssetManagement.setExtend5(sysDept.getDeptName());
+        }
 
         Integer state = zxAssetManagement.getState();
         String status = "";
