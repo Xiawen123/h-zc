@@ -76,7 +76,6 @@ public class ZxCampusReceiveController extends BaseController {
     @ResponseBody
     public TableDataInfo list(ZxChange zxChange)
     {
-        System.out.println("extend4*******************:" + zxChange.getExtend4());
         startPage();
         // 查询变更表中所有变动类型为1即领用的所有记录
         List<ZxChange> list = zxChangeService.findAllChangeTypeOne(zxChange);
@@ -109,7 +108,7 @@ public class ZxCampusReceiveController extends BaseController {
     public String add(ModelMap mmap)
     {
         SysDept sysDept = new SysDept();
-        List<SysDept> sysDepts = iSysDeptService.selectDeptList(sysDept);
+        List<SysDept> sysDepts = iSysDeptService.selectSchoolByParentId();
         mmap.put("school",sysDepts);
         return prefix + "/add";
     }
@@ -122,8 +121,6 @@ public class ZxCampusReceiveController extends BaseController {
     @ResponseBody
     public AjaxResult addSave(ZxAssetManagement zxAssetManagement, HttpSession session)
     {
-        System.out.println("zxAssetManagement:_____________" + zxAssetManagement.toString());
-
         String ids = zxAssetManagement.getIds();
         int i1=0;
         if (ids!=null&&!ids.equals("")){

@@ -80,8 +80,13 @@ public class ZxDepartmentController extends BaseController {
         SysDept dept = new SysDept();
         SysUser sysUser = ShiroUtils.getSysUser();  //获取用户信息
         Long schoolId = sysUser.getDeptId();  //获取部门编号（校区）
-        dept.setParentId(schoolId);
-        List<SysDept> deptList = deptService.selectDeptList(dept);
+        List<SysDept> deptList = null;
+        if(schoolId == 100){
+            deptList = deptService.selectDeptByNotInParentId();
+        }else {
+            dept.setParentId(schoolId);
+            deptList = deptService.selectDeptList(dept);
+        }
         mmap.put("deptList", deptList);
         return prefix + "/add";
     }

@@ -111,4 +111,16 @@ public interface SysDeptMapper
      * @return
      */
     public List<SysDept> selectDeptByParentId();
+
+    /**
+     * 查询存放地点
+     * @return
+     */
+    public List<SysDept> selectDeptByNotInParentId();
+
+    /**
+     * 校区领用使用（下拉框）
+     * @return
+     */
+    public List<SysDept> selectSchoolByParentId();
 }
