@@ -63,11 +63,11 @@ public class ZxAssetManagement extends BaseEntity
     private Long price;
 
     /** 购置时间 */
-    @Excel(name = "购置时间", width = 30, dateFormat = "yyyy-MM-dd")
+    @Excel(name = "购置时间")
     private String purchasingTime;
 
     /** 入库时间 */
-    @Excel(name = "入库时间", width = 30, dateFormat = "yyyy-MM-dd")
+    @Excel(name = "入库时间")
     private String storageTime;
 
     /** 入库校区 */
