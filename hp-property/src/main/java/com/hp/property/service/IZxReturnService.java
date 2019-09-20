@@ -40,5 +40,5 @@ public interface IZxReturnService
      * 查询在用状态列表
      * @return
      */
-    public List<ZxAssetManagement> selectAssetManagementList();
+    public List<ZxAssetManagement> selectAssetManagementList(ZxAssetManagement zxAssetManagement);
 }

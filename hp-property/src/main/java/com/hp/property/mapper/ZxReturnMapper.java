@@ -46,7 +46,7 @@ public interface ZxReturnMapper
      * 查询在用状态列表
      * @return
      */
-    List<ZxAssetManagement> selectAssetManagementList();
+    List<ZxAssetManagement> selectAssetManagementList(ZxAssetManagement zxAssetManagement);
 
     int updateManagementStateById(Long id);
 

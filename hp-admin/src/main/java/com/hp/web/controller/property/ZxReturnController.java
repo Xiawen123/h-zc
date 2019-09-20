@@ -88,11 +88,22 @@ public class ZxReturnController extends BaseController {
 
     @RequiresPermissions("property:return:add")
     @GetMapping("/add")
-    public String add(HttpServletRequest request)
+    public String add(HttpServletRequest request,ModelMap mmap)
     {
         if(request.getSession().getAttribute("s")!=null){
             request.getSession().removeAttribute("s");
         }
+        SysDept dept = new SysDept();
+        SysUser sysUser = ShiroUtils.getSysUser();  //获取用户信息
+        Long schoolId = sysUser.getDeptId();  //获取部门编号（校区）
+        List<SysDept> deptList = null;
+        if(schoolId == 100){
+            deptList = sysDeptService.selectDeptByNotInParentId();
+        }else {
+            dept.setParentId(schoolId);
+            deptList = sysDeptService.selectDeptList(dept);
+        }
+        mmap.put("deptList", deptList);
         return prefix + "/add";
     }
 
@@ -103,7 +114,7 @@ public class ZxReturnController extends BaseController {
     @Log(title = "退还登记", businessType = BusinessType.INSERT)
     @PostMapping("/add")
     @ResponseBody
-    public AjaxResult addSave(ZxChange zxChange,ZxAssetManagement zxAssetManagement,HttpServletRequest request)
+    public AjaxResult addSave(ZxChange zxChange,HttpServletRequest request)
     {
         String ids =  request.getSession().getAttribute("s").toString();  //列表id
         //String ids = zxAssetManagement.getIds();
@@ -123,6 +134,13 @@ public class ZxReturnController extends BaseController {
                     zxone = new ZxAssetManagement();  //创建ZxAssetManagement表对象（用于传参）
                     zxone.setId(Long.parseLong(s1));  //单个id
                     zxone.setState(1);  //状态（1：闲置，2：在用，3：报废）
+                    if(zxChange.getUseDepartment() != null){
+                        zxone.setExtend1("");  //使用部门
+                    }
+                    zxone.setExtend2("");  //使用人
+                    if(zxChange.getExtend3() != null){
+                        zxone.setLocation(Integer.parseInt(zxChange.getExtend3()));  //存放地点
+                    }
 
                     long l = SnowFlake.nextId();
                     zxChange.setId(l);
@@ -155,7 +173,7 @@ public class ZxReturnController extends BaseController {
 
 
     /**
-     * 新增资产退还页面
+     * 退还详情页面
      */
     @GetMapping("/select/{id}")
     public String select(@PathVariable("id") Long id, ModelMap mmap)
@@ -173,10 +191,10 @@ public class ZxReturnController extends BaseController {
     @RequiresPermissions("property:return:list")
     @PostMapping("/listss")
     @ResponseBody
-    public TableDataInfo listss()
+    public TableDataInfo listss(ZxAssetManagement zxAssetManagement)
     {
         startPage();
-        List<ZxAssetManagement> list = zxReturnService.selectAssetManagementList();
+        List<ZxAssetManagement> list = zxReturnService.selectAssetManagementList(zxAssetManagement);
         return getDataTable(list);
     }
 
@@ -210,7 +228,8 @@ public class ZxReturnController extends BaseController {
                 for(Object id:set){
                     String s1 = id.toString();
                     if(!s1.equals("")){
-                        ZxAssetManagement ls = zxAssetManagementService.selectZxAssetManagementById(Long.parseLong(s1));
+                        zxAssetManagement.setId(Long.parseLong(s1));
+                        ZxAssetManagement ls = zxAssetManagementService.selectAssetManagementListById(zxAssetManagement);
                         list.add(ls);
                     }
                 }
@@ -241,7 +260,8 @@ public class ZxReturnController extends BaseController {
                 for(Object id:set){
                     String s1 = id.toString();
                     if(!s1.equals("")){
-                        ZxAssetManagement ls = zxAssetManagementService.selectZxAssetManagementById(Long.parseLong(s1));
+                        zxAssetManagement.setId(Long.parseLong(s1));
+                        ZxAssetManagement ls = zxAssetManagementService.selectAssetManagementListById(zxAssetManagement);
                         list.add(ls);
                     }
                 }

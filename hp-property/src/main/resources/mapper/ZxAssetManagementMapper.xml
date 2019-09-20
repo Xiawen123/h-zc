@@ -34,6 +34,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="extend3"    column="extend3"    />
         <result property="extend4"    column="extend4"    />
         <result property="extend5"    column="extend5"    />
+        <result property="deptName"     column="dept_name"  />
     </resultMap>
 
     <resultMap type="ZxChange" id="ZxChangeResult">
@@ -107,6 +108,33 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <select id="selectZxAssetManagementById" parameterType="Long" resultMap="ZxAssetManagementResult">
         <include refid="selectZxAssetManagementVo"/>
         where id = #{id}
+    </select>
+
+    <!-- 弹框列表 -->
+    <select id="selectAssetManagementLists" resultMap="ZxAssetManagementResult" parameterType="ZxAssetManagement">
+        select am.*,d.dept_name from zx_asset_management am
+        left join sys_dept d on d.dept_id = am.warehousing_campus
+        <where>
+            <if test="id != null ">and am.id = #{id}</if>
+            <if test="state != null "> and am.state = #{state}</if>
+            <if test="name != null  and name != ''"> and am.name like concat('%', #{name}, '%')</if>
+            <if test="extend1 != null and extend1 != '' "> and am.extend1 = #{extend1}</if>
+            <if test="extend2 != null and extend2 != '' "> and am.extend2 like concat('%', #{extend2}, '%')</if>
+            <if test="extend3 != null  and extend3 != ''"> and am.extend3 = #{extend3}</if>
+        </where>
+        order by asset_num desc
+    </select>
+
+    <!-- 弹框选择后显示在添加页面的列表 -->
+    <select id="selectAssetManagementListById" resultMap="ZxAssetManagementResult" parameterType="ZxAssetManagement">
+        select am.*,d.dept_name from zx_asset_management am
+        left join sys_dept d on d.dept_id = am.warehousing_campus
+        <where>
+            <if test="id != null ">and am.id = #{id}</if>
+            <if test="name != null  and name != ''"> and am.name like concat('%', #{name}, '%')</if>
+            <if test="extend1 != null and extend1 != '' "> and am.extend1 = #{extend1}</if>
+            <if test="extend2 != null and extend2 != '' "> and am.extend2 like concat('%', #{extend2}, '%')</if>
+        </where>
     </select>
 
     <!--查询所有值-->
@@ -219,8 +247,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="campus != null ">campus = #{campus},</if>
             <if test="department != null ">department = #{department},</if>
             <if test="extend1 != null  and extend1 != ''">extend1 = #{extend1},</if>
-            <if test="extend2 != null  and extend2 != ''">extend2 = #{extend2},</if>
-            <if test="extend3 != null  and extend3 != ''">extend3 = #{extend3},</if>
+            <if test="extend2 != null  ">extend2 = #{extend2},</if>
+            <if test="extend3 != null  ">extend3 = #{extend3},</if>
             <if test="extend4 != null  and extend4 != ''">extend4 = #{extend4},</if>
             <if test="extend5 != null  and extend5 != ''">extend5 = #{extend5},</if>
         </trim>

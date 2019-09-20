@@ -177,21 +177,6 @@
             };
             $.table.init(options);
         }
-        function queryDeptTree()
-        {
-            var url = ctx + "system/dept/treeData";
-            var options = {
-                url: url,
-                expandLevel: 2,
-                onClick : zOnClick
-            };
-            $.tree.init(options);
-
-            function zOnClick(event, treeId, treeNode) {
-                $("#deptId").val(treeNode.id);
-                $.table.search();
-            }
-        }
 
         //时间选择器
         laydate.render({

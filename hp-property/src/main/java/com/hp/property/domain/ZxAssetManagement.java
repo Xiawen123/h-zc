@@ -114,11 +114,11 @@ public class ZxAssetManagement extends BaseEntity
     @Excel(name = "部门")
     private Integer department;
 
-    /** $column.columnComment */
+    /** 使用部门 */
     @Excel(name = "")
     private String extend1;
 
-    /** $column.columnComment */
+    /** 使用人 */
     @Excel(name = "")
     private String extend2;
 
@@ -136,6 +136,26 @@ public class ZxAssetManagement extends BaseEntity
 
     /** 用于删除时做判断 */
     private Integer num;
+    /** 接收人员 */
+    private String reception;
+    /** 存放地点（ZxChange表） */
+    private String place;
+
+    public String getPlace() {
+        return place;
+    }
+
+    public void setPlace(String place) {
+        this.place = place;
+    }
+
+    public String getReception() {
+        return reception;
+    }
+
+    public void setReception(String reception) {
+        this.reception = reception;
+    }
 
     public Integer getNum() {
         return num;
@@ -486,12 +506,12 @@ public class ZxAssetManagement extends BaseEntity
     {
         return department;
     }
-    public void setExtend1(String extend1) 
+    public void setExtend1(String extend1)
     {
         this.extend1 = extend1;
     }
 
-    public String getExtend1() 
+    public String getExtend1()
     {
         return extend1;
     }
