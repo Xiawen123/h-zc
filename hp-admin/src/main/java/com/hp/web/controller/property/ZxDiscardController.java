@@ -86,7 +86,10 @@ public class ZxDiscardController extends BaseController {
      * 新增报废信息
      */
     @GetMapping("/add")
-    public String add() {
+    public String add(HttpServletRequest request) {
+        if(request.getSession().getAttribute("s")!=null){
+            request.getSession().removeAttribute("s");
+        }
         return prefix + "/add";
     }
 
@@ -195,7 +198,7 @@ public class ZxDiscardController extends BaseController {
     @Log(title = "新增资产报废", businessType = BusinessType.INSERT)
     @PostMapping("/add")
     @ResponseBody
-    public AjaxResult addSave(ZxChange zxChange,ZxAssetManagement zxAssetManagement, HttpServletRequest request) {
+    public AjaxResult addSave(ZxChange zxChange, HttpServletRequest request) {
         String ids =  request.getSession().getAttribute("s").toString();  //列表id
         //String ids = zxAssetManagement.getIds();
         int i1=0;
@@ -215,6 +218,13 @@ public class ZxDiscardController extends BaseController {
                         zxone = new ZxAssetManagement();  //创建ZxAssetManagement表对象（用于传参）
                         zxone.setId(Long.parseLong(s1));  //单个id
                         zxone.setState(3);  //状态（1：闲置，2：在用，3：报废）
+                        if(zxChange.getUseDepartment() != null){
+                            zxone.setExtend1("");  //使用部门
+                        }
+                        zxone.setExtend2("");  //使用人
+                        if(zxChange.getExtend3() != null){
+                            zxone.setLocation(-1);  //存放地点
+                        }
 
                         long l = SnowFlake.nextId();
                         zxChange.setId(l);
@@ -246,7 +256,6 @@ public class ZxDiscardController extends BaseController {
         @ResponseBody
         public TableDataInfo insert (ZxAssetManagement zxAssetManagement)
         {
-            zxAssetManagement.setState(4);
             startPage();
             List<ZxAssetManagement> list = zxDiscardService.selectZxNoDiscardList(zxAssetManagement);
             return getDataTable(list);

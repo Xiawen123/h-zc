@@ -100,10 +100,13 @@
 
     <!--查询未报废的资产信息-->
     <select id="selectNoDiscardZxAssetList" parameterType="ZxAssetManagement" resultMap="ZxAssetManagementResult">
-        select * from zx_asset_management
+        select am.*,d.dept_name from zx_asset_management am
+        left join sys_dept d on d.dept_id = am.warehousing_campus
         <where>
-            not state = #{state}
-            <if test="name != null  and name != ''"> and name like concat('%', #{name}, '%')</if>
+            am.state = 3
+            <if test="name != null  and name != ''"> and am.name like concat('%', #{name}, '%')</if>
+            <if test="extend1 != null and extend1 != '' "> and am.extend1 = #{extend1}</if>
+            <if test="extend2 != null and extend2 != '' "> and am.extend2 like concat('%', #{extend2}, '%')</if>
         </where>
     </select>
 
