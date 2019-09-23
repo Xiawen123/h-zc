@@ -211,11 +211,17 @@
         var price = $("#price").val();
         var purchasingTime = $("#purchasingTime").val();
         var imgs = document.getElementsByClassName("imgs");
+        if (imgs.length == 0){
+            imgs = null;
+        }else {
+            imgs = imgs[0].src
+        }
+        /*return
         var b = [];
         for (var i = 0; i < imgs.length; i++) {
             b.push({img: imgs[i].src});
         }
-        var picture = JSON.stringify(b)
+        var picture = JSON.stringify(b)*/
             $.ajax({
                 cache: true,
                 type: "POST",
@@ -230,7 +236,7 @@
                     "supplier": supplier,
                     "price": price,
                     "purchasingTime": purchasingTime,
-                    "picture": picture
+                    "picture": imgs
                 },
                 async: false,
                 error: function (request) {

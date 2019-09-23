@@ -113,20 +113,15 @@ public class ZxAssetAddController extends BaseController
             //添加入库校区
             zxAssetManagement.setWarehousingCampus(ShiroUtils.getSysUser().getDeptId().intValue());
             //添加图片url
-            if (zxAssetManagement.getPicture() != null){
-                List<Map<String, Object>> list = FastJsonUtils.getJsonToListMap(zxAssetManagement.getPicture());
-                for (int i = 0; i < list.size(); i++) {
-                    String a=list.get(i).get("img").toString();
-                    String suffix = a.substring(a.indexOf("/")+1,a.indexOf(";"));
-                    CloudStorageService storage = OSSFactory.build();
-                    String str = a.substring(a.indexOf(",") + 1, a.length());
-                    byte[] bytes = Base64.getDecoder().decode(str);
-                    String url = storage.uploadSuffix(bytes, "." + suffix);
-                    zxAssetManagement.setPicture(url);
-                }
+        if (zxAssetManagement.getPicture() != null && zxAssetManagement.getPicture().equals("") == false){
+            String a=zxAssetManagement.getPicture();
+            String suffix = a.substring(a.indexOf("/")+1,a.indexOf(";"));
+            CloudStorageService storage = OSSFactory.build();
+            String str = a.substring(a.indexOf(",") + 1, a.length());
+            byte[] bytes = Base64.getDecoder().decode(str);
+            String url = storage.uploadSuffix(bytes, "." + suffix);
+            zxAssetManagement.setPicture(url);
             }
-
-
         return toAjax(zxAssetManagementService.insertZxAssetManagement(zxAssetManagement));
     }
 
