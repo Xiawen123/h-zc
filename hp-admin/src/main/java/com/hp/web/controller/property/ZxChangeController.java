@@ -155,7 +155,8 @@ public class ZxChangeController extends BaseController
                 for(Object id:set){
                     String s1 = id.toString();
                     if(!s1.equals("")){
-                        ZxAssetManagement ls = zxAssetManagementService.selectZxAssetManagementById(Long.parseLong(s1));
+                        zxAssetManagement.setId(Long.parseLong(s1));
+                        ZxAssetManagement ls = zxAssetManagementService.selectAssetManagementListById(zxAssetManagement);
                         list.add(ls);
                     }
                 }
@@ -188,14 +189,15 @@ public class ZxChangeController extends BaseController
                 for (int i = 0; i < split.length; i++) {
                     set.add(split[i]);
                 }
-                //移除0和" "
+                //移除0和""
                 set.remove("0");
-                set.remove(" ");
+                set.remove("");
                 //根据id查询相应的资产，存入list
                 for (Object id : set) {
                     String s1 = id.toString();
                     if (!s1.equals("")) {
-                        ZxAssetManagement ls = zxAssetManagementService.selectZxAssetManagementById(Long.parseLong(s1));
+                        zxAssetManagement.setId(Long.parseLong(s1));
+                        ZxAssetManagement ls = zxAssetManagementService.selectAssetManagementListById(zxAssetManagement);
                         list.add(ls);
                     }
                 }
