@@ -156,7 +156,7 @@ public class ZxRepairsController extends BaseController {
                 if (!s1.equals("")) {
                     zxone = new ZxAssetManagement();  //创建ZxAssetManagement表对象（用于传参）
                     zxone.setId(Long.parseLong(s1));  //单个id
-                    zxone.setExtend3("1");
+                    zxone.setExtend3("1");  //保修状态,1:保修，0：未保修
 
                     long l = SnowFlake.nextId();
                     zxChange.setId(l);
@@ -180,6 +180,11 @@ public class ZxRepairsController extends BaseController {
         }
     }
 
+
+    /**
+     * 调用弹框页面
+     * @return
+     */
     @RequiresPermissions("property:return:adds")
     @GetMapping("/adds")
     public String adds()
@@ -189,7 +194,7 @@ public class ZxRepairsController extends BaseController {
 
 
     /**
-     * 获取在用状态的列表(弹框)
+     * 获取未报废状态的资产列表(弹框)
      * @return
      */
     @RequiresPermissions("property:return:list")
@@ -232,7 +237,8 @@ public class ZxRepairsController extends BaseController {
                 for(Object id:set){
                     String s1 = id.toString();
                     if(!s1.equals("")){
-                        ZxAssetManagement ls = zxAssetManagementService.selectZxAssetManagementById(Long.parseLong(s1));
+                        zxAssetManagement.setId(Long.parseLong(s1));
+                        ZxAssetManagement ls = zxAssetManagementService.selectAssetManagementListById(zxAssetManagement);
                         list.add(ls);
                     }
                 }
@@ -263,7 +269,8 @@ public class ZxRepairsController extends BaseController {
                 for(Object id:set){
                     String s1 = id.toString();
                     if(!s1.equals("")){
-                        ZxAssetManagement ls = zxAssetManagementService.selectZxAssetManagementById(Long.parseLong(s1));
+                        zxAssetManagement.setId(Long.parseLong(s1));
+                        ZxAssetManagement ls = zxAssetManagementService.selectAssetManagementListById(zxAssetManagement);
                         list.add(ls);
                     }
                 }

@@ -32,6 +32,7 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
+ * 校区领用
  * @author Liushun
  * @date Created in 2019/9/2 18:00
  * @description
@@ -136,6 +137,10 @@ public class ZxCampusReceiveController extends BaseController {
                 zxone.setExtend2(zxChange.getUsers());  //使用人
                 if(zxChange.getExtend3() != null){
                     zxone.setLocation(Integer.parseInt(zxChange.getExtend3()));  //存放地点
+                }
+                if(zxChange.getExtend5() != null){
+                    Long campus = zxChange.getExtend5();
+                    zxone.setCampus(new Long(campus).intValue());   //所属校区
                 }
 
                 long l = SnowFlake.nextId();

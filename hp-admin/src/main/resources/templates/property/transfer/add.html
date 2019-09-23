@@ -166,8 +166,7 @@
                 {
                     field : 'supplier',
                     title : '供货商'
-                }
-                ,
+                },
                 {
                     field: 'extend1',
                     title: '使用部门',
@@ -187,7 +186,6 @@
                     field: 'state',
                     title: '物品状态',
                     formatter: function(value, row, index) {
-                        console.log(value);
                         return $.table.selectDictLabel(state,value);
                     }
                 }]
