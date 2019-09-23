@@ -93,6 +93,10 @@
                     title : '领用时间'
                 },
                 {
+                    field : 'assetNum',
+                    title : '资产编号'
+                },
+                {
                     field : 'name', 
                     title : '资产名称'
                 },
@@ -123,12 +127,16 @@
                     }
                 },
                 {
-                    field : 'extend4',
+                    field: 'place',
+                    title: '存放地点'
+                },
+                {
+                    field : 'deptName',
                     title : '校区'
                 },
                 {
                     field : 'useDepartment',
-                    title : '部门',
+                    title : '领用部门',
                     formatter:function (value, row, index) {
                         return $.table.selectDictLabel(department,value);
                     }
@@ -153,23 +161,6 @@
             };
             $.table.init(options);
         };
-
-        function queryDeptTree()
-        {
-            var url = ctx + "system/dept/treeData";
-            var options = {
-                url: url,
-                expandLevel: 2,
-                onClick : zOnClick
-            };
-            $.tree.init(options);
-
-            function zOnClick(event, treeId, treeNode) {
-                $("#deptId").val(treeNode.id);
-                $("#parentId").val(treeNode.pId);
-                $.table.search();
-            }
-        }
 
         //时间选择器
         laydate.render({

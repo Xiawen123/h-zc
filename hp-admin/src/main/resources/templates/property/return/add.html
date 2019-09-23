@@ -26,6 +26,15 @@
             </div>
         </div>
         <div class="form-group">
+            <label class="col-sm-3 control-label">存放地点：</label>
+            <div class="col-sm-8">
+                <select id="extend3" name="extend3" class="form-control" type="text">
+                    <option th:each="obj,eStat:${deptList}" th:value="${obj.deptId}"
+                            th:text="${obj.deptName}"></option>
+                </select>
+            </div>
+        </div>
+        <div class="form-group">
             <label class="col-sm-3 control-label">退还时间：</label>
             <div class="col-sm-8">
                 <input name="shareTime" class="form-control" type="text" id="returnTime">
@@ -49,13 +58,12 @@
 <th:block th:include="include :: datetimepicker-js" />
 
 <script th:inline="javascript">
-
-    var removeFlag = [[${@permission.hasPermi('property:return:remove')}]];
-    var selectFlag = [[${@permission.hasPermi('property:return:select')}]];
     var prefix = ctx + "property/return";
+
     var type=[[${@dict.getType('zc_type')}]];
     var dept=[[${@dict.getType('zc_department')}]];
     var unit=[[${@dict.getType('zc_unit')}]];
+    var state=[[${@dict.getType('zc_state')}]];
 
     //删除
     function del() {
@@ -126,66 +134,76 @@
             /* detailUrl: prefix+"/select/{id}",*/
             modalName: "未退还资产信息",
             columns: [{
-                title: "选择",
                 checkbox: true
             },
-                {
-                    field : 'id',
-                    title : '资产ID'
-                },
-                {
-                    field: 'assetNum',
-                    title: '资产编号',
-                    visible: false
-                },
-                {
-                    field: 'name',
-                    title: '资产名称'
-                },
-                {
-                    field: 'type',
-                    title: '资产分类',
-                    formatter: function (value, row, index) {
-                        return $.table.selectDictLabel(type, value);
-                    }
-                },
-                {
-                    field: 'brand',
-                    title: '品牌'
-                },
-                {
-                    field: 'assetSpecification',
-                    title: '规格型号'
-                },
-                {
-                    field: 'units',
-                    title: '单位',
-                    formatter: function (value, row, index) {
-                        return $.table.selectDictLabel(unit, value);
-                    }
-                },
-                {
-                    field: 'supplier',
-                    title: '供货商'
-                },
-                {
-                    field: 'price',
-                    title: '资产原值(元)'
-                },
-                {
-                    field: 'number',
-                    title: '数量'
-                }/*,
-                {
-                    title: '操作',
-                    align: 'center',
-                    formatter: function (value, row, index) {
-                        var actions = [];
-                        actions.push('<a id="a" class="btn btn-danger btn-xs" href="#" onclick="del(\'' + row.id + '\')"><i class="fa fa-remove"></i>删除</a>');
-                        return actions.join('');
-                    }
-                }*/
-            ]
+            {
+                field : 'id',
+                title : '资产ID'
+            },
+            {
+                field: 'assetNum',
+                title: '资产编号'
+            },
+            {
+                field: 'name',
+                title: '资产名称'
+            },
+            {
+                field: 'type',
+                title: '资产分类',
+                formatter: function (value, row, index) {
+                    return $.table.selectDictLabel(type, value);
+                }
+            },
+            {
+                field: 'brand',
+                title: '品牌'
+            },
+            {
+                field: 'assetSpecification',
+                title: '规格型号'
+            },
+            {
+                field: 'units',
+                title: '单位',
+                formatter: function (value, row, index) {
+                    return $.table.selectDictLabel(unit, value);
+                }
+            },
+            {
+                field: 'supplier',
+                title: '供货商'
+            },
+            {
+                field: 'price',
+                title: '资产原值(元)'
+            },
+            {
+                field: 'number',
+                title: '数量'
+            },
+            {
+                field: 'extend1',
+                title: '使用部门',
+                formatter: function(value, row, index) {
+                    return $.table.selectDictLabel(dept,value);
+                }
+            },
+            {
+                field: 'extend2',
+                title: '使用人'
+            },
+            {
+                field: 'deptName',
+                title: '所属校区'
+            },
+            {
+                field: 'state',
+                title: '物品状态',
+                formatter: function(value, row, index) {
+                    return $.table.selectDictLabel(state,value);
+                }
+            }]
         };
         $.table.init(options);
     }

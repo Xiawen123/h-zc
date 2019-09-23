@@ -1,8 +1,11 @@
 <!DOCTYPE HTML>
 <html  lang="zh" xmlns:th="http://www.thymeleaf.org">
 <meta charset="utf-8">
-<head th:include="include :: header('添加领用登记')"></head>
-<script th:src="@{/ajax/libs/laydate/laydate.js}"></script>
+<head>
+	<th:block th:include="include :: header('新增领用信息')" />
+	<th:block th:include="include :: datetimepicker-css" />
+	<script th:src="@{/ajax/libs/laydate/laydate.js}"></script>
+</head>
 <body class="white-bg">
     <div class="wrapper wrapper-content animated fadeInRight ibox-content">
         <form class="form-horizontal m" id="form-department-add">
@@ -30,9 +33,6 @@
 						<option th:each="obj,eStat:${deptList}" th:value="${obj.deptId}"
 								th:text="${obj.deptName}"></option>
 					</select>
-					<!--<select name="extend3" id="extend3" class="form-control m-b" th:with="type=${@dict.getType('zc_location')}">
-						<option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
-					</select>-->
 				</div>
 			</div>
 			<div class="form-group">
@@ -47,14 +47,15 @@
 					<input name="shareTime" class="form-control" type="text" id="shareTime">
 				</div>
 			</div>
-            <div class="btn-group-sm" id="toolbar" role="group">
-                <a class="btn btn-success" onclick="selectUsersToParent()">
-                    <i class="fa fa-plus"></i> 添加
-                </a>
-                <a class="btn btn-danger multiple disabled" onclick="del()">
-                    <i class="fa fa-remove"></i> 删除
-                </a>
-            </div>
+
+			<div class="btn-group-sm" id="toolbar" role="group">
+				<a class="btn btn-success" onclick="selectUsersToParent()">
+					<i class="fa fa-plus"></i> 添加
+				</a>
+				<a class="btn btn-danger multiple disabled" onclick="del()">
+					<i class="fa fa-remove"></i> 删除
+				</a>
+			</div>
 			<div class="col-sm-12 select-table table-striped">
 				<table id="bootstrap-table" data-mobile-responsive="true"></table>
 			</div>
@@ -64,6 +65,39 @@
     <th:block th:include="include :: datetimepicker-js" />
     <script type="text/javascript">
 		var prefix = ctx + "property/department";
+
+		//添加（获取弹框数据）
+        function selectUsersToParent(){
+            var url = prefix + "/assetList";
+            var options = {
+                title: '选择用户',
+                url: url,
+                callBack: doSubmit
+            };
+            $.modal.openOptions(options);
+        }
+        function doSubmit(index, layero){
+            var body = layer.getChildFrame('body', index);
+            if(body != "undefined" && body != "" && body != null){
+                var ids="";
+                for (var i=0;i<body.find('.selected').length;i++){
+                    var data = body.find('.selected')[i];
+                    ids = data.children[1].innerHTML+","+ids;
+                }
+                //赋值
+                $("#ids").val(ids);
+                $("#num").val(-1);
+
+                //判断是否为空
+                if (ids != undefined && ids != null) {
+                    getList();
+                    $.table.search();
+                }
+            }else{
+                layer.msg("请选择一个资产");
+            }
+            layer.close(index);
+        }
 
         //删除
         function del() {
@@ -100,65 +134,35 @@
             var options = {
                 url: prefix + "/listsan",
                 modalName: "闲置资产",
-                search: false,
-                showExport: true,
                 columns: [{
-                        checkbox: true
-                    },
-                    {
-                        field : 'id',
-                        title : '资产id'
-                    },
-                    {
-                        field : 'name',
-                        title : '资产名称'
-                    },
-                    {
-                        field : 'brand',
-                        title : '品牌'
-                    },
-                    {
-                        field : 'assetSpecification',
-                        title : '资产规格'
-                    },
-                    {
-                        field : 'price',
-                        title : '资产原值(元)'
-                    }
-                ]
+					checkbox: true
+				},
+				{
+					field : 'id',
+					title : '资产id'
+				},
+				{
+					field : 'name',
+					title : '资产名称'
+				},
+				{
+					field : 'assetNum',
+					title : '资产编号'
+				},
+				{
+					field : 'brand',
+					title : '品牌'
+				},
+				{
+					field : 'assetSpecification',
+					title : '资产规格'
+				},
+				{
+					field : 'price',
+					title : '资产原值(元)'
+				}]
             };
             $.table.init(options);
-        }
-        function selectUsersToParent(){
-			var url = prefix + "/assetList";
-			var options = {
-				title: '选择用户',
-				url: url,
-				callBack: doSubmit
-			};
-			$.modal.openOptions(options);
-        }
-        function doSubmit(index, layero){
-            var body = layer.getChildFrame('body', index);
-            if(body != "undefined" && body != "" && body != null){
-                var ids="";
-                for (var i=0;i<body.find('.selected').length;i++){
-                    var data = body.find('.selected')[i];
-                     ids = data.children[1].innerHTML+","+ids;
-                }
-                //赋值
-                $("#ids").val(ids);
-                $("#num").val(-1);
-
-                //判断是否为空
-                if (ids != undefined && ids != null) {
-                    getList();
-                    $.table.search();
-                }
-            }else{
-                layer.msg("请选择一个资产");
-            }
-            layer.close(index);
         }
 
         function submitHandler() {
@@ -167,7 +171,7 @@
             var num = $("#num").val();
             var useDepartment = $("#useDepartment").val();  //领用部门
             var users = $("#users").val();    //领用人员
-            var extend3 = $("#extend3").val();   //存放地点
+            var extend3 = $("#extend3 option:selected").val();   //存放地点
             var extend2 = $("#extend2").val();  //使用人员
 			var shareTime = $("#shareTime").val();   //领用时间
             $.ajax({

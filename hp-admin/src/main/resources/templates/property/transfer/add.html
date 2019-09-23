@@ -8,60 +8,10 @@
 <body class="white-bg">
     <div class="wrapper wrapper-content animated fadeInRight ibox-content">
         <form class="form-horizontal m" id="form-discard-add">
-            <!--<div class="form-group">
-                <label class="col-sm-3 control-label" hidden="hidden">资源：</label>
-                <div class="col-sm-8">
-                    <input type="hidden" id="ids" name="ids" />
-                    <input type="hidden" id="num" name="num" /> &lt;!&ndash;用于删除传参 &ndash;&gt;
-                </div>
-            </div>
-            <div class="select-list">
-                <ul>
-                    <li>
-                        <p>申请部门：</p>
-                        <select name="useDepartment" th:with="type=${@dict.getType('zc_department')}">
-                            <option value="">所有</option>
-                            <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
-                        </select>
-                    </li>
-                    <li>
-                        <p>申请人员：</p>
-                        <input id="users" name="users" class="form-control" type="text">
-                    </li>
-                    <li>
-                        <p>接收部门：</p>
-                        <select name="useDepartment" th:with="type=${@dict.getType('zc_department')}">
-                            <option value="">所有</option>
-                            <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
-                        </select>
-                    </li>
-                    <li>
-                        <p>接收人员：</p>
-                        <input id="users" name="users" class="form-control" type="text">
-                    </li>
-                    <li>
-                        <p>使用人员：</p>
-                        <input id="users" name="users" class="form-control" type="text">
-                    </li>
-                    <li>
-                        <p>存放地点：</p>
-                        <input id="users" name="users" class="form-control" type="text">
-                    </li>
-                    <li>
-                        <p>转移时间：</p>
-                        <input name="shareTime" class="form-control" type="text" id="transferTime">
-                    </li>
-                </ul>
-            </div>-->
-
             <!--和报废的添加模块类似的表单-->
-            <div class="form-group">
-                <label class="col-sm-3 control-label" hidden="hidden">资源：</label>
-                <div class="col-sm-8">
-                    <input type="hidden" id="ids" name="ids" />
-                    <input type="hidden" id="num" name="num" /><!-- 用于删除传参 -->
-                </div>
-            </div>
+            <input type="hidden" id="ids" name="ids" />
+            <input type="hidden" id="num" name="num" /><!-- 用于删除传参 -->
+
             <div class="form-group">    
                 <label class="col-sm-3 control-label">申请部门：</label>
                 <div class="col-sm-8">
@@ -101,8 +51,9 @@
             <div class="form-group">
                 <label class="col-sm-3 control-label">存放地点：</label>
                 <div class="col-sm-8">
-                    <select name="extend3" id="extend3" class="form-control m-b" th:with="type=${@dict.getType('zc_location')}">
-                        <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+                    <select id="extend3" name="extend3" class="form-control" type="text">
+                        <option th:each="obj,eStat:${deptList}" th:value="${obj.deptId}"
+                                th:text="${obj.deptName}"></option>
                     </select>
                 </div>
             </div>

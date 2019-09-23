@@ -125,8 +125,8 @@ public class ZxReturnServiceImpl implements IZxReturnService
      * @return
      */
     @Override
-    public List<ZxAssetManagement> selectAssetManagementList(){
-        return zxReturnMapper.selectAssetManagementList();
+    public List<ZxAssetManagement> selectAssetManagementList(ZxAssetManagement zxAssetManagement){
+        return zxReturnMapper.selectAssetManagementList(zxAssetManagement);
     }
 
 }

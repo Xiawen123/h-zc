@@ -35,6 +35,7 @@
 
     var unit=[[${@dict.getType('zc_unit')}]];
     var state=[[${@dict.getType('zc_state')}]];
+    var dept=[[${@dict.getType('zc_department')}]];
 
     var prefix = ctx + "property/campusrecive";
 
@@ -73,15 +74,30 @@
 				}
 			},
 			{
-				field : 'state',
-				title : '资产状态',
-				formatter:function (value, row, index) {
-					return $.table.selectDictLabel(state,value);
+				field : 'number',
+				title : '数量'
+			},
+			{
+				field: 'extend1',
+				title: '使用部门',
+				formatter: function(value, row, index) {
+					return $.table.selectDictLabel(dept,value);
 				}
 			},
 			{
-				field : 'number',
-				title : '数量'
+				field: 'extend2',
+				title: '使用人'
+			},
+			{
+				field: 'deptName',
+				title: '所属校区'
+			},
+			{
+				field: 'state',
+				title: '物品状态',
+				formatter: function(value, row, index) {
+					return $.table.selectDictLabel(state,value);
+				}
 			}]
         };
         $.table.init(options);
@@ -95,10 +111,6 @@
             return;
         }
         $.modal.close();
-        // 父页面的方法
-        // parent.selectUsers();
-        // 父页面的变量
-        parent.$('#ids').val(rows.join());
     }
 </script>
 </body>

@@ -277,4 +277,22 @@ public class SysDeptServiceImpl implements ISysDeptService
     public List<SysDept> selectDeptByParentId(){
         return deptMapper.selectDeptByParentId();
     }
+
+    /**
+     * 查询存放地点
+     * @return
+     */
+    @Override
+    public List<SysDept> selectDeptByNotInParentId(){
+        return deptMapper.selectDeptByNotInParentId();
+    }
+
+    /**
+     * 校区领用使用（下拉框）
+     * @return
+     */
+    @Override
+    public List<SysDept> selectSchoolByParentId(){
+        return deptMapper.selectSchoolByParentId();
+    }
 }

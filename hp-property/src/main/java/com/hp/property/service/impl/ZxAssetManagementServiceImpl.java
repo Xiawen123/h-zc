@@ -40,6 +40,26 @@ public class ZxAssetManagementServiceImpl implements IZxAssetManagementService {
     }
 
     /**
+     * 弹框列表
+     * @param zxAssetManagement
+     * @return
+     */
+    @Override
+    public List<ZxAssetManagement> selectAssetManagementLists(ZxAssetManagement zxAssetManagement){
+        return zxAssetManagementMapper.selectAssetManagementLists(zxAssetManagement);
+    }
+
+    /**
+     * 弹框选择后显示在添加页面的列表
+     * @param zxAssetManagement
+     * @return
+     */
+    @Override
+    public ZxAssetManagement selectAssetManagementListById(ZxAssetManagement zxAssetManagement){
+        return zxAssetManagementMapper.selectAssetManagementListById(zxAssetManagement);
+    }
+
+    /**
      * 查询资产信息列表
      *
      * @param zxAssetManagement 资产信息

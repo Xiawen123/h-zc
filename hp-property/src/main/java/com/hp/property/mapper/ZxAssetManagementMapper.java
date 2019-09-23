@@ -24,6 +24,20 @@ public interface ZxAssetManagementMapper extends BaseMapper<ZxAssetManagement>
     public ZxAssetManagement selectZxAssetManagementById(Long id);
 
     /**
+     * 弹框列表
+     * @param zxAssetManagement
+     * @return
+     */
+    public List<ZxAssetManagement> selectAssetManagementLists(ZxAssetManagement zxAssetManagement);
+
+    /**
+     * 弹框选择后显示在添加页面的列表
+     * @param zxAssetManagement
+     * @return
+     */
+    public ZxAssetManagement selectAssetManagementListById(ZxAssetManagement zxAssetManagement);
+
+    /**
      * 查询资产信息列表
      * 
      * @param zxAssetManagement 资产信息
@@ -35,7 +49,7 @@ public interface ZxAssetManagementMapper extends BaseMapper<ZxAssetManagement>
     /**
      * 新增资产信息
      * 
-     * @param zxAssetManagement 资产信息
+     * @param insertZxChangeByAssert 资产信息
      * @return 结果
      */
     public int insertZxAssetManagement(ZxAssetManagement insertZxChangeByAssert);

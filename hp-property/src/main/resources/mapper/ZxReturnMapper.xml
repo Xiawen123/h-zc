@@ -63,6 +63,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="users"    column="users"    />
         <result property="deptName"     column="dept_name"  />
         <result property="branch"     column="branch"   />
+        <result property="reception"    column="reception"  />
+        <result property="place"     column="place"   />
     </resultMap>
 
 
@@ -126,17 +128,25 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     <!-- 通过id查询详情 -->
     <select id="selectZxAssetManagementById" parameterType="Long" resultMap="ZxAssetManagementResult">
-        select c.share_time,c.use_department,c.users,c.extend2,am.*,d.dept_name,dept.dept_name branch
+        select c.share_time,c.use_department,c.users,c.extend2 reception,sd.dept_name place,am.*,d.dept_name,dept.dept_name branch
         from zx_change c
         left join zx_asset_management am on c.assets_id = am.id
         left join sys_dept d on c.extend5 = d.dept_id
 		left join sys_dept dept on dept.dept_id = am.warehousing_campus
+		left join sys_dept sd on sd.dept_id = c.extend3
         where c.id = #{id}
     </select>
 
-    <select id="selectAssetManagementList" resultMap="ZxAssetManagementResult">
-        select id, name, asset_num, brand, asset_specification, number, type, units, supplier, picture, price, purchasing_time, storage_time, warehousing_campus, state, operator, location, recipients_time, repair_time, transfer_time, discard_time, return_time, campus, department, extend1, extend2, extend3, extend4, extend5 from zx_asset_management
-        where state=2
+    <!-- 弹框（退还） -->
+    <select id="selectAssetManagementList" resultMap="ZxAssetManagementResult" parameterType="ZxAssetManagement">
+        select am.*,d.dept_name from zx_asset_management am
+        left join sys_dept d on d.dept_id = am.warehousing_campus
+        <where>
+            am.state=2 and am.extend3 = '0'
+            <if test="name != null  and name != ''"> and am.name like concat('%', #{name}, '%')</if>
+            <if test="extend1 != null and extend1 != '' "> and am.extend1 = #{extend1}</if>
+            <if test="extend2 != null and extend2 != '' "> and am.extend2 like concat('%', #{extend2}, '%')</if>
+        </where>
     </select>
 
 

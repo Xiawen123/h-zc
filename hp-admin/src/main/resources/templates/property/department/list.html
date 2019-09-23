@@ -30,6 +30,8 @@
 <div th:include="include :: footer"></div>
 <script th:inline="javascript">
     var prefix = ctx + "property/department";
+    var dept=[[${@dict.getType('zc_department')}]];
+    var state=[[${@dict.getType('zc_state')}]];
 
     $(function() {
         var zc_type = [[${@dict.getType('zc_type')}]];
@@ -41,34 +43,59 @@
             columns: [{
                 checkbox: true
             },
-                {
-                    field : 'id',
-                    title : '资产id'
-                },
-                {
-                    field : 'name',
-                    title : '资产名称'
-                },
-                {
-                    field : 'brand',
-                    title : '品牌'
-                },
-                {
-                    field : 'assetSpecification',
-                    title : '资产规格'
-                },
-                {
-                    field : 'price',
-                    title : '资产原值(元)'
-                },
-                {
-                    field : 'type',
-                    title : '资产类别',
-                    formatter: function(value, row, index) {
-                        return $.table.selectDictLabel(zc_type,value);
-                    }
+            {
+                field : 'id',
+                title : '资产id'
+            },
+            {
+                field : 'name',
+                title : '资产名称'
+            },
+            {
+                field : 'assetNum',
+                title : '资产编号'
+            },
+            {
+                field : 'brand',
+                title : '品牌'
+            },
+            {
+                field : 'assetSpecification',
+                title : '资产规格'
+            },
+            {
+                field : 'price',
+                title : '资产原值(元)'
+            },
+            {
+                field : 'type',
+                title : '资产类别',
+                formatter: function(value, row, index) {
+                    return $.table.selectDictLabel(zc_type,value);
                 }
-            ]
+            },
+            {
+                field: 'extend1',
+                title: '使用部门',
+                formatter: function(value, row, index) {
+                    return $.table.selectDictLabel(dept,value);
+                }
+            },
+            {
+                field: 'extend2',
+                title: '使用人'
+            },
+            {
+                field: 'deptName',
+                title: '所属校区'
+            },
+            {
+                field: 'state',
+                title: '物品状态',
+                formatter: function(value, row, index) {
+                    return $.table.selectDictLabel(state,value);
+                }
+            }]
         };
         $.table.init(options);
     });

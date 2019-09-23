@@ -42,9 +42,6 @@ public class ZxDepartmentController extends BaseController {
     private IZxChangeService zxChangeService;
 
     @Autowired
-    private ISysDeptService deptService;
-
-    @Autowired
     private IZxReturnService zxReturnService;
 
     @Autowired
@@ -80,8 +77,13 @@ public class ZxDepartmentController extends BaseController {
         SysDept dept = new SysDept();
         SysUser sysUser = ShiroUtils.getSysUser();  //获取用户信息
         Long schoolId = sysUser.getDeptId();  //获取部门编号（校区）
-        dept.setParentId(schoolId);
-        List<SysDept> deptList = deptService.selectDeptList(dept);
+        List<SysDept> deptList = null;
+        if(schoolId == 100){
+            deptList = sysDeptService.selectDeptByNotInParentId();
+        }else {
+            dept.setParentId(schoolId);
+            deptList = sysDeptService.selectDeptList(dept);
+        }
         mmap.put("deptList", deptList);
         return prefix + "/add";
     }
@@ -111,6 +113,13 @@ public class ZxDepartmentController extends BaseController {
                 zxone = new ZxAssetManagement();  //创建ZxAssetManagement表对象（用于传参）
                 zxone.setId(Long.parseLong(assetId));  //单个id
                 zxone.setState(2);   //状态（1：闲置，2：在用，3：报废）
+                if(zxChange.getUseDepartment() != null){
+                    zxone.setExtend1(zxChange.getUseDepartment().toString());  //使用部门
+                }
+                zxone.setExtend2(zxChange.getUsers());  //使用人
+                if(zxChange.getExtend3() != null){
+                    zxone.setLocation(Integer.parseInt(zxChange.getExtend3()));  //存放地点
+                }
 
                 long l = SnowFlake.nextId();
                 zxChange.setId(l);
@@ -151,7 +160,7 @@ public class ZxDepartmentController extends BaseController {
     }
 
     /**
-     * 资产列表查询
+     * 资产列表查询(弹框列表)
      */
     @RequiresPermissions("property:department:list")
     @PostMapping("/listooo")
@@ -160,8 +169,9 @@ public class ZxDepartmentController extends BaseController {
     {
         zxAssetManagement.setState(1);
         zxAssetManagement.setExtend3("0");  //未保修的
+
         startPage();
-        List<ZxAssetManagement> list = zxAssetManagementService.selectZxAssetManagementList(zxAssetManagement);
+        List<ZxAssetManagement> list = zxAssetManagementService.selectAssetManagementLists(zxAssetManagement);
         return getDataTable(list);
     }
 
@@ -195,7 +205,8 @@ public class ZxDepartmentController extends BaseController {
                 for(Object id:set){
                     String s1 = id.toString();
                     if(!s1.equals("")){
-                        ZxAssetManagement ls = zxAssetManagementService.selectZxAssetManagementById(Long.parseLong(s1));
+                        zxAssetManagement.setId(Long.parseLong(s1));
+                        ZxAssetManagement ls = zxAssetManagementService.selectAssetManagementListById(zxAssetManagement);
                         list.add(ls);
                     }
                 }
@@ -226,7 +237,8 @@ public class ZxDepartmentController extends BaseController {
                 for(Object id:set){
                     String s1 = id.toString();
                     if(!s1.equals("")){
-                        ZxAssetManagement ls = zxAssetManagementService.selectZxAssetManagementById(Long.parseLong(s1));
+                        zxAssetManagement.setId(Long.parseLong(s1));
+                        ZxAssetManagement ls = zxAssetManagementService.selectAssetManagementListById(zxAssetManagement);
                         list.add(ls);
                     }
                 }

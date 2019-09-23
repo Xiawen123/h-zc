@@ -162,12 +162,29 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         INSERT INTO zx_change
     </insert>
 
-    <!--查询变动类型为1,即领用的所有信息-->
+    <!--查询变动类型为1,即校区领用的所有信息-->
     <select id="selectAllChangeTypeOne" resultMap="ZxChangeResult" parameterType="ZxChange">
-        SELECT c.id,c.share_time,a.asset_num,a.name,a.type,a.brand,a.asset_specification,a.number,a.units,c.extend4,c.use_department,c.users,c.extend1
-        FROM `zx_change` c
-        LEFT join `zx_asset_management` a
-        ON c.assets_id= a.id
+        SELECT
+        c.id,
+        c.share_time,
+        a.asset_num,
+        a.NAME,
+        a.type,
+        a.brand,
+        a.asset_specification,
+        a.number,
+        a.units,
+        c.extend4,
+        c.use_department,
+        c.users,
+        c.extend1,
+        d.dept_name,
+        sd.dept_name place
+        FROM
+        `zx_change` c
+        LEFT JOIN `zx_asset_management` a ON c.assets_id = a.id
+        left join sys_dept d on c.extend5 = d.dept_id
+        left join sys_dept sd on c.extend3 = sd.dept_id
         <where>
             c.change_type = 1
             <if test="extend1 != null and extend1 != ''">

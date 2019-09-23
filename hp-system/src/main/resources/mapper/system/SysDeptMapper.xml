@@ -159,4 +159,20 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		order by d.parent_id, d.order_num
 	</select>
 
+	<!-- 查询存放地点 -->
+	<select id="selectDeptByNotInParentId" resultMap="SysDeptResult">
+		select d.dept_id, d.parent_id, d.ancestors, d.dept_name, d.order_num, d.leader, d.phone, d.email, d.status, d.del_flag, d.create_by, d.create_time
+        from sys_dept d
+		where d.del_flag = '0' AND d.parent_id not in (0,100)
+		order by d.parent_id, d.order_num
+	</select>
+
+	<!-- 查询校区（用于校区领用下拉框搜索） -->
+	<select id="selectSchoolByParentId" resultMap="SysDeptResult">
+		select d.dept_id, d.parent_id, d.ancestors, d.dept_name, d.order_num, d.leader, d.phone, d.email, d.status, d.del_flag, d.create_by, d.create_time
+		from sys_dept d
+		where d.del_flag = '0' AND d.parent_id = 100
+		order by d.parent_id, d.order_num
+	</select>
+
 </mapper> 
