@@ -187,11 +187,11 @@
                         title : '使用人'
                     },
                     {
-                        field : 'location',
-                        title : '存放地点',
-                        formatter: function(value, row, index) {
+                        field : 'deptName',
+                        title : '存放地点'
+                        /*formatter: function(value, row, index) {
                             return $.table.selectDictLabel(zc_location,value);
-                        }
+                        }*/
                     },
                     {
                         field : 'extend5',
@@ -202,6 +202,18 @@
                         title : '物品状态',
                         formatter: function(value, row, index) {
                             return $.table.selectDictLabel(zc_state,value);
+                        }
+                    },
+                    {
+                        field : 'extend3',
+                        title : '报修状态',
+                        formatter: function(value, item, index) {
+                            if (item.extend3 == '1') {
+                                return '报修中';
+                            }
+                            else {
+                                return '正常';
+                            }
                         }
                     },
                     {
@@ -252,4 +264,16 @@
         }
     </script>
 </body>
+<form id="importForm" enctype="multipart/form-data" class="mt20 mb10" style="display: none;">
+    <div class="col-xs-offset-1">
+        <input type="file" id="file" name="file"/>
+        <div class="mt10 pt5">
+            <input type="checkbox" id="updateSupport" name="updateSupport" title="如果登录账户已经存在，更新这条数据。"> 是否更新已经存在的用户数据
+            &nbsp;	<a onclick="$.table.importTemplate()" class="btn btn-default btn-xs"><i class="fa fa-file-excel-o"></i> 下载模板</a>
+        </div>
+        <font color="red" class="pull-left mt10">
+            提示：仅允许导入“xls”或“xlsx”格式文件！
+        </font>
+    </div>
+</form>
 </html>
