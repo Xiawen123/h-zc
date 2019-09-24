@@ -75,13 +75,13 @@
             <div class="form-group">
                 <label class="col-sm-3 control-label">购置时间：</label>
                 <div class="col-sm-8">
-                    <input name="purchasingTime" th:field="*{purchasingTime}" class="form-control" type="text">
+                    <input name="purchasingTime" th:field="*{purchasingTime}" class="form-control" type="text" readonly="readonly">
                 </div>
             </div>
             <div class="form-group">
                 <label class="col-sm-3 control-label">入库时间：</label>
                 <div class="col-sm-8">
-                    <input name="storageTime" th:field="*{storageTime}" class="form-control" type="text">
+                    <input name="storageTime" th:field="*{storageTime}" class="form-control" type="text" readonly="readonly">
                 </div>
             </div>
 
@@ -139,21 +139,6 @@
     <th:block th:include="include :: datetimepicker-js" />
     <script type="text/javascript">
         var prefix = ctx + "property/department";
-        $("#form-management-edit").validate({
-            focusCleanup: true
-        });
-
-        function submitHandler() {
-            if ($.validate.form()) {
-                $.operate.save(prefix + "/edit", $('#form-management-edit').serialize());
-            }
-        }
-
-        $("input[name='purchasingTime']").datetimepicker({
-            format: "yyyy-mm-dd",
-            minView: "month",
-            autoclose: true
-        });
     </script>
 </body>
 </html>
