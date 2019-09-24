@@ -129,10 +129,16 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         where id = #{id}
     </update>
 
-
+    <!-- 弹框（报修） -->
     <select id="selectAssetManagementList" parameterType="ZxAssetManagement" resultMap="ZxAssetManagementResult">
-        select * from zx_asset_management where state in (1,2) and extend3='0'
-        <if test="name != null  and name != ''"> and name like concat('%', #{name}, '%')</if>
+        select am.*,d.dept_name from zx_asset_management am
+        left join sys_dept d on d.dept_id = am.warehousing_campus
+        <where>
+            am.state in (1,2) and am.extend3 = '0'
+            <if test="name != null  and name != ''"> and am.name like concat('%', #{name}, '%')</if>
+            <if test="extend1 != null and extend1 != '' "> and am.extend1 = #{extend1}</if>
+            <if test="extend2 != null and extend2 != '' "> and am.extend2 like concat('%', #{extend2}, '%')</if>
+        </where>
     </select>
 
 </mapper>

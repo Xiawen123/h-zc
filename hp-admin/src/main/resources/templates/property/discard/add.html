@@ -8,18 +8,13 @@
 <body class="white-bg">
     <div class="wrapper wrapper-content animated fadeInRight ibox-content">
         <form class="form-horizontal m" id="form-discard-add">
-            <div class="form-group">
-                <label class="col-sm-3 control-label" hidden="hidden">资源：</label>
-                <div class="col-sm-8">
-                    <input type="hidden" id="ids" name="ids" />
-                    <input type="hidden" id="num" name="num" /><!-- 用于删除传参 -->
-                </div>
-            </div>
+            <input type="hidden" id="ids" name="ids" />
+            <input type="hidden" id="num" name="num" /><!-- 用于删除传参 -->
+
             <div class="form-group">    
                 <label class="col-sm-3 control-label">申请部门：</label>
                 <div class="col-sm-8">
                     <select id="useDepartment" name="useDepartment" class="form-control m-b" th:with="type=${@dict.getType('zc_department')}">
-                            <option value="">所有</option>
                             <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
                     </select>
                 </div>
@@ -55,6 +50,7 @@
         var type=[[${@dict.getType('zc_type')}]];
         var dept=[[${@dict.getType('zc_department')}]];
         var unit=[[${@dict.getType('zc_unit')}]];
+        var state=[[${@dict.getType('zc_state')}]];
 
         //删除
         function deleteId() {
@@ -92,62 +88,78 @@
         function getList() {
             var options = {
                 url: prefix + "/alist",
-                createUrl: prefix + "/add",
-                updateUrl: prefix + "/select/{id}",
-                removeUrl: prefix + "/remove",
-                exportUrl: prefix + "/export",
-                detailUrl: prefix + "/select/{id}",
                 modalName: "未退还资产信息",
                 search: false,
                 showExport: true,
                 columns: [{
-                    title: "选择",
                     checkbox: true
                 },
-                    {
-                        field : 'id',
-                        title : '资产Id',
-                    },
-                    {
-                        field : 'name',
-                        title : '资产名称'
-                    },
-                    {
-                        field : 'assetNum',
-                        title : '资产编号',
-                        /*visible: false*/
-                    },
-                    {
-                        field : 'type',
-                        title : '资产分类',
-                        formatter:function (value, row, index) {
-                            return $.table.selectDictLabel(type,value);
-                        }
-                    },
-                    {
-                        field : 'brand',
-                        title : '品牌'
-                    },
-                    {
-                        field : 'assetSpecification',
-                        title : '规格型号'
-                    },
-                    {
-                        field : 'number',
-                        title : '数量'
-                    },
-                    {
-                        field : 'units',
-                        title : '单位',
-                        formatter:function (value, row, index) {
-                            return $.table.selectDictLabel(unit,value);
-                        }
-                    },
-                    {
-                        field : 'supplier',
-                        title : '供货商'
+                {
+                    field : 'id',
+                    title : '资产Id'
+                },
+                {
+                    field : 'name',
+                    title : '资产名称'
+                },
+                {
+                    field : 'assetNum',
+                    title : '资产编号'
+                },
+                {
+                    field : 'type',
+                    title : '资产分类',
+                    formatter:function (value, row, index) {
+                        return $.table.selectDictLabel(type,value);
                     }
-                ]
+                },
+                {
+                    field : 'brand',
+                    title : '品牌'
+                },
+                {
+                    field : 'assetSpecification',
+                    title : '规格型号'
+                },
+                {
+                    field : 'number',
+                    title : '数量'
+                },
+                {
+                    field : 'units',
+                    title : '单位',
+                    formatter:function (value, row, index) {
+                        return $.table.selectDictLabel(unit,value);
+                    }
+                },
+                {
+                    field : 'supplier',
+                    title : '供货商'
+                }
+                ,
+                {
+                    field: 'extend1',
+                    title: '使用部门',
+                    formatter: function(value, row, index) {
+                        return $.table.selectDictLabel(dept,value);
+                    }
+                },
+                {
+                    field: 'extend2',
+                    title: '使用人'
+                },
+                {
+                    field: 'deptName',
+                    title: '所属校区'
+                },
+                {
+                    field: 'state',
+                    title: '物品状态',
+                    formatter: function(value, row, index) {
+                        console.log(value);
+                        return $.table.selectDictLabel(state,value);
+                    }
+                }]
             };
             $.table.init(options);
         };

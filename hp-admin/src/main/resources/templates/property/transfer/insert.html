@@ -13,10 +13,19 @@
                 <div class="select-list">
                     <ul>
                         <li>
-                            <p>资产名称：</p>
-                            <input type="text" name="name"/>
+                            资产名称：<input type="text" name="name"/>
                         </li>
                         <li>
+                            使用人：<input type="text" name="extend2"/>
+                        </li>
+                        <li>
+                            使用部门：
+                            <select name="extend1" th:with="type=${@dict.getType('zc_department')}">
+                                <option value="">所有</option>
+                                <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+                            </select>
+                        </li>
+                        <li style="width: 100%;text-align: center">
                             <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
                             <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
                         </li>
@@ -24,20 +33,19 @@
                 </div>
             </form>
 
-            <div class="col-sm-12 select-table table-striped" name="ins">
-            <table id="bootstrap-table" data-mobile-responsive="true"></table>
+            <div class="col-sm-12 select-table table-striped">
+                <table id="bootstrap-table" data-mobile-responsive="true"></table>
+            </div>
         </div>
-    </div>
     </div>
 </div>
 <th:block th:include="include :: footer" />
 <script th:inline="javascript">
     var types = [[${@dict.getType('zc_type')}]];
     var unit = [[${@dict.getType('zc_unit')}]];
-    var datas = [[${@dict.getType('zc_department')}]];
+    var dept = [[${@dict.getType('zc_department')}]];
+    var state=[[${@dict.getType('zc_state')}]];
     var prefix = ctx + "property/transfer";
-
-
 
     $(function() {
         var options = {
@@ -51,52 +59,73 @@
             columns: [{
                 checkbox: true
             },
-                {
-                    field : 'id',
-                    title : '资产ID',
-                    /*visible: false*/
-                },
-                {
-                    field : 'name',
-                    title : '资产名称'
-                },
-                {
-                    field : 'assetNum',
-                    title : '资产编号',
-                    /*visible: false*/
-                },
-                {
-                    field : 'type',
-                    title : '资产分类',
-                    align: 'center',
-                    formatter: function(value, row, index) {
-                        return $.table.selectDictLabel(types, value);
-                    }
-                },
-                {
-                    field : 'brand',
-                    title : '品牌'
-                },
-                {
-                    field : 'assetSpecification',
-                    title : '资产规格'
-                },
-                {
-                    field : 'number',
-                    title : '数量'
-                },
-                {
-                    field : 'units',
-                    title : '单位',
-                    align: 'center',
-                    formatter: function(value, row, index) {
-                        return $.table.selectDictLabel(unit, value);
-                    }
-                },
-                {
-                    field : 'supplier',
-                    title : '供应商'
-                }]
+            {
+                field : 'id',
+                title : '资产ID'
+            },
+            {
+                field : 'name',
+                title : '资产名称'
+            },
+            {
+                field : 'assetNum',
+                title : '资产编号'
+            },
+            {
+                field : 'type',
+                title : '资产分类',
+                align: 'center',
+                formatter: function(value, row, index) {
+                    return $.table.selectDictLabel(types, value);
+                }
+            },
+            {
+                field : 'brand',
+                title : '品牌'
+            },
+            {
+                field : 'assetSpecification',
+                title : '资产规格'
+            },
+            {
+                field : 'number',
+                title : '数量'
+            },
+            {
+                field : 'units',
+                title : '单位',
+                align: 'center',
+                formatter: function(value, row, index) {
+                    return $.table.selectDictLabel(unit, value);
+                }
+            },
+            {
+                field : 'supplier',
+                title : '供应商'
+            },
+            {
+                field: 'extend1',
+                title: '使用部门',
+                formatter: function(value, row, index) {
+                    return $.table.selectDictLabel(dept,value);
+                }
+            },
+            {
+                field: 'extend2',
+                title: '使用人'
+            },
+            {
+                field: 'deptName',
+                title: '所属校区'
+            },
+            {
+                field: 'state',
+                title: '物品状态',
+                formatter: function(value, row, index) {
+                    console.log(value);
+                    return $.table.selectDictLabel(state,value);
+                }
+            }]
         };
         $.table.init(options);
     });
@@ -109,10 +138,6 @@
             return;
         }
         $.modal.close();
-        // 父页面的方法
-        // parent.selectUsers();
-        // 父页面的变量
-        parent.$('#ids').val(rows.join());
     }
 </script>
 </body>

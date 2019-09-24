@@ -149,7 +149,7 @@
                 },
                 {
                     field : 'users',
-                    title : '申报人',
+                    title : '申报人'
                 },
                 {
                     field : 'deptName',
@@ -157,8 +157,7 @@
                 },
                 {
                     field : 'extend1',
-                    title : '创建时间',
-
+                    title : '创建时间'
                 },
                 {
                     title: '详情',
@@ -173,23 +172,6 @@
             $.table.init(options);
         };
 
-        function queryDeptTree()
-        {
-            var url = ctx + "system/dept/treeData";
-            var options = {
-                url: url,
-                expandLevel: 2,
-                onClick : zOnClick
-            };
-            $.tree.init(options);
-
-            function zOnClick(event, treeId, treeNode) {
-                $("#deptId").val(treeNode.id);
-                $("#parentId").val(treeNode.pId);
-                $.table.search();
-            }
-        }
-
         $(function(){
             //时间选择器
             laydate.render({
@@ -199,7 +181,6 @@
                 trigger: 'click'
             });
         });
-
     </script>
 </body>
 </html>

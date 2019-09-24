@@ -91,7 +91,22 @@ public class ZxChangeController extends BaseController
      * 新增报废信息
      */
     @GetMapping("/add")
-    public String add() {
+    public String add(HttpServletRequest request,ModelMap mmap) {
+        //清空session
+        if(request.getSession().getAttribute("s")!=null){
+            request.getSession().removeAttribute("s");
+        }
+        SysDept dept = new SysDept();
+        SysUser sysUser = ShiroUtils.getSysUser();  //获取用户信息
+        Long schoolId = sysUser.getDeptId();  //获取部门编号（校区）
+        List<SysDept> deptList = null;
+        if(schoolId == 100){
+            deptList = sysDeptService.selectDeptByNotInParentId();
+        }else {
+            dept.setParentId(schoolId);
+            deptList = sysDeptService.selectDeptList(dept);
+        }
+        mmap.put("deptList", deptList);
         return prefix + "/add";
     }
 
@@ -140,7 +155,8 @@ public class ZxChangeController extends BaseController
                 for(Object id:set){
                     String s1 = id.toString();
                     if(!s1.equals("")){
-                        ZxAssetManagement ls = zxAssetManagementService.selectZxAssetManagementById(Long.parseLong(s1));
+                        zxAssetManagement.setId(Long.parseLong(s1));
+                        ZxAssetManagement ls = zxAssetManagementService.selectAssetManagementListById(zxAssetManagement);
                         list.add(ls);
                     }
                 }
@@ -173,14 +189,15 @@ public class ZxChangeController extends BaseController
                 for (int i = 0; i < split.length; i++) {
                     set.add(split[i]);
                 }
-                //移除0和" "
+                //移除0和""
                 set.remove("0");
-                set.remove(" ");
+                set.remove("");
                 //根据id查询相应的资产，存入list
                 for (Object id : set) {
                     String s1 = id.toString();
                     if (!s1.equals("")) {
-                        ZxAssetManagement ls = zxAssetManagementService.selectZxAssetManagementById(Long.parseLong(s1));
+                        zxAssetManagement.setId(Long.parseLong(s1));
+                        ZxAssetManagement ls = zxAssetManagementService.selectAssetManagementListById(zxAssetManagement);
                         list.add(ls);
                     }
                 }
@@ -200,7 +217,7 @@ public class ZxChangeController extends BaseController
     @Log(title = "新增资产报废", businessType = BusinessType.INSERT)
     @PostMapping("/add")
     @ResponseBody
-    public AjaxResult addSave(ZxChange zxChange,ZxAssetManagement zxAssetManagement, HttpServletRequest request) {
+    public AjaxResult addSave(ZxChange zxChange, HttpServletRequest request) {
         String ids =  request.getSession().getAttribute("s").toString();  //列表id
         //String ids = zxAssetManagement.getIds();
         int i1=0;
@@ -220,15 +237,18 @@ public class ZxChangeController extends BaseController
                     zxone = new ZxAssetManagement();  //创建ZxAssetManagement表对象（用于传参）
                     zxone.setId(Long.parseLong(s1));  //单个id
                     //zxone.setState(3);  //状态（1：闲置，2：在用，3：报废）
-                    zxone.setLocation(Integer.valueOf(zxChange.getExtend3()));//存放地点
+                    if(zxChange.getUseDepartment() != null){
+                        zxone.setExtend1(zxChange.getUseDepartment().toString());  //使用部门
+                    }
+                    zxone.setExtend2(zxChange.getUsers());  //使用人
+                    if(zxChange.getExtend3() != null){
+                        zxone.setLocation(Integer.parseInt(zxChange.getExtend3()));  //存放地点
+                    }
 
                     long l = SnowFlake.nextId();
                     zxChange.setId(l);
                     zxChange.setAssetsId(Long.parseLong(s1));
-                    zxChange.setChangeType(2);  //7：转移
-                    zxChange.setUseDepartment(zxChange.getUseDepartment());  //转移部门
-
-
+                    zxChange.setChangeType(2);  //2：转移
                     SysUser sysUser = ShiroUtils.getSysUser();  //获取用户信息
                     Long schoolId = sysUser.getDeptId();  //获取部门编号（校区）
                     zxChange.setExtend5(schoolId);
@@ -246,14 +266,13 @@ public class ZxChangeController extends BaseController
     }
 
     /**
-     * 查询资产信息列表（查询未转移的资产））
+     * 查询资产信息列表（查询未转移的资产）
      */
     @RequiresPermissions("property:discard:inserts")
     @PostMapping("/inserts")
     @ResponseBody
     public TableDataInfo insert (ZxAssetManagement zxAssetManagement)
     {
-        zxAssetManagement.setState(2);
         startPage();
         List<ZxAssetManagement> list = zxTransferService.selectNoTransferList(zxAssetManagement);
         return getDataTable(list);
