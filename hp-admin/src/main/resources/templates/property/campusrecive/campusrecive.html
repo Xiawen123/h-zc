@@ -29,7 +29,8 @@
                                 </li>
                                 <li>
                                     <p>领用校区：</p>
-                                    <select id="extend4" name="extend4" type="text">
+                                    <select id="extend5" name="extend5" type="text">
+                                        <option value="">全部</option>
                                         <option th:each="obj,eStat:${school}" th:value="${obj.deptId}"
                                                  th:text="${obj.deptName}"></option>
                                     </select>

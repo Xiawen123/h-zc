@@ -233,7 +233,7 @@ public class ZxDepartmentController extends BaseController {
                     set.add(split[i]);
                 }
                 set.remove("0");
-                set.remove(" ");
+                set.remove("");
                 for(Object id:set){
                     String s1 = id.toString();
                     if(!s1.equals("")){
