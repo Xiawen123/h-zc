@@ -66,7 +66,10 @@ public class ZxAssetManagementControllersXG extends BaseController
     @PostMapping("/list")
     @ResponseBody
     public TableDataInfo list(ZxAssetManagement zxAssetManagement) {
-
+        int campus = ShiroUtils.getSysUser().getDeptId().intValue();
+        if (campus != 100){
+            zxAssetManagement.setCampus(campus);
+        }
         startPage();
         List<ZxAssetManagement> list = zxAssetManagementService.selectZxAssetManagementList(zxAssetManagement);
         SysDept sysDept = new SysDept();
@@ -79,11 +82,11 @@ public class ZxAssetManagementControllersXG extends BaseController
                 String b=sysDept1.getDeptId().toString();
                 if (a.equals(b)) {
                     String c=sysDept1.getDeptName();
-                    zxAssetManagement1.setExtend5(c);}
+                    zxAssetManagement1.setExtend5(c);
+                }
             }
             }
         }
-
         return getDataTable(list);
     }
 

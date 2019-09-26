@@ -66,6 +66,10 @@ public class ZxAssetAddController extends BaseController
     @ResponseBody
     public TableDataInfo list(ZxAssetManagement zxAssetManagement)
     {
+        int campus = ShiroUtils.getSysUser().getDeptId().intValue();
+        if (campus != 100){
+            zxAssetManagement.setCampus(campus);
+        }
         startPage();
         List<ZxAssetManagement> list = zxAssetManagementService.selectZxAssetManagementList(zxAssetManagement);
         for (ZxAssetManagement z:list){

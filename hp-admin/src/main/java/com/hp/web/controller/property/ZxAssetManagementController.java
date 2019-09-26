@@ -6,6 +6,7 @@ import com.hp.common.core.domain.AjaxResult;
 import com.hp.common.core.page.TableDataInfo;
 import com.hp.common.enums.BusinessType;
 import com.hp.common.utils.poi.ExcelUtil;
+import com.hp.framework.util.ShiroUtils;
 import com.hp.property.domain.ZxAssetManagement;
 import com.hp.property.domain.ZxChange;
 import com.hp.property.service.IZxAssetManagementService;
@@ -58,15 +59,10 @@ public class ZxAssetManagementController extends BaseController
     @ResponseBody
     public TableDataInfo list(ZxAssetManagement zxAssetManagement)
     {
-//        ZxChange zxChange=new ZxChange();
-//       if (zxAssetManagement.getExtend1()!=null&&!zxAssetManagement.getExtend1().equals("")){
-//           zxChange.setUseDepartment(Integer.parseInt(zxAssetManagement.getExtend1()));
-//       }
-//        if (zxAssetManagement.getExtend2()!=null&&!zxAssetManagement.getExtend2().equals("")){
-//            zxChange.setUsers(zxAssetManagement.getExtend2());
-//        }
-     //   List<ZxChange> zxChangess=zxChangeService.selectZxChangeList(zxChange);
-
+        int campus = ShiroUtils.getSysUser().getDeptId().intValue();
+        if (campus != 100){
+            zxAssetManagement.setCampus(campus);
+        }
         startPage();
         List<ZxAssetManagement> list = zxInfoService.selectZxAssetManagementList(zxAssetManagement);
         SysDept sysDept = new SysDept();
@@ -83,36 +79,6 @@ public class ZxAssetManagementController extends BaseController
                 }
             }
         }
-       /* for(ZxAssetManagement assetManagement:list){
-            Long id = assetManagement.getId();
-            ZxChange zxChange = zxInfoService.selectZxChangeById(id);
-            assetManagement.setExtend5(zxChange.getDeptName());
-        }*/
-//        for (ZxAssetManagement z:list){
-//            zxChange.setAssetsId(new Long((long)z.getId()));
-//            List<ZxChange> zxChanges = zxChangeService.selectZxChangeList(zxChange);
-//           if (zxChanges!=null&&zxChanges.equals("")){
-//               for (int i=0;i<zxChanges.size()-1;i++){
-//                   for (int j=0;j<zxChanges.size()-1-i;j++){
-//                       if (DateString.getDate("yy-MM-dd HH:mm:ss",zxChanges.get(j).getExtend1()).compareTo(DateString.getDate("yy-MM-dd HH:mm:ss",zxChanges.get(j+1).getExtend1()))<0){
-//                           String temp=zxChanges.get(j).getExtend1();
-//                           zxChanges.get(j).setExtend1(zxChanges.get(j+1).getExtend1());
-//                           zxChanges.get(j+1).setExtend1(temp);
-//                       }
-//                   }
-//               }
-//               z.setExtend1(zxChanges.get(0).getUseDepartment()+"");
-//               z.setExtend2(zxChanges.get(0).getUsers());
-//           }
-//        }
-
-      /*  for (ZxAssetManagement z:list){
-            if (z.getCampus()!=null) {
-                 int z1=z.getCampus();
-               SysDept s= iSysDeptService.selectDeptById(new Long((long)z1));
-                z.setExtend5(s.getDeptName());
-            }
-        }*/
         return getDataTable(list);
     }
 

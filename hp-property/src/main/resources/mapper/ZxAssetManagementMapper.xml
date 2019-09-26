@@ -65,7 +65,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     <select id="selectZxAssetManagementList" parameterType="ZxAssetManagement" resultMap="ZxAssetManagementResult">
         <include refid="selectZxAssetManagementVo"/>
-        <where>  
+        <where>
             <if test="name != null  and name != ''"> and name like concat('%', #{name}, '%')</if>
             <if test="assetNum != null  and assetNum != ''"> and asset_num like concat('%', #{assetNum}, '%')</if>
             <if test="brand != null  and brand != ''"> and brand = #{brand}</if>
