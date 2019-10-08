@@ -4,9 +4,11 @@ import com.hp.common.core.text.Convert;
 import com.hp.common.exception.BusinessException;
 import com.hp.common.utils.SnowFlake;
 import com.hp.common.utils.StringUtils;
+import com.hp.framework.util.ShiroUtils;
 import com.hp.property.domain.ZxAssetManagement;
 import com.hp.property.mapper.ZxAssetManagementMapper;
 import com.hp.property.service.IZxAssetManagementService;
+import com.hp.system.domain.SysUser;
 import com.hp.system.mapper.SysDeptMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -211,13 +213,10 @@ public class ZxAssetManagementServiceImpl implements IZxAssetManagementService {
         {
             try
             {
-                String schoolName = management.getBranch();  //入库校区名称
+                SysUser sysUser = ShiroUtils.getSysUser();  //获取用户信息
+                Long schoolId = sysUser.getDeptId();  //获取部门编号（校区）
                 String place = management.getPlace();  //存放地点名称
                 if(!isUpdateSupport){
-                    int deptId = 0;
-                    if(schoolName != null && schoolName != ""){
-                        deptId = deptMapper.selectIdByName(schoolName);  //获取校区编号
-                    }
                     int location = 0;
                     if(place != null && place != ""){
                         location = deptMapper.selectIdByName(place);   //货物存放地点编号
@@ -225,26 +224,27 @@ public class ZxAssetManagementServiceImpl implements IZxAssetManagementService {
                     SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");//设置日期格式
                     //购置时间
                     int legalLen = 10;
-                    String Storage = management.getStorageTime();
-                    if(Storage != null){
-                        if ((Storage.length() != legalLen) && Storage.length() != 0) {
-                            Date date = new Date(management.getStorageTime());
-                            management.setStorageTime(dateFormat.format(date));
+                    String purchasingTime = management.getPurchasingTime();
+                    if(purchasingTime != null){
+                        if ((purchasingTime.length() != legalLen) && purchasingTime.length() != 0) {
+                            Date date = new Date(purchasingTime);
+                            management.setPurchasingTime(dateFormat.format(date));
                         }
                     }
-                    management.setWarehousingCampus(deptId);  //入库校区
-                    management.setCampus(deptId);   //使用校区
+                    management.setWarehousingCampus(new Long(schoolId).intValue());  //入库校区
+                    management.setCampus(new Long(schoolId).intValue());   //使用校区
                     management.setLocation(location);  //存放地点
                     management.setState(2);   //状态，2:在用
                     management.setNumber(1);    //数量：默认1
                     management.setExtend3("0");   //报修状态：0：正常
+                    SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");//日期格式
+                    management.setStorageTime(format.format(new Date()));  //入库时间
                     this.insertZxAssetManagement(management);
                     successNum++;
                     successMsg.append("<br/>" + successNum + "、资产 " + management.getName() + " 导入成功");
                 }
                 else if (isUpdateSupport)
                 {
-                    int deptId = deptMapper.selectIdByName(schoolName);  //获取校区编号
                     int location = deptMapper.selectIdByName(place);   //货物存放地点编号
                     SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");//设置日期格式
                     //购置时间
@@ -253,12 +253,14 @@ public class ZxAssetManagementServiceImpl implements IZxAssetManagementService {
                         Date date = new Date(management.getStorageTime());
                         management.setStorageTime(dateFormat.format(date));
                     }
-                    management.setWarehousingCampus(deptId);  //入库校区
-                    management.setCampus(deptId);   //使用校区
+                    management.setWarehousingCampus(new Long(schoolId).intValue());  //入库校区
+                    management.setCampus(new Long(schoolId).intValue());   //使用校区
                     management.setLocation(location);  //存放地点
                     management.setState(2);   //状态，2:在用
                     management.setNumber(1);    //数量：默认1
                     management.setExtend3("0");   //报修状态：0：正常
+                    SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");//日期格式
+                    management.setStorageTime(format.format(new Date()));  //入库时间
                     this.updateZxAssetManagement(management);
                     successNum++;
                     successMsg.append("<br/>" + successNum + "、资产 " + management.getName() + " 更新成功");

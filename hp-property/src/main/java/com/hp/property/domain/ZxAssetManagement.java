@@ -23,7 +23,7 @@ public class ZxAssetManagement extends BaseEntity
     private Long id;
 
     /** 资产编号 */
-    @Excel(name = "资产编号")
+    //@Excel(name = "资产编号")
     private String assetNum;
 
     /** 资产名称 */
@@ -103,7 +103,6 @@ public class ZxAssetManagement extends BaseEntity
     private Integer campus;
 
     /** 入库校区名称 */
-    @Excel(name = "入库校区")
     private String branch;
     /** 部门 */
     private Integer department;
