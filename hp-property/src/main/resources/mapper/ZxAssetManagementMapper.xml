@@ -121,6 +121,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="extend1 != null and extend1 != '' "> and am.extend1 = #{extend1}</if>
             <if test="extend2 != null and extend2 != '' "> and am.extend2 like concat('%', #{extend2}, '%')</if>
             <if test="extend3 != null  and extend3 != ''"> and am.extend3 = #{extend3}</if>
+            <if test="campus != null "> and am.campus = #{campus}</if>
         </where>
         order by asset_num desc
     </select>

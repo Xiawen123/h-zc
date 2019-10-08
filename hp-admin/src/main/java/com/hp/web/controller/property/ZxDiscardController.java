@@ -77,6 +77,10 @@ public class ZxDiscardController extends BaseController {
     @PostMapping("/list")
     @ResponseBody
     public TableDataInfo list(ZxChange zxChange) {
+        Long campus = ShiroUtils.getSysUser().getDeptId();
+        if (campus != 100){
+            zxChange.setExtend5(campus);
+        }
         startPage();
         List<ZxChange> list = zxDiscardService.selectDiscardList(zxChange);
         return getDataTable(list);
@@ -259,6 +263,10 @@ public class ZxDiscardController extends BaseController {
         @ResponseBody
         public TableDataInfo insert (ZxAssetManagement zxAssetManagement)
         {
+            int campus = ShiroUtils.getSysUser().getDeptId().intValue();
+            if (campus != 100){
+                zxAssetManagement.setCampus(campus);
+            }
             startPage();
             List<ZxAssetManagement> list = zxDiscardService.selectZxNoDiscardList(zxAssetManagement);
             return getDataTable(list);

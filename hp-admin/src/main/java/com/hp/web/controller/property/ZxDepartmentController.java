@@ -63,6 +63,10 @@ public class ZxDepartmentController extends BaseController {
     @ResponseBody
     public TableDataInfo list(ZxChange zxChange)
     {
+        Long campus = ShiroUtils.getSysUser().getDeptId();
+        if (campus != 100){
+            zxChange.setExtend5(campus);
+        }
         startPage();
         List<ZxChange> list = zxChangeService.selectDeptReceiveList(zxChange);
         return getDataTable(list);
@@ -168,9 +172,12 @@ public class ZxDepartmentController extends BaseController {
     @ResponseBody
     public TableDataInfo listooo(ZxAssetManagement zxAssetManagement)
     {
+        int campus = ShiroUtils.getSysUser().getDeptId().intValue();
+        if (campus != 100){
+            zxAssetManagement.setCampus(campus);
+        }
         zxAssetManagement.setState(1);
         zxAssetManagement.setExtend3("0");  //未保修的
-
         startPage();
         List<ZxAssetManagement> list = zxAssetManagementService.selectAssetManagementLists(zxAssetManagement);
         return getDataTable(list);
