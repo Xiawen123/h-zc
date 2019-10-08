@@ -123,4 +123,10 @@ public interface SysDeptMapper
      * @return
      */
     public List<SysDept> selectSchoolByParentId();
+
+    /**
+     * 根据名称查询id
+     * @return
+     */
+    public int selectIdByName(String deptName);
 }

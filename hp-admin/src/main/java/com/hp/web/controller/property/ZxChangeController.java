@@ -244,13 +244,14 @@ public class ZxChangeController extends BaseController
                     if(zxChange.getExtend3() != null){
                         zxone.setLocation(Integer.parseInt(zxChange.getExtend3()));  //存放地点
                     }
+                    SysUser sysUser = ShiroUtils.getSysUser();  //获取用户信息
+                    Long schoolId = sysUser.getDeptId();  //获取部门编号（校区）
+                    zxone.setCampus(new Long(schoolId).intValue());   //使用校区
 
                     long l = SnowFlake.nextId();
                     zxChange.setId(l);
                     zxChange.setAssetsId(Long.parseLong(s1));
                     zxChange.setChangeType(2);  //2：转移
-                    SysUser sysUser = ShiroUtils.getSysUser();  //获取用户信息
-                    Long schoolId = sysUser.getDeptId();  //获取部门编号（校区）
                     zxChange.setExtend5(schoolId);
                     SimpleDateFormat time = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                     zxChange.setExtend1(time.format(new Date()));  //创建时间

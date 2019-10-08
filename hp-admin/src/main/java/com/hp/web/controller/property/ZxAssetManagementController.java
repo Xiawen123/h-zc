@@ -19,6 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -198,5 +199,24 @@ public class ZxAssetManagementController extends BaseController
        // mmap.addAttribute("zxChanges",zxChanges);
         //mmap.addAttribute("id",id);
         return getDataTable(zxChanges);
+    }
+
+    /**
+     * 导入
+     * @param file
+     * @param updateSupport
+     * @return
+     * @throws Exception
+     */
+    @RequiresPermissions("property:management:import")
+    @PostMapping("/importData")
+    @ResponseBody
+    public AjaxResult importData(MultipartFile file, boolean updateSupport) throws Exception
+    {
+        ExcelUtil<ZxAssetManagement> util = new ExcelUtil<ZxAssetManagement>(ZxAssetManagement.class);
+        List<ZxAssetManagement> managementList = util.importExcels(file.getInputStream());
+        String operName = ShiroUtils.getLoginName();
+        String message = zxAssetManagementService.importZxAssetManagement(managementList, updateSupport, operName);
+        return AjaxResult.success(message);
     }
 }

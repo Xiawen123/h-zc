@@ -120,13 +120,14 @@ public class ZxDepartmentController extends BaseController {
                 if(zxChange.getExtend3() != null){
                     zxone.setLocation(Integer.parseInt(zxChange.getExtend3()));  //存放地点
                 }
+                SysUser sysUser = ShiroUtils.getSysUser();  //获取用户信息
+                Long schoolId = sysUser.getDeptId();  //获取部门编号（校区）
+                zxone.setCampus(new Long(schoolId).intValue());   //使用校区
 
                 long l = SnowFlake.nextId();
                 zxChange.setId(l);
                 zxChange.setAssetsId(Long.parseLong(assetId));  //主表id（资产表）
                 zxChange.setChangeType(6);   //6：部门领用
-                SysUser sysUser = ShiroUtils.getSysUser();  //获取用户信息
-                Long schoolId = sysUser.getDeptId();  //获取部门编号（校区）
                 zxChange.setExtend5(schoolId);
                 zxChange.setExtend1(DateString.getString(new Date(),"yyyy-MM-dd HH:mm:ss"));  //创建时间
 

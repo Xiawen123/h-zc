@@ -22,32 +22,32 @@ public class ZxAssetManagement extends BaseEntity
     @Id
     private Long id;
 
-    /** 资产名称 */
-    @Excel(name = "资产名称")
-    private String name;
-
     /** 资产编号 */
     @Excel(name = "资产编号")
     private String assetNum;
+
+    /** 资产名称 */
+    @Excel(name = "资产名称")
+    private String name;
 
     /** 品牌 */
     @Excel(name = "品牌")
     private String brand;
 
     /** 资产规格 */
-    @Excel(name = "资产规格")
+    @Excel(name = "规格型号")
     private String assetSpecification;
 
     /** 数量 */
-    @Excel(name = "数量")
+    //@Excel(name = "数量")
     private Integer number;
 
     /** 资产类型 */
-    @Excel(name = "资产类型")
+    @Excel(name = "资产类型", readConverterExp = "A=办公设备类,B=办公家私类,C=运输设备类,D=电器设备类,E=机器设备类,F=其它设备类")
     private String  type;
 
     /** 单位 */
-    @Excel(name = "单位")
+    @Excel(name = "单位", readConverterExp = "1=个,2=台")
     private Integer units;
 
     /** 供货商 */
@@ -55,7 +55,7 @@ public class ZxAssetManagement extends BaseEntity
     private String supplier;
 
     /** 图片 */
-    @Excel(name = "图片")
+    //@Excel(name = "图片")
     private String picture;
 
     /** 资产原值 */
@@ -67,78 +67,69 @@ public class ZxAssetManagement extends BaseEntity
     private String purchasingTime;
 
     /** 入库时间 */
-    @Excel(name = "入库时间")
+    //@Excel(name = "入库时间")
     private String storageTime;
 
     /** 入库校区 */
-    @Excel(name = "入库校区")
+    //@Excel(name = "入库校区")
     private Integer warehousingCampus;
 
     /** 状态 */
-    @Excel(name = "状态")
     private Integer state;
 
     /** 操作人员 */
-    @Excel(name = "操作人员")
     private String operator;
 
     /** 存放地点 */
-    @Excel(name = "存放地点")
     private Integer location;
 
     /** 领用时间 */
-    @Excel(name = "领用时间", width = 30, dateFormat = "yyyy-MM-dd")
     private Date recipientsTime;
 
     /** 报修时间 */
-    @Excel(name = "报修时间", width = 30, dateFormat = "yyyy-MM-dd")
     private Date repairTime;
 
     /** 转移时间 */
-    @Excel(name = "转移时间", width = 30, dateFormat = "yyyy-MM-dd")
     private Date transferTime;
 
     /** 报废时间 */
-    @Excel(name = "报废时间", width = 30, dateFormat = "yyyy-MM-dd")
     private Date discardTime;
 
     /** 退还时间 */
-    @Excel(name = "退还时间", width = 30, dateFormat = "yyyy-MM-dd")
     private Date returnTime;
 
     /** 校区 */
-    @Excel(name = "校区")
+    //@Excel(name = "校区")
     private Integer campus;
 
+    /** 入库校区名称 */
+    @Excel(name = "入库校区")
+    private String branch;
     /** 部门 */
-    @Excel(name = "部门")
     private Integer department;
 
-    /** 使用部门 */
-    @Excel(name = "")
+    /** 使用部门名称 */
+    @Excel(name = "使用部门", readConverterExp = "1=财务部,2=宣传部,3=研发部,4=培训部,0=宏鹏集团")
     private String extend1;
 
     /** 使用人 */
-    @Excel(name = "")
+    @Excel(name = "使用人")
     private String extend2;
 
     /** $column.columnComment */
-    @Excel(name = "")
     private String extend3;
 
     /** $column.columnComment */
-    @Excel(name = "")
     private String extend4;
 
-    /** $column.columnComment */
-    @Excel(name = "")
     private String extend5;
 
     /** 用于删除时做判断 */
     private Integer num;
     /** 接收人员 */
     private String reception;
-    /** 存放地点（ZxChange表） */
+    /** 存放地点名称 */
+    @Excel(name = "存放地点")
     private String place;
 
     public String getPlace() {
@@ -194,8 +185,6 @@ public class ZxAssetManagement extends BaseEntity
     private String departmentName;
     /** 状态名称 */
     private String status;
-    /** 入库校区名称 */
-    private String branch;
 
     public String getBranch() {
         return branch;

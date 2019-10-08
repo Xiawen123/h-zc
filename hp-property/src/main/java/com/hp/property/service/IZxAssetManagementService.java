@@ -104,4 +104,13 @@ public interface IZxAssetManagementService
 
      // 校区领用详情页
     ZxAssetManagement selectZxAssetManagementById2(Long id);
+
+    /**
+     * 导入
+     * @param managementList
+     * @param isUpdateSupport
+     * @param operName
+     * @return
+     */
+    public String importZxAssetManagement(List<ZxAssetManagement> managementList, Boolean isUpdateSupport, String operName);
 }
