@@ -138,6 +138,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="name != null  and name != ''"> and am.name like concat('%', #{name}, '%')</if>
             <if test="extend1 != null and extend1 != '' "> and am.extend1 = #{extend1}</if>
             <if test="extend2 != null and extend2 != '' "> and am.extend2 like concat('%', #{extend2}, '%')</if>
+            <if test="campus != null "> and am.campus = #{campus}</if>
         </where>
     </select>
 

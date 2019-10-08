@@ -76,6 +76,10 @@ public class ZxReturnController extends BaseController {
     @PostMapping("/list")
     @ResponseBody
     public TableDataInfo list(ZxChange zxChange){
+        Long campus = ShiroUtils.getSysUser().getDeptId();
+        if (campus != 100){
+            zxChange.setExtend5(campus);
+        }
         startPage();
         List<ZxChange> list = zxReturnService.selectReturnList(zxChange);
         return getDataTable(list);
@@ -193,6 +197,10 @@ public class ZxReturnController extends BaseController {
     @ResponseBody
     public TableDataInfo listss(ZxAssetManagement zxAssetManagement)
     {
+        int campus = ShiroUtils.getSysUser().getDeptId().intValue();
+        if (campus != 100){
+            zxAssetManagement.setCampus(campus);
+        }
         startPage();
         List<ZxAssetManagement> list = zxReturnService.selectAssetManagementList(zxAssetManagement);
         return getDataTable(list);

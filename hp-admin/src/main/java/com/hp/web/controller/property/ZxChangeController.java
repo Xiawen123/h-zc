@@ -69,6 +69,10 @@ public class ZxChangeController extends BaseController
     @ResponseBody
     public TableDataInfo transferList(ZxChange zxChange)
     {
+        Long campus = ShiroUtils.getSysUser().getDeptId();
+        if (campus != 100){
+            zxChange.setExtend5(campus);
+        }
         startPage();
         List<ZxChange> list = zxTransferService.selectTransferList(zxChange);
         return getDataTable(list);
@@ -273,6 +277,10 @@ public class ZxChangeController extends BaseController
     @ResponseBody
     public TableDataInfo insert (ZxAssetManagement zxAssetManagement)
     {
+        int campus = ShiroUtils.getSysUser().getDeptId().intValue();
+        if (campus != 100){
+            zxAssetManagement.setCampus(campus);
+        }
         startPage();
         List<ZxAssetManagement> list = zxTransferService.selectNoTransferList(zxAssetManagement);
         return getDataTable(list);
