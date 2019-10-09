@@ -219,4 +219,17 @@ public class ZxAssetManagementController extends BaseController
         String message = zxAssetManagementService.importZxAssetManagement(managementList, updateSupport, operName);
         return AjaxResult.success(message);
     }
+
+    /**
+     * 导入模板下载
+     * @return
+     */
+    @RequiresPermissions("property:management:view")
+    @GetMapping("/importTemplate")
+    @ResponseBody
+    public AjaxResult importTemplate()
+    {
+        ExcelUtil<ZxAssetManagement> util = new ExcelUtil<ZxAssetManagement>(ZxAssetManagement.class);
+        return util.importTemplateExcel("资产信息表模板");
+    }
 }
