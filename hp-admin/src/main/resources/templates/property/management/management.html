@@ -68,10 +68,11 @@
                             </li>
                             <li>
                                 <p>存放地点：</p>
-                                        <select name="location" id="extend3" class="form-control m-b" th:with="type=${@dict.getType('zc_location')}">
-                                            <option value="">所有</option>
-                                            <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
-                                        </select>
+                                <select id="extend3" name="location" class="form-control m-b" type="text">
+                                    <option value="">所有</option>
+                                    <option th:each="obj,eStat:${deptList}" th:value="${obj.deptId}"
+                                            th:text="${obj.deptName}"></option>
+                                </select>
                             </li>
                             <li style="width: 100%;text-align: center">
                                 <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>

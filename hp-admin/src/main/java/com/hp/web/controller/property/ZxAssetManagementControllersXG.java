@@ -50,13 +50,23 @@ public class ZxAssetManagementControllersXG extends BaseController
     @Autowired
     private ISysUserService iSysUserService;
     @Autowired
-    private ISysDictDataService iSysDictDataService;
+    private ISysDeptService sysDeptService;
 
     @RequiresPermissions("property:management1:view")
     @GetMapping()
-    public String management()
+    public String management(ModelMap mmap)
     {
-        return prefix + "/management1";
+        SysDept dept = new SysDept();
+        SysUser sysUser = ShiroUtils.getSysUser();  //获取用户信息
+        Long schoolId = sysUser.getDeptId();  //获取部门编号（校区）
+        List<SysDept> deptList = null;
+        if(schoolId == 100){
+            deptList = sysDeptService.selectDeptByNotInParentId();
+        }else {
+            dept.setParentId(schoolId);
+            deptList = sysDeptService.selectDeptList(dept);
+        }
+        mmap.put("deptList", deptList);return prefix + "/management1";
     }
 
     /**

@@ -13,6 +13,7 @@ import com.hp.property.service.IZxAssetManagementService;
 import com.hp.property.service.IZxChangeService;
 import com.hp.property.service.IZxInfoService;
 import com.hp.system.domain.SysDept;
+import com.hp.system.domain.SysUser;
 import com.hp.system.service.ISysDeptService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,10 +46,24 @@ public class ZxAssetManagementController extends BaseController
     @Autowired
     private IZxInfoService zxInfoService;
 
+    @Autowired
+    private ISysDeptService sysDeptService;
+
     @RequiresPermissions("property:management:view")
     @GetMapping()
-    public String management()
+    public String management(ModelMap mmap)
     {
+        SysDept dept = new SysDept();
+        SysUser sysUser = ShiroUtils.getSysUser();  //获取用户信息
+        Long schoolId = sysUser.getDeptId();  //获取部门编号（校区）
+        List<SysDept> deptList = null;
+        if(schoolId == 100){
+            deptList = sysDeptService.selectDeptByNotInParentId();
+        }else {
+            dept.setParentId(schoolId);
+            deptList = sysDeptService.selectDeptList(dept);
+        }
+        mmap.put("deptList", deptList);
         return prefix + "/management";
     }
 

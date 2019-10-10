@@ -64,42 +64,42 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </sql>
 
     <select id="selectZxAssetManagementList" parameterType="ZxAssetManagement" resultMap="ZxAssetManagementResult">
-        <include refid="selectZxAssetManagementVo"/>
+        select a.id, a.name, a.asset_num, a.brand, a.asset_specification, a.number, a.type, a.units, a.state, a.warehousing_campus, a.extend1, a.extend2, a.extend3,b.dept_name from zx_asset_management a LEFT JOIN sys_dept b ON a.location = b.dept_id
         <where>
-            <if test="name != null  and name != ''"> and name like concat('%', #{name}, '%')</if>
-            <if test="assetNum != null  and assetNum != ''"> and asset_num like concat('%', #{assetNum}, '%')</if>
-            <if test="brand != null  and brand != ''"> and brand = #{brand}</if>
-            <if test="assetSpecification != null  and assetSpecification != ''"> and asset_specification = #{assetSpecification}</if>
-            <if test="number != null "> and number = #{number}</if>
-            <if test="type != null and type != ''"> and type = #{type}</if>
-            <if test="units != null "> and units = #{units}</if>
-            <if test="supplier != null  and supplier != ''"> and supplier = #{supplier}</if>
-            <if test="picture != null  and picture != ''"> and picture = #{picture}</if>
-            <if test="price != null "> and price = #{price}</if>
+            <if test="name != null  and name != ''"> and a.name like concat('%', #{name}, '%')</if>
+            <if test="assetNum != null  and assetNum != ''"> and a.asset_num like concat('%', #{assetNum}, '%')</if>
+            <if test="brand != null  and brand != ''"> and a.brand = #{brand}</if>
+            <if test="assetSpecification != null  and assetSpecification != ''"> and a.asset_specification = #{assetSpecification}</if>
+            <if test="number != null "> and a.number = #{number}</if>
+            <if test="type != null and type != ''"> and a.type = #{type}</if>
+            <if test="units != null "> and a.units = #{units}</if>
+            <if test="supplier != null  and supplier != ''"> and a.supplier = #{supplier}</if>
+            <if test="picture != null  and picture != ''"> and a.picture = #{picture}</if>
+            <if test="price != null "> and a.price = #{price}</if>
             <if test="purchasingTime != null and purchasingTime != ''">
-                and date_format(purchasing_time,'%y%m%d') >= date_format(SUBSTR(#{purchasingTime} FROM 1 FOR 10),'%y%m%d')
-                and date_format(purchasing_time,'%y%m%d') <![CDATA[ <= ]]> date_format(SUBSTR(#{purchasingTime} FROM 14 FOR 10),'%y%m%d')
+                and date_format(a.purchasing_time,'%y%m%d') >= date_format(SUBSTR(#{purchasingTime} FROM 1 FOR 10),'%y%m%d')
+                and date_format(a.purchasing_time,'%y%m%d') <![CDATA[ <= ]]> date_format(SUBSTR(#{purchasingTime} FROM 14 FOR 10),'%y%m%d')
             </if>
             <if test="storageTime != null and storageTime != ''">
-                and date_format(storage_time,'%y%m%d') >= date_format(SUBSTR(#{storageTime} FROM 1 FOR 10),'%y%m%d')
-                and date_format(storage_time,'%y%m%d') <![CDATA[ <= ]]> date_format(SUBSTR(#{storageTime} FROM 14 FOR 10),'%y%m%d')
+                and date_format(a.storage_time,'%y%m%d') >= date_format(SUBSTR(#{storageTime} FROM 1 FOR 10),'%y%m%d')
+                and date_format(a.storage_time,'%y%m%d') <![CDATA[ <= ]]> date_format(SUBSTR(#{storageTime} FROM 14 FOR 10),'%y%m%d')
             </if>
-            <if test="warehousingCampus != null and warehousingCampus != 100"> and warehousing_campus = #{warehousingCampus}</if>
-            <if test="state != null "> and state = #{state}</if>
-            <if test="operator != null  and operator != ''"> and operator = #{operator}</if>
-            <if test="location != null "> and location = #{location}</if>
-            <if test="recipientsTime != null "> and recipients_time = #{recipientsTime}</if>
-            <if test="repairTime != null "> and repair_time = #{repairTime}</if>
-            <if test="transferTime != null "> and transfer_time = #{transferTime}</if>
-            <if test="discardTime != null "> and discard_time = #{discardTime}</if>
-            <if test="returnTime != null "> and return_time = #{returnTime}</if>
-            <if test="campus != null "> and campus = #{campus}</if>
-            <if test="department != null "> and department = #{department}</if>
-            <if test="extend1 != null  and extend1 != ''"> and extend1 = #{extend1}</if>
-            <if test="extend2 != null  and extend2 != ''"> and extend2 like concat('%', #{extend2}, '%')</if>
-            <if test="extend3 != null  and extend3 != ''"> and extend3 = #{extend3}</if>
-            <if test="extend4 != null  and extend4 != ''"> and extend4 = #{extend4}</if>
-            <if test="extend5 != null  and extend5 != ''"> and extend5 = #{extend5}</if>
+            <if test="warehousingCampus != null and warehousingCampus != 100"> and a.warehousing_campus = #{warehousingCampus}</if>
+            <if test="state != null "> and a.state = #{state}</if>
+            <if test="operator != null  and operator != ''"> and a.operator = #{operator}</if>
+            <if test="location != null "> and a.location = #{location}</if>
+            <if test="recipientsTime != null "> and a.recipients_time = #{recipientsTime}</if>
+            <if test="repairTime != null "> and a.repair_time = #{repairTime}</if>
+            <if test="transferTime != null "> and a.transfer_time = #{transferTime}</if>
+            <if test="discardTime != null "> and a.discard_time = #{discardTime}</if>
+            <if test="returnTime != null "> and a.return_time = #{returnTime}</if>
+            <if test="campus != null "> and a.campus = #{campus}</if>
+            <if test="department != null "> and a.department = #{department}</if>
+            <if test="extend1 != null  and extend1 != ''"> and a.extend1 = #{extend1}</if>
+            <if test="extend2 != null  and extend2 != ''"> and a.extend2 like concat('%', #{extend2}, '%')</if>
+            <if test="extend3 != null  and extend3 != ''"> and a.extend3 = #{extend3}</if>
+            <if test="extend4 != null  and extend4 != ''"> and a.extend4 = #{extend4}</if>
+            <if test="extend5 != null  and extend5 != ''"> and a.extend5 = #{extend5}</if>
         </where>
         order by storage_time desc,asset_num desc
     </select>
