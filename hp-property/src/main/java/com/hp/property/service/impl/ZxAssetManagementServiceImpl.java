@@ -209,66 +209,15 @@ public class ZxAssetManagementServiceImpl implements IZxAssetManagementService {
         int failureNum = 0;
         StringBuilder successMsg = new StringBuilder();
         StringBuilder failureMsg = new StringBuilder();
+
         for (ZxAssetManagement management : managementList)
         {
             try
             {
-                SysUser sysUser = ShiroUtils.getSysUser();  //获取用户信息
-                Long schoolId = sysUser.getDeptId();  //获取部门编号（校区）
-                String place = management.getPlace();  //存放地点名称
-                if(!isUpdateSupport){
-                    int location = 0;
-                    if(place != null && place != ""){
-                        location = deptMapper.selectIdByName(place);   //货物存放地点编号
-                    }
-                    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");//设置日期格式
-                    //购置时间
-                    int legalLen = 10;
-                    String purchasingTime = management.getPurchasingTime();
-                    if(purchasingTime != null){
-                        if ((purchasingTime.length() != legalLen) && purchasingTime.length() != 0) {
-                            Date date = new Date(purchasingTime);
-                            management.setPurchasingTime(dateFormat.format(date));
-                        }
-                    }
-                    management.setWarehousingCampus(new Long(schoolId).intValue());  //入库校区
-                    management.setCampus(new Long(schoolId).intValue());   //使用校区
-                    management.setLocation(location);  //存放地点
-                    management.setState(2);   //状态，2:在用
-                    management.setNumber(1);    //数量：默认1
-                    management.setExtend3("0");   //报修状态：0：正常
-                    SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");//日期格式
-                    management.setStorageTime(format.format(new Date()));  //入库时间
-                    this.insertZxAssetManagement(management);
-                    successNum++;
-                    successMsg.append("<br/>" + successNum + "、资产 " + management.getName() + " 导入成功");
-                }
-                else if (isUpdateSupport)
-                {
-                    int location = deptMapper.selectIdByName(place);   //货物存放地点编号
-                    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");//设置日期格式
-                    //购置时间
-                    int legalLen = 10;
-                    if ((management.getStorageTime().length() != legalLen) && management.getStorageTime().length() != 0) {
-                        Date date = new Date(management.getStorageTime());
-                        management.setStorageTime(dateFormat.format(date));
-                    }
-                    management.setWarehousingCampus(new Long(schoolId).intValue());  //入库校区
-                    management.setCampus(new Long(schoolId).intValue());   //使用校区
-                    management.setLocation(location);  //存放地点
-                    management.setState(2);   //状态，2:在用
-                    management.setNumber(1);    //数量：默认1
-                    management.setExtend3("0");   //报修状态：0：正常
-                    SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");//日期格式
-                    management.setStorageTime(format.format(new Date()));  //入库时间
-                    this.updateZxAssetManagement(management);
-                    successNum++;
-                    successMsg.append("<br/>" + successNum + "、资产 " + management.getName() + " 更新成功");
-                }
-                else
-                {
+                String type = management.getType();  //资产类型
+                if(type == null || type == "" || type.length() == 0){
                     failureNum++;
-                    failureMsg.append("<br/>" + failureNum + "、资产 " + management.getName() + " 已存在");
+                    failureMsg.append("<br/>" + failureNum + "、资产 " + management.getName() + " 导入失败，请检查必填项");
                 }
             }
             catch (Exception e)
@@ -286,7 +235,102 @@ public class ZxAssetManagementServiceImpl implements IZxAssetManagementService {
         }
         else
         {
-            successMsg.insert(0, "恭喜您，数据已全部导入成功！共 " + successNum + " 条，数据如下：");
+            for (ZxAssetManagement management1 : managementList)
+            {
+                try
+                {
+                    SysUser sysUser = ShiroUtils.getSysUser();  //获取用户信息
+                    Long schoolId = sysUser.getDeptId();  //获取部门编号（校区）
+                    String place = management1.getPlace();  //存放地点名称
+                    String type = management1.getType();  //资产类型
+                    if(!isUpdateSupport){
+                        if(type == null || type == "" || type.length() == 0){
+                            failureNum++;
+                            failureMsg.append("<br/>" + failureNum + "、资产 " + management1.getName() + " 导入失败，请检查必填项");
+                        }else {
+                            if(failureNum == 0){
+                                int location = 0;
+                                if(place != null && place != ""){
+                                    String jieguo = deptMapper.selectIdByName(place);
+                                    if(jieguo != null){
+                                        location = Integer.parseInt(jieguo);   //货物存放地点编号
+                                    }
+                                }
+                                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");//设置日期格式
+                                //购置时间
+                                int legalLen = 10;
+                                String purchasingTime = management1.getPurchasingTime();
+                                if(purchasingTime != null){
+                                    if ((purchasingTime.length() != legalLen) && purchasingTime.length() != 0) {
+                                        Date date = new Date(purchasingTime);
+                                        management1.setPurchasingTime(dateFormat.format(date));
+                                    }
+                                }
+                                management1.setWarehousingCampus(new Long(schoolId).intValue());  //入库校区
+                                management1.setCampus(new Long(schoolId).intValue());   //使用校区
+                                management1.setLocation(location);  //存放地点
+                                management1.setState(2);   //状态，2:在用
+                                management1.setNumber(1);    //数量：默认1
+                                management1.setExtend3("0");   //报修状态：0：正常
+                                SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");//日期格式
+                                management1.setStorageTime(format.format(new Date()));  //入库时间
+                                this.insertZxAssetManagement(management1);
+                                successNum++;
+                                successMsg.append("<br/>" + successNum + "、资产 " + management1.getName() + " 导入成功");
+                            }
+                        }
+                    }
+                    else if (isUpdateSupport)
+                    {
+                        int location = 0;
+                        if(place != null && place != ""){
+                            String jieguo = deptMapper.selectIdByName(place);
+                            if(jieguo != null){
+                                location = Integer.parseInt(jieguo);   //货物存放地点编号
+                            }
+                        }
+                        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");//设置日期格式
+                        //购置时间
+                        int legalLen = 10;
+                        if ((management1.getStorageTime().length() != legalLen) && management1.getStorageTime().length() != 0) {
+                            Date date = new Date(management1.getStorageTime());
+                            management1.setStorageTime(dateFormat.format(date));
+                        }
+                        management1.setWarehousingCampus(new Long(schoolId).intValue());  //入库校区
+                        management1.setCampus(new Long(schoolId).intValue());   //使用校区
+                        management1.setLocation(location);  //存放地点
+                        management1.setState(2);   //状态，2:在用
+                        management1.setNumber(1);    //数量：默认1
+                        management1.setExtend3("0");   //报修状态：0：正常
+                        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");//日期格式
+                        management1.setStorageTime(format.format(new Date()));  //入库时间
+                        this.updateZxAssetManagement(management1);
+                        successNum++;
+                        successMsg.append("<br/>" + successNum + "、资产 " + management1.getName() + " 更新成功");
+                    }
+                    else
+                    {
+                        failureNum++;
+                        failureMsg.append("<br/>" + failureNum + "、资产 " + management1.getName() + " 已存在");
+                    }
+                }
+                catch (Exception e)
+                {
+                    failureNum++;
+                    String msg = "<br/>" + failureNum + "、资产 " + management1.getName() + " 导入失败：";
+                    failureMsg.append(msg + e.getMessage());
+                    log.error(msg, e);
+                }
+            }
+            if (failureNum > 0)
+            {
+                failureMsg.insert(0, "很抱歉，导入失败！共 " + failureNum + " 条数据格式不正确，错误如下：");
+                throw new BusinessException(failureMsg.toString());
+            }
+            else
+            {
+                successMsg.insert(0, "恭喜您，数据已全部导入成功！共 " + successNum + " 条，数据如下：");
+            }
         }
         return successMsg.toString();
     }

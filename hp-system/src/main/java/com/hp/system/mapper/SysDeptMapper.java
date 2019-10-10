@@ -128,5 +128,5 @@ public interface SysDeptMapper
      * 根据名称查询id
      * @return
      */
-    public int selectIdByName(String deptName);
+    public String selectIdByName(String deptName);
 }
