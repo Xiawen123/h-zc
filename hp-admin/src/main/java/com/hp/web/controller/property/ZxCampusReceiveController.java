@@ -88,8 +88,11 @@ public class ZxCampusReceiveController extends BaseController {
      * 新增资产信息
      */
     @GetMapping("/add")
-    public String add(ModelMap mmap)
+    public String add(HttpServletRequest request,ModelMap mmap)
     {
+        if(request.getSession().getAttribute("s")!=null){
+            request.getSession().removeAttribute("s");
+        }
         List<SysDept> sysDepts = iSysDeptService.selectSchoolByParentId();
         mmap.put("school",sysDepts);
 

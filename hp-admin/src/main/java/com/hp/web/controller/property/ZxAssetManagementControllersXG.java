@@ -145,15 +145,17 @@ public class ZxAssetManagementControllersXG extends BaseController
         if (zxAssetManagement.getCampus()!=null) {
             int z1=zxAssetManagement.getCampus();
             SysDept s= iSysDeptService.selectDeptById(new Long((long)z1));
-            zxAssetManagement.setExtend5(s.getDeptName());
+            if(s != null){
+                zxAssetManagement.setExtend5(s.getDeptName());
+            }
         }
         if (zxAssetManagement.getWarehousingCampus()!=null) {
             int z1=zxAssetManagement.getWarehousingCampus();
             SysDept s= iSysDeptService.selectDeptById(new Long((long)z1));
-            zxAssetManagement.setExtend4(s.getDeptName());
+            if(s != null){
+                zxAssetManagement.setExtend4(s.getDeptName());
+            }
         }
-
-
         mmap.put("zxAssetManagement", zxAssetManagement);
         return prefix + "/edit";
     }

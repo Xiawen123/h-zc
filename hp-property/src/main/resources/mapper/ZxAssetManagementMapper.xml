@@ -247,7 +247,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="returnTime != null ">return_time = #{returnTime},</if>
             <if test="campus != null ">campus = #{campus},</if>
             <if test="department != null ">department = #{department},</if>
-            <if test="extend1 != null  and extend1 != ''">extend1 = #{extend1},</if>
+            <if test="extend1 != null ">extend1 = #{extend1},</if>
             <if test="extend2 != null  ">extend2 = #{extend2},</if>
             <if test="extend3 != null  ">extend3 = #{extend3},</if>
             <if test="extend4 != null  and extend4 != ''">extend4 = #{extend4},</if>

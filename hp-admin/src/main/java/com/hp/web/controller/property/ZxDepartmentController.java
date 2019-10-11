@@ -76,8 +76,11 @@ public class ZxDepartmentController extends BaseController {
      * 新增部门领用
      */
     @GetMapping("/add")
-    public String add(ModelMap mmap)
+    public String add(HttpServletRequest request,ModelMap mmap)
     {
+        if(request.getSession().getAttribute("s")!=null){
+            request.getSession().removeAttribute("s");
+        }
         SysDept dept = new SysDept();
         SysUser sysUser = ShiroUtils.getSysUser();  //获取用户信息
         Long schoolId = sysUser.getDeptId();  //获取部门编号（校区）
@@ -138,10 +141,10 @@ public class ZxDepartmentController extends BaseController {
                 zxChangeService.insertZxChange(zxChange);
                 i1 = zxAssetManagementService.updateZxAssetManagement(zxone);
             }
-            session.removeAttribute("s");//清空session信息
+            //session.removeAttribute("s");//清空session信息
             return toAjax(i1);
         }
-        session.removeAttribute("s");//清空session信息
+        //session.removeAttribute("s");//清空session信息
         return toAjax(zxChangeService.insertZxChange(null));
     }
 
