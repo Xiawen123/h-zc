@@ -103,7 +103,7 @@
         select am.*,d.dept_name from zx_asset_management am
         left join sys_dept d on d.dept_id = am.warehousing_campus
         <where>
-            am.state = 3
+            am.state != 3
             <if test="name != null  and name != ''"> and am.name like concat('%', #{name}, '%')</if>
             <if test="extend1 != null and extend1 != '' "> and am.extend1 = #{extend1}</if>
             <if test="extend2 != null and extend2 != '' "> and am.extend2 like concat('%', #{extend2}, '%')</if>

@@ -64,7 +64,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </sql>
 
     <select id="selectZxAssetManagementList" parameterType="ZxAssetManagement" resultMap="ZxAssetManagementResult">
-        select a.id, a.name, a.asset_num, a.brand, a.asset_specification, a.number, a.type, a.units, a.state, a.warehousing_campus, a.extend1, a.extend2, a.extend3,b.dept_name from zx_asset_management a LEFT JOIN sys_dept b ON a.location = b.dept_id
+        select a.*,b.dept_name from zx_asset_management a LEFT JOIN sys_dept b ON a.location = b.dept_id
         <where>
             <if test="name != null  and name != ''"> and a.name like concat('%', #{name}, '%')</if>
             <if test="assetNum != null  and assetNum != ''"> and a.asset_num like concat('%', #{assetNum}, '%')</if>

@@ -188,6 +188,7 @@ public class ZxDepartmentController extends BaseController {
     @ResponseBody
     public TableDataInfo listsan(ZxAssetManagement zxAssetManagement, HttpServletRequest request)
     {
+        zxAssetManagement.setExtend2(null);
         int num = zxAssetManagement.getNum(); //获取num（用于删除做判断：num=0删除状态,num=-1正常添加状态）
         if(num == 0){
             request.getSession().removeAttribute("s");//清空session信息
