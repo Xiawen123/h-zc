@@ -269,6 +269,8 @@ public class ZxAssetManagementServiceImpl implements IZxAssetManagementService {
                         management1.setExtend3("0");   //报修状态：0：正常
                         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");//日期格式
                         management1.setStorageTime(format.format(new Date()));  //入库时间
+                        String loginName = ShiroUtils.getSysUser().getLoginName();  //获取登录人信息
+                        management1.setOperator(loginName);  //操作人
                         this.insertZxAssetManagement(management1);
                         successNum++;
                         successMsg.append("<br/>" + successNum + "、资产 " + management1.getName() + " 导入成功");
@@ -297,6 +299,8 @@ public class ZxAssetManagementServiceImpl implements IZxAssetManagementService {
                         management1.setExtend3("0");   //报修状态：0：正常
                         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");//日期格式
                         management1.setStorageTime(format.format(new Date()));  //入库时间
+                        String loginName = ShiroUtils.getSysUser().getLoginName();  //获取登录人信息
+                        management1.setOperator(loginName);  //操作人
                         this.updateZxAssetManagement(management1);
                         successNum++;
                         successMsg.append("<br/>" + successNum + "、资产 " + management1.getName() + " 更新成功");

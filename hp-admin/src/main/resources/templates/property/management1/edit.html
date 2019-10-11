@@ -71,13 +71,13 @@
             <div class="form-group">    
                 <label class="col-sm-3 control-label">数量：</label>
                 <div class="col-sm-8">
-                    <input name="number" th:field="*{number}" class="form-control" type="text">
+                    <input name="number" th:field="*{number}" class="form-control" type="text" readonly="readonly">
                 </div>
             </div>
             <div class="form-group">    
                 <label class="col-sm-3 control-label">资产类型：</label>
                 <div class="col-sm-8">
-                    <select name="type"  th:with="type=${@dict.getType('zc_type')}">
+                    <select name="type"  th:with="type=${@dict.getType('zc_type')}" disabled="disabled">
                         <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}" th:field="*{type}"> </option>
                     </select>
                 </div>
@@ -112,7 +112,7 @@
             <div class="form-group">    
                 <label class="col-sm-3 control-label">状态：</label>
                 <div class="col-sm-8">
-                    <select name="state" th:with="type=${@dict.getType('zc_state')}">
+                    <select name="state" th:with="type=${@dict.getType('zc_state')}" disabled="disabled">
                         <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}" th:field="*{state}" ></option>
                     </select>
                 </div>
@@ -121,9 +121,8 @@
             <div class="form-group">    
                 <label class="col-sm-3 control-label">存放地点：</label>
                 <div class="col-sm-8">
-                    <select name="location" th:with="type=${@dict.getType('zc_location')}">
-
-                        <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}" th:field="*{location}" disabled="disabled"></option >
+                    <select name="location" th:with="type=${@dict.getType('zc_location')}" disabled="disabled">
+                        <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}" th:field="*{location}"></option >
                     </select>
                 </div>
             </div>
@@ -131,8 +130,7 @@
             <div class="form-group">
                 <label class="col-sm-3 control-label">使用部门：</label>
                 <div class="col-sm-8">
-                    <select name="extend1" th:with="type=${@dict.getType('zc_department')}">
-
+                    <select name="extend1" th:with="type=${@dict.getType('zc_department')}" disabled="disabled">
                         <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}" th:field="*{extend1}" disabled="disabled"></option>
                     </select>
                 </div>
