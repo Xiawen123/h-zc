@@ -49,11 +49,22 @@
                 </div>
             </div>
             <div class="form-group">
+                <label class="col-sm-3 control-label">校区：</label>
+                <div class="col-sm-8">
+                    <select id="extend5" name="extend5" class="form-control" type="text">
+                        <option value="">请选择</option>
+                        <option th:each="obj,eStat:${deptList}" th:value="${obj.deptId}"
+                                th:text="${obj.deptName}"></option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
                 <label class="col-sm-3 control-label">存放地点：</label>
                 <div class="col-sm-8">
                     <select id="extend3" name="extend3" class="form-control" type="text">
-                        <option th:each="obj,eStat:${deptList}" th:value="${obj.deptId}"
-                                th:text="${obj.deptName}"></option>
+                        <option value="" id="one">请选择</option>
+                        <!--<option th:each="obj,eStat:${deptList}" th:value="${obj.deptId}"
+                                th:text="${obj.deptName}"></option>-->
                     </select>
                 </div>
             </div>
@@ -240,6 +251,35 @@
         }
 
 
+        //校区，存放地点联动
+        $(document).ready(function() {
+            $("#extend5").bind("change",function(){
+                var schoolId = $(this).val();
+                $.ajax({
+                    cache : true,
+                    type : "POST",
+                    url : prefix + "/selectPlaceBySchoolId",
+                    data : {
+                        "parentId": schoolId
+                    },
+                    async : false,
+                    error : function(request) {
+                        $.modal.alertError("系统错误");
+                    },
+                    success : function(data) {
+                        $("#one").siblings("option").remove();
+                        if(data != 0){
+                            for(var i=0;i<data.length;i++){
+                                //更新存放地点
+                                var deptId=data[i].deptId;
+                                var deptName=data[i].deptName;
+                                $("#extend3").append("<option value='"+deptId+"'>"+deptName+"</option>");
+                            }
+                        }
+                    }
+                });
+            });
+        });
     </script>
     <script type="text/javascript">
         //时间选择器（默认情况下是：yyyy-MM-dd,type:'datetime'是：yyyy-MM-dd HH:mm:ss）

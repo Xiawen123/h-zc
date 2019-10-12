@@ -57,6 +57,7 @@
                             <li>
                                 <p>入库校区：</p>
                                 <select id="warehousingCampus" name="warehousingCampus" type="text">
+                                    <option value="">全部</option>
                                     <option th:each="obj,eStat:${school}" th:value="${obj.deptId}"
                                             th:text="${obj.deptName}"></option>
                                 </select>

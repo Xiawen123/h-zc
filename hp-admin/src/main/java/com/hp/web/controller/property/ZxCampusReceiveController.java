@@ -133,11 +133,11 @@ public class ZxCampusReceiveController extends BaseController {
                 String assetId = id.toString();  //获取单个id
                 zxone = new ZxAssetManagement();  //创建ZxAssetManagement表对象（用于传参）
                 zxone.setId(Long.parseLong(assetId));  //单个id
-                zxone.setState(2);   //状态（1：闲置，2：在用，3：报废）
-                if(zxChange.getUseDepartment() != null){
+                //zxone.setState(2);   //状态（1：闲置，2：在用，3：报废）
+                /*if(zxChange.getUseDepartment() != null){
                     zxone.setExtend1(zxChange.getUseDepartment().toString());  //使用部门
                 }
-                zxone.setExtend2(zxChange.getUsers());  //使用人
+                zxone.setExtend2(zxChange.getUsers());  //使用人*/
                 if(zxChange.getExtend3() != null){
                     zxone.setLocation(Integer.parseInt(zxChange.getExtend3()));  //存放地点
                 }

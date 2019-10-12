@@ -295,4 +295,14 @@ public class SysDeptServiceImpl implements ISysDeptService
     public List<SysDept> selectSchoolByParentId(){
         return deptMapper.selectSchoolByParentId();
     }
+
+    /**
+     * 根据父级id查询子级信息（用于级联）
+     * @param parentId
+     * @return
+     */
+    @Override
+    public List<SysDept> selectPlaceByParentId(Long parentId){
+        return deptMapper.selectPlaceByParentId(parentId);
+    }
 }
