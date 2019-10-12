@@ -170,7 +170,6 @@ public class ZxDepartmentController extends BaseController {
     /**
      * 资产列表查询(弹框列表)
      */
-    @RequiresPermissions("property:department:list")
     @PostMapping("/listooo")
     @ResponseBody
     public TableDataInfo listooo(ZxAssetManagement zxAssetManagement)

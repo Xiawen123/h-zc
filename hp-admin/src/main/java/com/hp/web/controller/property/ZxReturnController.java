@@ -169,7 +169,6 @@ public class ZxReturnController extends BaseController {
         }
     }
 
-    @RequiresPermissions("property:return:adds")
     @GetMapping("/adds")
     public String adds()
     {
@@ -193,7 +192,6 @@ public class ZxReturnController extends BaseController {
      * 获取在用状态的列表(弹框)
      * @return
      */
-    @RequiresPermissions("property:return:list")
     @PostMapping("/listss")
     @ResponseBody
     public TableDataInfo listss(ZxAssetManagement zxAssetManagement)
@@ -208,7 +206,6 @@ public class ZxReturnController extends BaseController {
     }
 
 
-    @RequiresPermissions("property:return:list")
     @PostMapping("/lists")
     @ResponseBody
     public TableDataInfo lists(ZxAssetManagement zxAssetManagement, HttpServletRequest request) {

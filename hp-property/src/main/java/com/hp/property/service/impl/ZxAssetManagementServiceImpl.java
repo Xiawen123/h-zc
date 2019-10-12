@@ -99,7 +99,7 @@ public class ZxAssetManagementServiceImpl implements IZxAssetManagementService {
             if (count != 0){
                 //添加资产编号
                 String maxNum = zxAssetManagementService.getMaxNum(zxAssetManagement);
-                String substring = maxNum.substring(8);
+                String substring = maxNum.substring(6);
                 aNum = Integer.parseInt(substring);
             }
             zxAssetManagement.setAssetNum("WHHP-"+zxAssetManagement.getType()+ String.format("%05d",(aNum+1)));

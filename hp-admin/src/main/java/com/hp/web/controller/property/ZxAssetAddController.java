@@ -68,7 +68,7 @@ public class ZxAssetAddController extends BaseController
     {
         int campus = ShiroUtils.getSysUser().getDeptId().intValue();
         if (campus != 100){
-            zxAssetManagement.setCampus(campus);
+            zxAssetManagement.setWarehousingCampus(campus);
         }
         startPage();
         List<ZxAssetManagement> list = zxAssetManagementService.selectZxAssetManagementList(zxAssetManagement);
@@ -116,6 +116,8 @@ public class ZxAssetAddController extends BaseController
             zxAssetManagement.setState(1);
             //添加入库校区
             zxAssetManagement.setWarehousingCampus(ShiroUtils.getSysUser().getDeptId().intValue());
+            //添加所属校区
+            zxAssetManagement.setCampus(ShiroUtils.getSysUser().getDeptId().intValue());
             //添加图片url
         if (zxAssetManagement.getPicture() != null && zxAssetManagement.getPicture().equals("") == false){
             String a=zxAssetManagement.getPicture();

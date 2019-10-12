@@ -93,7 +93,7 @@
     <th:block th:include="include :: layout-latest-js" />
     <th:block th:include="include :: ztree-js" />
     <script th:inline="javascript">
-        var editFlag = [[${@permission.hasPermi('system:management1:edit')}]];
+        var editFlag = [[${@permission.hasPermi('property:management1:edit')}]];
         var removeFlag = [[${@permission.hasPermi('system:management1:remove')}]];
         var types=[[${@dict.getType('zc_type')}]];
         var zc_unit=[[${@dict.getType('zc_unit')}]];

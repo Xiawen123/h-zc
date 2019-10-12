@@ -77,7 +77,7 @@ public class ZxAssetManagementController extends BaseController
     {
         int campus = ShiroUtils.getSysUser().getDeptId().intValue();
         if (campus != 100){
-            zxAssetManagement.setCampus(campus);
+            zxAssetManagement.setWarehousingCampus(campus);
         }
         startPage();
         List<ZxAssetManagement> list = zxInfoService.selectZxAssetManagementList(zxAssetManagement);
@@ -206,7 +206,7 @@ public class ZxAssetManagementController extends BaseController
         mmap.put("id",id);
         return prefix + "/oneChange";
     }
-    @RequiresPermissions("property:management:oneChange")
+
     @PostMapping("/oneChange")
     @ResponseBody
     public TableDataInfo oneChange(ZxChange zxChange){

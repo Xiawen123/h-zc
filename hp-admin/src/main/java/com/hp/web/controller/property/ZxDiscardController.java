@@ -258,7 +258,6 @@ public class ZxDiscardController extends BaseController {
         /**
          * 查询资产信息列表（查询未报废的资产）
          */
-        @RequiresPermissions("property:discard:inserts")
         @PostMapping("/inserts")
         @ResponseBody
         public TableDataInfo insert (ZxAssetManagement zxAssetManagement)
