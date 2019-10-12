@@ -165,8 +165,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <!--查询变动类型为1,即校区领用的所有信息-->
     <select id="selectAllChangeTypeOne" resultMap="ZxChangeResult" parameterType="ZxChange">
         SELECT
-        c.id,
-        c.share_time,
+        c.*,
         a.asset_num,
         a.NAME,
         a.type,
@@ -174,10 +173,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         a.asset_specification,
         a.number,
         a.units,
-        c.extend4,
-        c.use_department,
-        c.users,
-        c.extend1,
         d.dept_name,
         sd.dept_name place
         FROM
@@ -195,7 +190,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="assetNum != null  and assetNum != ''"> and a.asset_num like concat("%",#{assetNum},"%")</if>
             <if test="extend4 != null and extend4 != 100 and extend4 != ''"> and c.extend4 = #{extend4}</if>
             <if test="extend5 != null "> and c.extend5 = #{extend5}</if>
-            <if test="users != null  and users != ''"> and c.users like concat("%",#{users},"%")</if>
+            <if test="submitOne != null  and submitOne != ''"> and c.submit_one like concat("%",#{submitOne},"%")</if>
         </where>
         ORDER BY c.extend1 DESC
     </select>
@@ -211,8 +206,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             c.change_type = 6
             <if test="name != null  and name != ''"> and am.name like concat('%', #{name}, '%')</if>
             <if test="assetNum != null  and assetNum != ''"> and am.asset_num like concat('%', #{assetNum}, '%')</if>
-            <if test="useDepartment != null "> and c.use_department = #{useDepartment}</if>
-            <if test="users != null  and users != ''"> and c.users like concat('%', #{users}, '%')</if>
+            <if test="submittedDepartment != null "> and c.submitted_department = #{submittedDepartment}</if>
+            <if test="submitOne != null  and submitOne != ''"> and c.submit_one like concat('%', #{submitOne}, '%')</if>
             <if test="params.beginTime != null and params.beginTime != ''"><!-- 开始时间检索 -->
                 and c.share_time &gt;= #{params.beginTime}
             </if>

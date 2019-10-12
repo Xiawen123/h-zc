@@ -120,8 +120,9 @@ public class ZxDepartmentController extends BaseController {
                 zxone = new ZxAssetManagement();  //创建ZxAssetManagement表对象（用于传参）
                 zxone.setId(Long.parseLong(assetId));  //单个id
                 zxone.setState(2);   //状态（1：闲置，2：在用，3：报废）
-                if(zxChange.getUseDepartment() != null){
-                    zxone.setExtend1(zxChange.getUseDepartment().toString());  //使用部门
+                if(zxChange.getSubmittedDepartment() != null){
+                    zxone.setExtend1(zxChange.getSubmittedDepartment().toString());  //使用部门
+                    zxChange.setUseDepartment(zxChange.getSubmittedDepartment());
                 }
                 zxone.setExtend2(zxChange.getUsers());  //使用人
                 if(zxChange.getExtend3() != null){
