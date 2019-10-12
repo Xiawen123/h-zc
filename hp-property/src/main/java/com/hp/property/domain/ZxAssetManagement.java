@@ -130,6 +130,26 @@ public class ZxAssetManagement extends BaseEntity
     /** 存放地点名称 */
     @Excel(name = "存放地点")
     private String place;
+    /** 领用部门 */
+    private Integer submittedDepartment;
+    /** 领用人员 */
+    private String submitOne;
+
+    public Integer getSubmittedDepartment() {
+        return submittedDepartment;
+    }
+
+    public void setSubmittedDepartment(Integer submittedDepartment) {
+        this.submittedDepartment = submittedDepartment;
+    }
+
+    public String getSubmitOne() {
+        return submitOne;
+    }
+
+    public void setSubmitOne(String submitOne) {
+        this.submitOne = submitOne;
+    }
 
     public String getPlace() {
         return place;

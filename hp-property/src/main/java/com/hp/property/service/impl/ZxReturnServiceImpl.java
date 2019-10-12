@@ -52,7 +52,7 @@ public class ZxReturnServiceImpl implements IZxReturnService
     @Override
     public ZxAssetManagement selectZxAssetManagementById(Long id) {
         ZxAssetManagement management = zxReturnMapper.selectZxAssetManagementById(id);
-        Long dept = management.getUseDepartment();
+        Integer dept = management.getSubmittedDepartment();
         String department = "";
         if(!"".equals(dept) && dept != null){
             department = sysDictDataMapper.selectDictLabel("zc_department",dept.toString());

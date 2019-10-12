@@ -65,6 +65,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="branch"     column="branch"   />
         <result property="reception"    column="reception"  />
         <result property="place"     column="place"   />
+        <result property="submittedDepartment"    column="submitted_department"  />
+        <result property="submitOne"    column="submit_one"  />
     </resultMap>
 
 
@@ -128,7 +130,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     <!-- 通过id查询详情 -->
     <select id="selectZxAssetManagementById" parameterType="Long" resultMap="ZxAssetManagementResult">
-        select c.share_time,c.use_department,c.users,c.extend2 reception,sd.dept_name place,am.*,d.dept_name,dept.dept_name branch
+        select c.share_time,c.use_department,c.users,c.submitted_department,c.submit_one,c.extend2 reception,sd.dept_name place,am.*,d.dept_name,dept.dept_name branch
         from zx_change c
         left join zx_asset_management am on c.assets_id = am.id
         left join sys_dept d on c.extend5 = d.dept_id
