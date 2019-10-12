@@ -68,7 +68,7 @@ public class ZxAssetAddController extends BaseController
     {
         int campus = ShiroUtils.getSysUser().getDeptId().intValue();
         if (campus != 100){
-            zxAssetManagement.setWarehousingCampus(campus);
+            zxAssetManagement.setCampus(campus);
         }
         startPage();
         List<ZxAssetManagement> list = zxAssetManagementService.selectZxAssetManagementList(zxAssetManagement);
