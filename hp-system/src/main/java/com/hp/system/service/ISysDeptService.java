@@ -109,4 +109,11 @@ public interface ISysDeptService
      * @return
      */
     public List<SysDept> selectSchoolByParentId();
+
+    /**
+     * 根据父级id查询子级信息（用于级联）
+     * @param parentId
+     * @return
+     */
+    public List<SysDept> selectPlaceByParentId(Long parentId);
 }

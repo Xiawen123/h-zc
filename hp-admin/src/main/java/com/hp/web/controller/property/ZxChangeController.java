@@ -56,6 +56,9 @@ public class ZxChangeController extends BaseController
     public String change(ModelMap mmap){
         List<SysDept> sysDepts = sysDeptService.selectDeptByParentId();
         mmap.put("school",sysDepts);
+        /*//校区
+        List<SysDept> sysDepts = sysDeptService.selectSchoolByParentId();
+        mmap.put("school",sysDepts);*/
         return prefix + "/transfer";
     }
 
@@ -105,13 +108,27 @@ public class ZxChangeController extends BaseController
         Long schoolId = sysUser.getDeptId();  //获取部门编号（校区）
         List<SysDept> deptList = null;
         if(schoolId == 100){
-            deptList = sysDeptService.selectDeptByNotInParentId();
+            deptList = sysDeptService.selectSchoolByParentId();
         }else {
             dept.setParentId(schoolId);
             deptList = sysDeptService.selectDeptList(dept);
         }
         mmap.put("deptList", deptList);
         return prefix + "/add";
+    }
+
+    /**
+     * 用于校区与存放地点的级联
+     * @param parentId
+     * @return
+     */
+    @PostMapping("/selectPlaceBySchoolId")
+    @ResponseBody
+    public List<SysDept> selectPlaceBySchoolId(Long parentId)
+    {
+        //存放地点
+        List<SysDept> sysDepts = sysDeptService.selectPlaceByParentId(parentId);
+        return sysDepts;
     }
 
     /**
@@ -134,6 +151,7 @@ public class ZxChangeController extends BaseController
     @PostMapping("/alist")
     @ResponseBody
     public TableDataInfo alist(ZxAssetManagement zxAssetManagement, HttpServletRequest request) {
+        zxAssetManagement.setExtend2(null);
         int num = zxAssetManagement.getNum(); //获取num（用于删除做判断：num=0删除状态,num=-1正常添加状态）
         if(num == 0){
             request.getSession().removeAttribute("s");//清空session信息
@@ -244,14 +262,16 @@ public class ZxChangeController extends BaseController
                     if(zxChange.getUseDepartment() != null){
                         zxone.setExtend1(zxChange.getUseDepartment().toString());  //使用部门
                     }
+                    if(zxChange.getExtend5() != null){
+                        zxone.setCampus(new Long(zxChange.getExtend5()).intValue());   //使用校区
+                    }
                     zxone.setExtend2(zxChange.getUsers());  //使用人
                     if(zxChange.getExtend3() != null){
                         zxone.setLocation(Integer.parseInt(zxChange.getExtend3()));  //存放地点
                     }
+
                     SysUser sysUser = ShiroUtils.getSysUser();  //获取用户信息
                     Long schoolId = sysUser.getDeptId();  //获取部门编号（校区）
-                    zxone.setCampus(new Long(schoolId).intValue());   //使用校区
-
                     long l = SnowFlake.nextId();
                     zxChange.setId(l);
                     zxChange.setAssetsId(Long.parseLong(s1));
