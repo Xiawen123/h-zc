@@ -91,8 +91,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             c.change_type = 7
             <if test="name != null  and name != ''"> and am.name like concat('%', #{name}, '%')</if>
             <if test="assetNum != null  and assetNum != ''"> and am.asset_num like concat('%', #{assetNum}, '%')</if>
-            <if test="useDepartment != null "> and c.use_department = #{useDepartment}</if>
-            <if test="users != null  and users != ''"> and c.users like concat('%', #{users}, '%')</if>
+            <if test="submittedDepartment != null "> and c.submitted_department = #{submittedDepartment}</if>
+            <if test="submitOne != null  and submitOne != ''"> and c.submit_one like concat('%', #{submitOne}, '%')</if>
             <if test="params.beginTime != null and params.beginTime != ''"><!-- 开始时间检索 -->
                 and c.share_time &gt;= #{params.beginTime}
             </if>

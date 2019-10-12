@@ -138,7 +138,7 @@ public class ZxReturnController extends BaseController {
                     zxone = new ZxAssetManagement();  //创建ZxAssetManagement表对象（用于传参）
                     zxone.setId(Long.parseLong(s1));  //单个id
                     zxone.setState(1);  //状态（1：闲置，2：在用，3：报废）
-                    if(zxChange.getUseDepartment() != null){
+                    if(zxChange.getSubmittedDepartment() != null){
                         zxone.setExtend1("");  //使用部门
                     }
                     zxone.setExtend2("");  //使用人
@@ -151,7 +151,6 @@ public class ZxReturnController extends BaseController {
                     zxChange.setId(l);
                     zxChange.setAssetsId(Long.parseLong(s1));
                     zxChange.setChangeType(7);  //7：退还
-                    zxChange.setUseDepartment(zxChange.getUseDepartment());  //退还部门
 
                     SysUser sysUser = ShiroUtils.getSysUser();  //获取用户信息
                     Long schoolId = sysUser.getDeptId();  //获取部门编号（校区）

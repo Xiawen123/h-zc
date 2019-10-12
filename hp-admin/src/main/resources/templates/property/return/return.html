@@ -28,14 +28,14 @@
                             </li>
                             <li>
                                 <p>退还部门：</p>
-                                <select name="useDepartment" th:with="type=${@dict.getType('zc_department')}">
+                                <select name="submittedDepartment" th:with="type=${@dict.getType('zc_department')}">
                                     <option value="">所有</option>
                                     <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
                                 </select>
                             </li>
                             <li>
                                 <p>退还人员：</p>
-                                <input type="text" name="users"/>
+                                <input type="text" name="submitOne"/>
                             </li>
                             <li>
                                 <p>校区：</p>
@@ -133,14 +133,14 @@
                         }
                     },
                     {
-                        field : 'useDepartment',
+                        field : 'submittedDepartment',
                         title : '退还部门',
                         formatter:function (value, row, index) {
                             return $.table.selectDictLabel(dept,value);
                         }
                     },
                     {
-                        field : 'users',
+                        field : 'submitOne',
                         title : '退还人员'
                     },
                     {
