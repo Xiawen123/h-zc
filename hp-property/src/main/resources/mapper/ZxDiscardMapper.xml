@@ -113,7 +113,7 @@
 
     <!-- 通过id查询报废详情 -->
     <select id="selectZxAssetManagementById" parameterType="Long" resultMap="ZxAssetManagementResult">
-        select c.share_time,c.use_department,c.users,am.*,d.dept_name,dept.dept_name branch
+        select c.share_time,c.submitted_department,c.submit_one,am.*,d.dept_name,dept.dept_name branch
         from zx_change c
         left join zx_asset_management am on c.assets_id = am.id
         left join sys_dept d on c.extend5 = d.dept_id

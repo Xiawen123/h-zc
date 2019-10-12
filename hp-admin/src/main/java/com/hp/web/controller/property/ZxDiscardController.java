@@ -206,7 +206,6 @@ public class ZxDiscardController extends BaseController {
     @ResponseBody
     public AjaxResult addSave(ZxChange zxChange, HttpServletRequest request) {
         String ids =  request.getSession().getAttribute("s").toString();  //列表id
-        //String ids = zxAssetManagement.getIds();
         int i1=0;
         if (ids != null && !ids.equals("")) {
             ZxAssetManagement zxone = null;
@@ -237,7 +236,8 @@ public class ZxDiscardController extends BaseController {
                         zxChange.setId(l);
                         zxChange.setAssetsId(Long.parseLong(s1));
                         zxChange.setChangeType(4);  //7：报废
-                        zxChange.setUseDepartment(zxChange.getUseDepartment());  //报废部门
+                        zxChange.setSubmittedDepartment(zxChange.getUseDepartment());  //报废部门
+                        zxChange.setSubmitOne(zxChange.getUsers());
 
                         SysUser sysUser = ShiroUtils.getSysUser();  //获取用户信息
                         Long schoolId = sysUser.getDeptId();  //获取部门编号（校区）

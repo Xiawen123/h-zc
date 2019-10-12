@@ -64,11 +64,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="changeType != null ">change_type,</if>
             <if test="submittedDepartment != null ">submitted_department,</if>
             <if test="submitOne != null  and submitOne != ''">submit_one,</if>
-            <if test="useDepartment != null ">use_department,</if>
-            <if test="users != null  and users != ''">users,</if>
             <if test="extend1 != null  and extend1 != ''">extend1,</if>
             <if test="extend2 != null  and extend2 != ''">extend2,</if>
-            <if test="extend3 != null  and extend3 != ''">extend3,</if>
             <if test="extend4 != null  and extend4 != ''">extend4,</if>
             <if test="extend5 != null  and extend5 != ''">extend5,</if>
             <if test="shareTime != null ">share_time,</if>
@@ -79,11 +76,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="changeType != null ">#{changeType},</if>
             <if test="submittedDepartment != null ">#{submittedDepartment},</if>
             <if test="submitOne != null  and submitOne != ''">#{submitOne},</if>
-            <if test="useDepartment != null ">#{useDepartment},</if>
-            <if test="users != null  and users != ''">#{users},</if>
             <if test="extend1 != null  and extend1 != ''">#{extend1},</if>
             <if test="extend2 != null  and extend2 != ''">#{extend2},</if>
-            <if test="extend3 != null  and extend3 != ''">#{extend3},</if>
             <if test="extend4 != null  and extend4 != ''">#{extend4},</if>
             <if test="extend5 != null  and extend5 != ''">#{extend5},</if>
             <if test="shareTime != null ">#{shareTime},</if>
