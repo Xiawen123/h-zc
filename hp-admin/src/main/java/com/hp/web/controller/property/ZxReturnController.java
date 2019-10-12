@@ -145,7 +145,7 @@ public class ZxReturnController extends BaseController {
                     if(zxChange.getExtend3() != null){
                         zxone.setLocation(Integer.parseInt(zxChange.getExtend3()));  //存放地点
                     }
-                    zxone.setCampus(-1);   //使用校区(清除校区)
+                    //zxone.setCampus(-1);   //使用校区(清除校区)
 
                     long l = SnowFlake.nextId();
                     zxChange.setId(l);
