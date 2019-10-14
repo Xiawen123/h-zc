@@ -130,7 +130,7 @@ public class ZxDepartmentController extends BaseController {
                 }
                 SysUser sysUser = ShiroUtils.getSysUser();  //获取用户信息
                 Long schoolId = sysUser.getDeptId();  //获取部门编号（校区）
-                zxone.setCampus(new Long(schoolId).intValue());   //使用校区
+                //zxone.setCampus(new Long(schoolId).intValue());   //使用校区
 
                 long l = SnowFlake.nextId();
                 zxChange.setId(l);

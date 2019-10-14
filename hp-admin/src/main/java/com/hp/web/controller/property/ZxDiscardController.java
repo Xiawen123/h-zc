@@ -216,16 +216,13 @@ public class ZxDiscardController extends BaseController {
             }
             set.remove("0");
             set.remove("");
-            System.out.println("set=" + set);
             for (Object id : set) {
                     String s1 = id.toString();  //获取单个id
                     if (!s1.equals("")) {
                         zxone = new ZxAssetManagement();  //创建ZxAssetManagement表对象（用于传参）
                         zxone.setId(Long.parseLong(s1));  //单个id
                         zxone.setState(3);  //状态（1：闲置，2：在用，3：报废）
-                        if(zxChange.getUseDepartment() != null){
-                            zxone.setExtend1("");  //使用部门
-                        }
+                        zxone.setExtend1("");  //使用部门
                         zxone.setExtend2("");  //使用人
                         if(zxChange.getExtend3() != null){
                             zxone.setLocation(-1);  //存放地点
@@ -236,8 +233,6 @@ public class ZxDiscardController extends BaseController {
                         zxChange.setId(l);
                         zxChange.setAssetsId(Long.parseLong(s1));
                         zxChange.setChangeType(4);  //7：报废
-                        zxChange.setSubmittedDepartment(zxChange.getUseDepartment());  //报废部门
-                        zxChange.setSubmitOne(zxChange.getUsers());
 
                         SysUser sysUser = ShiroUtils.getSysUser();  //获取用户信息
                         Long schoolId = sysUser.getDeptId();  //获取部门编号（校区）
