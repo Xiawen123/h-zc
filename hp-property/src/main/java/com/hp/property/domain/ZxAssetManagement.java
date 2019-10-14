@@ -196,7 +196,7 @@ public class ZxAssetManagement extends BaseEntity
 
     /** 部门编号 */
     private Long useDepartment;
-    private Long submittedDepartment;
+    //private Long submittedDepartment;
 
     /** 退还（使用）人 */
     private String users;
@@ -597,11 +597,11 @@ public class ZxAssetManagement extends BaseEntity
             .toString();
     }
 
-    public Long getSubmittedDepartment() {
+    /*public Long getSubmittedDepartment() {
         return submittedDepartment;
     }
 
     public void setSubmittedDepartment(Long submittedDepartment) {
         this.submittedDepartment = submittedDepartment;
-    }
+    }*/
 }

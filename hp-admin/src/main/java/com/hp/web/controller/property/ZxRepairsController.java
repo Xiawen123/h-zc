@@ -165,8 +165,8 @@ public class ZxRepairsController extends BaseController {
                     long l = SnowFlake.nextId();
                     zxChange.setId(l);
                     zxChange.setAssetsId(Long.parseLong(s1));
-                    zxChange.setChangeType(3);  //7：退还
-                    zxChange.setUseDepartment(zxChange.getUseDepartment());  //退还部门
+                    zxChange.setChangeType(3);  //3：报修
+                    //zxChange.setSubmittedDepartment(zxChange.getSubmittedDepartment());  //报修部门
 
                     SysUser sysUser = ShiroUtils.getSysUser();  //获取用户信息
                     Long schoolId = sysUser.getDeptId();  //获取部门编号（校区）

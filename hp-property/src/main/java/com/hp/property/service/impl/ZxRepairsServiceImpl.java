@@ -37,8 +37,7 @@ public class ZxRepairsServiceImpl implements IZxRepairsService
     @Override
     public ZxAssetManagement selectZxAssetManagementById(Long id) {
         ZxAssetManagement management = zxRepairsMapper.selectZxAssetManagementById(id);
-        System.out.println(management);
-        Long dept= management.getUseDepartment();
+        Integer dept= management.getSubmittedDepartment();
         String department = "";
         if(!"".equals(dept) && dept != null){
             department = sysDictDataMapper.selectDictLabel("zc_department",dept.toString());

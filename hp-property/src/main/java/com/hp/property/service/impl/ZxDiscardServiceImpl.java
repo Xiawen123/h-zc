@@ -60,8 +60,7 @@ public class ZxDiscardServiceImpl implements IZxDiscardService {
     @Override
     public ZxAssetManagement selectZxAssetManagementById(Long id) {
         ZxAssetManagement management = zxDiscardMapper.selectZxAssetManagementById(id);
-        System.out.println(management);
-        Long dept= management.getSubmittedDepartment();
+        Integer dept= management.getSubmittedDepartment();
         String department = "";
         if(!"".equals(dept) && dept != null){
             department = sysDictDataMapper.selectDictLabel("zc_department",dept.toString());

@@ -63,6 +63,8 @@
         <result property="users"    column="users"    />
         <result property="deptName"     column="dept_name"  />
         <result property="branch"     column="branch"   />
+        <result property="submittedDepartment"    column="submitted_department"    />
+        <result property="submitOne"    column="submit_one"    />
     </resultMap>
 
 
@@ -85,8 +87,8 @@
             c.change_type = 4
             <if test="name != null  and name != ''"> and am.name like concat('%', #{name}, '%')</if>
             <if test="assetNum != null  and assetNum != ''"> and am.asset_num like concat('%', #{assetNum}, '%')</if>
-            <if test="useDepartment != null "> and c.use_department = #{useDepartment}</if>
-            <if test="users != null  and users != ''"> and c.users like concat('%', #{users}, '%')</if>
+            <if test="submittedDepartment != null "> and c.submitted_department = #{submittedDepartment}</if>
+            <if test="submitOne != null  and submitOne != ''"> and c.submit_one like concat('%', #{submitOne}, '%')</if>
             <if test="params.beginTime != null and params.beginTime != ''"><!-- 开始时间检索 -->
                 and c.share_time &gt;= #{params.beginTime}
             </if>
