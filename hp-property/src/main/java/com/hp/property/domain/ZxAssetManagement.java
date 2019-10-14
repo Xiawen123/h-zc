@@ -47,7 +47,7 @@ public class ZxAssetManagement extends BaseEntity
     private String  type;
 
     /** 单位 */
-    @Excel(name = "单位", readConverterExp = "1=个,2=台")
+    @Excel(name = "单位", readConverterExp = "1=个,2=台,3=张,4=把,5=本,6=盒,7=罐,8=块,9=付,10=套,11=双,12=只,13=件,14=卷,15=辆,16=支")
     private Integer units;
 
     /** 供货商 */
