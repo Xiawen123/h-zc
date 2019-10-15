@@ -108,7 +108,7 @@ public class ZxAssetManagement extends BaseEntity
     private Integer department;
 
     /** 使用部门名称 */
-    @Excel(name = "使用部门", readConverterExp = "1=财务部,2=宣传部,3=研发部,4=培训部,0=宏鹏集团,11=总裁办")
+    @Excel(name = "使用部门", readConverterExp = "1=董事长,2=行政部,3=财务部,4=市场管理部,5=人力资源部,6=河南院校,7=渠道部,8=网络推广部,9=咨询部,10=教学管理部,11=市场活动部,12=品质管理部,13=武汉青鸟之家,14=荆州青鸟之家,15=襄阳青鸟之家")
     private String extend1;
 
     /** 使用人 */
