@@ -1191,7 +1191,7 @@
                     $.modal.msgError("请选择节点后提交");
                     return false;
 				}
-    		    for (var i = 0; i < nodes.length; i++) {
+    		    /*for (var i = 0; i < nodes.length; i++) {
     		        if (nodes[i].level == 0) {
     		            $.modal.msgError("不能选择根节点（" + nodes[i].name + "）");
     		            return false;
@@ -1200,7 +1200,7 @@
     		            $.modal.msgError("不能选择父节点（" + nodes[i].name + "）");
     		            return false;
     		        }
-    		    }
+    		    }*/
         		return true;
         	},
         	// 不允许最后层级节点选择
