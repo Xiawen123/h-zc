@@ -221,7 +221,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
 
 
-    <update id="updateZxAssetManagement" parameterType="ZxAssetManagement">
+    <update id="updateZxAssetManagement" parameterType="ZxAssetManagement" >
         update zx_asset_management
         <trim prefix="SET" suffixOverrides=",">
             <if test="name != null  and name != ''">name = #{name},</if>

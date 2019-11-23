@@ -37,14 +37,14 @@
                                 <p>申报人员：</p>
                                 <input type="text" name="submitOne"/>
                             </li>
-                            <li>
+                           <!-- <li>
                                 <p>校区：</p>
                                 <select id="extend5" name="extend5" type="text">
                                     <option value="">全部</option>
                                     <option th:each="obj,eStat:${school}" th:value="${obj.deptId}"
                                             th:text="${obj.deptName}"></option>
                                 </select>
-                            </li>
+                            </li>-->
                             <li style="width: 100%;text-align: center">
                                 <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
                                 <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
@@ -153,8 +153,11 @@
                 },
                 {
                     field : 'deptName',
+                    title : '部门'
+                },/* {
+                    field : 'deptName',
                     title : '校区'
-                },
+                },*/
                 {
                     field : 'extend1',
                     title : '创建时间'

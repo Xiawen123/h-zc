@@ -38,8 +38,10 @@
     }
 
 </style>
+
 <body class="white-bg">
 <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+
     <form class="form-horizontal m" id="form-productIn-add">
         <div class="form-group">
             <label class="col-sm-3 control-label">资产名称：</label>
@@ -119,7 +121,9 @@
 </div>
 <th:block th:include="include :: footer"/>
 <th:block th:include="include :: datetimepicker-js"/>
+
 <script type="text/javascript">
+    //新增接口
     var prefix = ctx + "property/productIn"
     /*$("#form-productIn-add").validate({
         rules:{
@@ -201,18 +205,18 @@
 
     function submitHandler() {
         //获取资产的参数
-        var name = $("#name").val();
-        var type = $("#type").val();
-        var assetSpecification = $("#assetSpecification").val();
-        var brand = $("#brand").val();
-        var units = $("#units").val();
-        var number = $("#number").val();
-        var supplier = $("#supplier").val();
-        var price = $("#price").val();
-        var purchasingTime = $("#purchasingTime").val();
-        var imgs = document.getElementsByClassName("imgs");
-        if (imgs.length == 0){
-            imgs = null;
+            var name = $("#name").val();
+            var type = $("#type").val();
+            var assetSpecification = $("#assetSpecification").val();
+            var brand = $("#brand").val();
+            var units = $("#units").val();
+            var number = $("#number").val();
+            var supplier = $("#supplier").val();
+            var price = $("#price").val();
+            var purchasingTime = $("#purchasingTime").val();
+            var imgs = document.getElementsByClassName("imgs");
+            if (imgs.length == 0){
+                imgs = null;
         }else {
             imgs = imgs[0].src
         }

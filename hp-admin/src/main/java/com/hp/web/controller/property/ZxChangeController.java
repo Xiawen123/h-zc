@@ -86,10 +86,10 @@ public class ZxChangeController extends BaseController
      * 根据变更记录id查询详情
      */
     @GetMapping("/one/{id}")
-    public String one (@PathVariable("id") Long id, ModelMap mmap)
+    public String one (@PathVariable("id") Long id, ModelMap map)
     {
         ZxAssetManagement zxAssetManagement = zxTransferService.selectZxAssetManagementById(id);
-        mmap.put("zxAssetManagement", zxAssetManagement);
+        map.put("zxAssetManagement", zxAssetManagement);
         return prefix + "/one";
     }
 
@@ -147,7 +147,6 @@ public class ZxChangeController extends BaseController
      * @param zxAssetManagement
      * @return
      */
-    @RequiresPermissions("property:discard:alist")
     @PostMapping("/alist")
     @ResponseBody
     public TableDataInfo alist(ZxAssetManagement zxAssetManagement, HttpServletRequest request) {
@@ -233,10 +232,10 @@ public class ZxChangeController extends BaseController
 
 
     /**
-     * 新增保存资产变更
+     * 新增保存资产转移
      */
-    @RequiresPermissions("property:discard:add")
-    @Log(title = "新增资产报废", businessType = BusinessType.INSERT)
+    @RequiresPermissions("property:transfer:add")
+    @Log(title = "新增资产转移", businessType = BusinessType.INSERT)
     @PostMapping("/add")
     @ResponseBody
     public AjaxResult addSave(ZxChange zxChange, HttpServletRequest request) {
@@ -293,7 +292,6 @@ public class ZxChangeController extends BaseController
     /**
      * 查询资产信息列表（查询未转移的资产）
      */
-    @RequiresPermissions("property:discard:inserts")
     @PostMapping("/inserts")
     @ResponseBody
     public TableDataInfo insert (ZxAssetManagement zxAssetManagement)

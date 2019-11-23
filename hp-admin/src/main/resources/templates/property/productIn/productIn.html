@@ -55,7 +55,8 @@
                                 <input type="text" name="operator"/>
                             </li>
                             <li>
-                                <p>入库校区：</p>
+                               <!-- <p>入库校区：</p>-->
+                                <p>入库部门：</p>
                                 <select id="warehousingCampus" name="warehousingCampus" type="text">
                                     <option value="">全部</option>
                                     <option th:each="obj,eStat:${school}" th:value="${obj.deptId}"
@@ -165,8 +166,11 @@
                     },
                     {
                         field : 'extend5',
+                        title : '入库部门',
+                    },/*  {
+                        field : 'extend5',
                         title : '入库校区',
-                    },
+                    },*/
                     {
                         field : 'operator',
                         title : '操作人员',

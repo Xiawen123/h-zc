@@ -123,8 +123,6 @@ public class ZxRepairsController extends BaseController {
      * 新增报修页面展示
      * @return
      */
-
-    @RequiresPermissions("property:repairs:add")
     @GetMapping("/add")
     public String add(HttpServletRequest request)
     {
